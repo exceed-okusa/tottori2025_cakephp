@@ -1,0 +1,30 @@
+/* ==========================================================================
+  共通
+   ========================================================================== */
+html {
+    min-height: 100%;
+    position: relative;
+    -webkit-text-size-adjust: 100%;
+}
+body {
+    font: 14px/1.6 "メイリオ", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",  Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+    color:#333333;
+    min-width:320px;
+    /* padding-top:44px; */
+	padding-left: 30px;
+}
+table {
+	border-collapse: collapse;
+	border: 1px solid rgb(70, 70, 70);
+}
+th,td {
+	border: 1px solid rgb(70, 70, 70);
+	padding: 4px 15px;
+}
+th {
+	text-align: center;
+	background-color: rgb(159, 255, 207);
+}
+tr:nth-child(even) {
+	background-color: rgb(255, 249, 235);
+}

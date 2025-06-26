@@ -1,0 +1,1390 @@
+/*共通
+-----------------------------------------*/
+.afDefault_body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    min-height: 100vh;
+}
+
+.afDefault_safeAriaTop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: env(safe-area-inset-top);
+    width: 100%;
+    background-color: rgba(255,255,255,0.8);
+}
+.afDefault_safeAriaBottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: env(safe-area-inset-bottom);
+    width: 100%;
+    background-color: rgba(255,255,255,0.8);
+}
+
+a {
+    color: #41AA92;
+}
+
+.btn-appPrimary {
+    color: #ffffff;
+    padding: 1.6rem 1.3rem;
+    background: #A8D182;
+    background: linear-gradient(45deg, #A8D182 0%,#41aa92 100%);
+    border: 0;
+    border-radius: 50px;
+    letter-spacing: 0.2rem;
+    font-weight: 700;
+}
+.btn-appPrimary:hover {
+    color: #fff;
+}
+.btn-appPrimary:active,
+.btn-appPrimary:focus {
+    background: linear-gradient(45deg, #A8D182 0%,#41aa92 100%);
+    color: #fff;
+}
+.btn-appPrimary.btn-sm {
+    padding: 8px 10px;
+}
+.btn-appPrimary.btn-block {
+    max-width: 480px;
+    margin: 10px auto;
+}
+@media only screen and (min-width: 768px) {
+    .btn-appPrimary.btn-block {
+        margin: 20px auto;
+        font-size: 15px;
+    }
+}
+
+.btn-appPrimary2 {
+    background: #A8D182;
+}
+
+.btn-appInfo,
+.btn-appInfo:hover {
+    background: #fff;
+    border-color: #41AA92;
+    color: #41AA92;
+}
+
+.btn-appArrowRight {
+    position: relative;
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+.btn-appArrowRight::before{
+    content: "";
+    right: 20px;
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    position: absolute;
+    top: calc(50% - 1px);
+}
+.btn-appArrowRight::after{
+    content: "";
+    right: 20px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid #fff;
+    border-right: 2px solid #fff;
+    transform: rotate(45deg);
+    position: absolute;
+    top: calc(50% - 5px);
+}
+
+
+.border-top {
+    border-top: 1px solid #eaeaea;
+}
+.border-bottom {
+    border-bottom: 1px solid #eaeaea;
+}
+.border-left {
+    border-left: 1px solid #eaeaea;
+}
+.border-right {
+    border-right: 1px solid #eaeaea;
+}
+.pre-wrap {
+    white-space: pre-wrap;
+}
+.af_mt_large {
+    margin-top: 3em!important;
+}
+.af_mb_large {
+    margin-bottom: 3em!important;
+}
+.af_wrap_small {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.afDefault_body .form-horizontal .control-label {
+    text-align: right;
+    margin-bottom: 0;
+    padding-top: 7px;
+}
+
+.af-search_results_no_data {
+    padding: 3rem;
+    font-size: 12px;
+    color: #333;
+    background: #f6f6f6;
+}
+
+.afDefault_body .hissu {
+    background: #41AA92;
+}
+
+/* header */
+.af_no_head {
+}
+#afAppStore-global-header.page_head {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-left: 0;
+    height: calc(45px + env(safe-area-inset-top));
+    width: 100%;
+    border: 0;
+    background: #fff;
+}
+#afAppStore-global-header .app-header_safeAriaTop {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #fff;
+    height: env(safe-area-inset-top);
+}
+#afAppStore-global-header .app-header-list {
+    z-index: 100;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    min-height: 45px;
+    background: #41AA92;
+    color: #fff;
+    margin-top: env(safe-area-inset-top);
+}
+#afAppStore-global-header .app-header-list .back-btn {
+    color: #fff;
+    padding: 7px 20px;
+}
+#sidemenu-button {
+    padding: 13px 20px;
+}
+.af_head_ico {
+    font-size: 20px;
+}
+.af_head_menu {
+    position: relative;
+    z-index: 9;
+    width: 22px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.af_head_menu::before ,
+.af_head_menu::after {
+    content: "";
+}
+.af_head_menu span,
+.af_head_menu::before ,
+.af_head_menu::after {
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 0;
+    display: block;
+}
+
+
+#afAppStore-global-header .app-header-list .page-title {
+    font-size: 15px;
+    font-weight: bold;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: calc(100vw - 110px);
+    overflow: hidden;
+    text-align: center;
+}
+/* header - menu */
+#afAppStore-global-header .sidemenu-area-active {
+    width:100%;
+    height:100vh;
+    background:rgba(0,0,0,0.3);
+    position:fixed;
+    z-index: 50;
+    top:0;
+}
+#afAppStore-global-header .sidemenu-button-active {
+    color:#A8D182;
+}
+#afAppStore-global-header #sidemenu-bg {
+    width: 250px;
+    position: fixed;
+    top: calc(45px + env(safe-area-inset-top));
+    right: 0;
+    height: 100%;
+    z-index: 10;
+    display: none;
+    background: #333;
+}
+#afAppStore-global-header .sidemenu-wrap {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    display: none;
+    padding-top: calc(45px + env(safe-area-inset-top));
+    overflow-x: hidden;
+    overflow-y: scroll;
+    overflow: hidden;
+    border-right: 1px solid #eaeaea;
+    z-index: 51;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+#afAppStore-global-header .sidemenu {
+    width: 250px;
+    position: absolute;
+    top: calc(45px + env(safe-area-inset-top));
+    left: 0;
+    height: calc(100% - 45px);
+    padding-bottom: 45px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background: #fff;
+}
+#afAppStore-global-header .sidemenu-wrap li {
+    border-bottom: 1px solid #eee;
+}
+#afAppStore-global-header .sidemenu-wrap li a {
+    text-decoration: none;
+    padding: 1.25em 15px;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    line-height: 1.25;
+}
+#afAppStore-global-header .sidemenu-wrap li a > span {
+    display: flex;
+    align-items: center;
+}
+#afAppStore-global-header .sidemenu-wrap li a i {
+    line-height: 1;
+    margin-right: 1.5rem;
+    font-size: 12px;
+    vertical-align: middle;
+    flex: none;
+}
+
+/*main*/
+.afAppStore-main-container {
+    padding-top: 45px;
+    padding-bottom: 60px;
+}
+.af-section_title {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 1.5em 0 0.5em;
+    letter-spacing: 0.2rem;
+}
+.af_description {
+    margin-bottom: 1.25em;
+    font-size: 12px;
+}
+.af_more {
+    text-align: right;
+}
+.af_more a {
+    color: inherit;
+    display: inline-block;
+    padding: 1.5em 0;
+    text-decoration: none;
+    font-size: 12px;
+}
+.af_more a i {
+    margin-left: 1em;
+}
+.waf-BackArea {
+    margin-top: 2em;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+.waf-BackArea a {
+    color: #333;
+    text-decoration: none;
+}
+.waf-BackArea_l {
+    margin-right: auto;
+}
+.waf-BackArea_r {
+    margin-left: auto;
+    text-align: right;
+}
+
+/**登録ボタンなどを下部に表示する場合*/
+.af_bottomBtn_wrap {
+    height: calc(100vh - 115px);
+}
+.af_bottomBtn {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 10px 15px;
+}
+
+/*pager pagination*/
+.pagination-lg>li>a, .pagination-lg>li>span {
+    padding: 6px 10px;
+    border-radius: 0;
+    color: #333;
+    font-size: 14px;
+}
+.pagination>.active>a,
+.pagination>.active>span,
+.pagination>.active>a:hover,
+.pagination>.active>span:hover,
+.pagination>.active>a:focus,
+.pagination>.active>span:focus {
+    background-color: #333;
+    border-color: #333;
+}
+.pagination-lg>li:first-child>a, .pagination-lg>li:first-child>span,
+.pagination-lg>li:last-child>a, .pagination-lg>li:last-child>span {
+    border: 0;
+    padding: 6px 15px;
+}
+.pagination>.disabled>span, .pagination>.disabled>span:hover, .pagination>.disabled>span:focus, .pagination>.disabled>a, .pagination>.disabled>a:hover, .pagination>.disabled>a:focus {
+    color: #eaeaea;
+    background: none;
+}
+.pagination-lg>li:last-child>a {
+    border-left: 1px solid #eaeaea;
+}
+
+/* footer */
+.af_footer_area {
+    z-index: 1000;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    border-top: 1px solid #eaeaea;
+    background: #fff;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+#afAppStore-global-footer .af-footer-list {
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    display: flex;
+    justify-content: space-around;
+}
+#afAppStore-global-footer .af-footer-list li.af-footer-item {
+    background: none;
+    width: 70px;
+    text-align: center;
+}
+#afAppStore-global-footer .af-footer-list a.af-footer-link {
+    display: block;
+    padding-top: 4px;
+    color: #333;
+}
+#afAppStore-global-footer .af-footer-list a.af-footer-link[disabled] {
+    color: graytext;
+    cursor: default;
+}
+#afAppStore-global-footer .af-footer-list li i {
+    font-size: 22px;
+    display: block;
+}
+#afAppStore-global-footer .af-footer-list li span {
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+
+/*下部固定の「次へ」ボタン*/
+.af-app-foot-button-area {
+    margin-top: auto;
+    position: fixed;
+    width: 100%;
+    height: calc(160px + env(safe-area-inset-bottom));
+    display: flex;
+    bottom: 0;
+    align-items: center;
+    background: #f6f6f6;
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.af-app-foot-button-area button {
+    font-weight: bold;
+}
+
+/*イントロ
+-----------------------------------------*/
+.af-app-intro-image_img {
+    width: 100vw;
+    height: calc(100vh - 160px);
+    position: absolute;
+    top:0;
+    left: 0;
+    margin-top: env(safe-area-inset-top);
+}
+
+.af-app-intro-image_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/*利用規約
+-----------------------------------------*/
+.af-app-terms-of-services_title {
+    text-align: center;
+    margin: 0;
+    padding: 3rem 0 1.8rem;
+    font-size: 15px;
+    font-weight: 700;
+    color: #41AA92;
+}
+
+.af-app-terms-of-services_text {
+    border: 1px solid #eaeaea;
+    margin: 0 auto;
+    height: calc(100vh - 250px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    padding: 10px;
+    line-height: 1.25;
+    font-size: 12px;
+}
+.af_no_head .af-app-terms-of-services_text {/*初回登録時*/
+    height: calc(100vh - 320px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+#af-app-terms-of-services .main-content span {
+    white-space:pre-wrap;
+}
+
+.af-app-terms-of-services_check {
+    height: 96px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+#af-app-terms-of-services .button-area {
+    margin-top: auto;
+}
+
+#af-app-terms-of-services .button-area button {
+    width: 100%;
+    height:128px;
+    background-color: #41AA92;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#af-app-terms-of-services .button-area button[disabled] {
+    background-color: #ccc;
+}
+
+#af-app-terms-of-services .termsCheck {
+    margin: 0 auto;
+}
+
+/*店舗選択
+-----------------------------------------*/
+.af-app-stores-select {
+    margin: 10px auto;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    padding: 20px 15px 10px;
+}
+.af-app-stores-select h2 {
+    font-size: 15px;
+    margin: 0 0 5px;
+}
+.af-app-stores-select_table {
+    margin: 0 auto 10px;
+    width: 100%;
+    font-size: 12px;
+}
+.af-app-stores-select_table th,
+.af-app-stores-select_table td {
+    padding: 2px 5px;
+    vertical-align: top;
+}
+.af-app-stores-select_table th {
+    font-weight: 400;
+}
+
+.af-app-stores-select .nextReservation {
+    border-bottom: 5px solid #f6f6f6;
+}
+
+/*店舗トップページ
+-----------------------------------------*/
+.af-app-stores-index_area {
+    min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 105px);
+    background: #f9f9f9;
+}
+.af-app-stores-index_img {
+    background: #fff;
+}
+.af-app-stores-index_wrap {
+}
+
+.tel-and-webReservation {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 0;
+}
+.tel-and-webReservation-item {
+}
+.tel-and-webReservation-item  a {
+    width: 105px;
+    height: 105px;
+    border-radius: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.tel-and-webReservation-item a::before {
+    content: '';
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    border: 1px dashed #a8d182;
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    border-radius: 100px;
+}
+.tel-and-webReservation-item i {
+    font-size: 28px;
+    margin-bottom: 7px;
+}
+.af-stores_webReservation-item i {
+    font-size: 24px;
+}
+.af-stores_nextReservation_area {
+    border: 2px solid #A8D182;
+    margin: 0 auto;
+    background: #fff;
+    max-width: 480px;
+}
+.nextReservation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 10px;
+}
+.nextReservation_text {
+    font-size: 11px;
+    color: #41AA92;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+.nextReservation_text i,
+.af-app-stores-point_text i {
+    font-size: 18px;
+    vertical-align: middle;
+}
+.noReservation {
+    color: #999;
+    font-weight: 400;
+    padding-left: 20px;
+    font-size: 11px;
+}
+.nextReservation_date {
+    font-size: 15px;
+    font-weight: 700;
+}
+.af-app-stores-point_area {
+    border-top: 1px solid #A8D182;
+    color: #41AA92;
+}
+.af-app-stores-point {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    padding: 10px 10px;
+}
+.af-app-stores-point_num {
+    margin-left: auto;
+    font-size: 24px;
+    margin-right: 5px;
+    color: #333;
+}
+.af-app-stores-point_rank {
+    text-align: center;
+    background: #A8D182;
+    color: #fff;
+    margin-top: -5px;
+}
+.af-app-stores-point_rank span {
+    font-size: 10px;
+    padding: 3px 10px;
+    display: inline-block;
+}
+.af-stores-notice-wrap {
+    position: relative;
+}
+.af-stores-notice-wrap .af-section_title {
+    padding-left: 60px;
+}
+.af-stores-notice-block {
+    border-top: 1px solid #eaeaea;
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+}
+.af-notice-block_bird {
+    position: absolute;
+    top: 13px;
+    left: 28px;
+    width: 40px;
+}
+.appStoreInfo {
+}
+
+/*店舗情報
+-----------------------------------------*/
+.af-stores-view,
+.af-stores-view tbody {
+    display: block;
+}
+.af-stores-view tr {
+    display: block;
+    border-bottom: 1px solid #eaeaea;
+    padding: 20px 15px;
+}
+.af-stores-view th,
+.af-stores-view td {
+    display: block;
+}
+.af-stores-view th {
+    font-size: 11px;
+    padding-bottom: 3px;
+    white-space: nowrap;
+    color: #41AA92;
+}
+.af-stores-link {
+    color: #5EB7E8;
+}
+.af-stores-link_wrap {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.af-stores-link_wrap img {
+    width: 40px;
+    display: block;
+    margin-right: 10px;
+    flex: none;
+}
+.af-stores-link_wrap .af-stores-link {
+    width: calc(100% - 50px);
+}
+.af-stores-link_wrap span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+
+
+/*お知らせ
+-----------------------------------------*/
+.af-noticies {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: solid 1px #eaeaea;
+    padding: 12px 15px;
+    font-size: 13px;
+}
+.af-noticies_l {
+    width: 85%;
+}
+.af-noticies_r {
+    width: 10%;
+}
+.af_right_btn_area span {
+    font-size: 24px;
+    color: #41aa92;
+}
+.af_right_btn_area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.af_right_btn_area button {
+    background-color: #FFFFFF;
+    border: none;
+}
+.af-noticies_date {
+    color: #41AA92;
+    font-weight: 700;
+    font-size: 11px;
+}
+.af-app-store-notice-details_date {
+    margin: 3rem 0 1rem;
+}
+.af-app-store-notice-details_title {
+    font-weight: 700;
+    font-size: 18px;
+    margin: 1.4rem 0;
+    line-height: 1.4;
+}
+
+/*登録店舗一覧
+-----------------------------------------*/
+.af-user-stores_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.af-user-stores_title h2 {
+    font-size: 18px;
+}
+.af-user-stores_title button {
+    flex: none;
+    margin-left: 20px;
+    font-size: 10px;
+}
+
+/*利用状況
+-----------------------------------------*/
+.af-usage-situations_link {
+    width: 140px;
+    height: 140px;
+    border-radius: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.af-usage-situations_link i {
+    font-size: 28px;
+    vertical-align: middle;
+    line-height: 1;
+    margin-bottom: 7px;
+}
+.af-usage-situations_text {
+    display: inline-block;
+}
+@media only screen and (min-width: 768px) {
+    .af-usage-situations_wrap {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 50vh;
+    }
+}
+
+/*バーコード表示
+-----------------------------------------*/
+#app-number-area {
+    padding: 5px 15px;
+    border-top: 10px solid #f6f6f6;
+    border-bottom: 10px solid #f6f6f6;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+}
+#app-number-title {
+    font-size: 12px;
+    color: #41aa92;
+    font-weight: 700;
+}
+#app-number {
+    font-weight: 700;
+    margin: 0 auto;
+}
+.af-barcode-displays {
+    min-height: calc((100vh - 280px) / 2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.app-barcode-area {
+    text-align: center;
+}
+#Qrcode {
+    border-top: 10px solid #f6f6f6;
+}
+
+/*機種変更
+-----------------------------------------*/
+.af-app-model-changes_id {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid #f6f6f6;
+    padding: 10px;
+}
+.af-app-model-changes_id > div {
+    padding: 10px;
+}
+.af-model-changes_copybtn:hover,
+.af-model-changes_copybtn:focus {
+    background: #A8D182;
+    border: 2px solid #41AA92;
+    color: #fff;
+}
+
+/*クーポン
+-----------------------------------------*/
+.af-coupons-select {
+    margin: 10px auto;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+.af-coupons-select > div {
+    display: flex;
+}
+.af-coupons-select_img {
+    width: 30%;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+.af-coupons-select_center {
+    width: 60%;
+    padding: 10px;
+    min-height: 67px;
+}
+.af-coupons-select_right {
+    width: 10%;
+    flex: none;
+}
+.af-coupons-select_ico_used {
+    background: #f6f6f6;
+}
+.af-coupons-select_noimage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #aaa;
+    background: #f6f6f6;
+}
+.af-coupons-select_send_date {
+    font-size: 11px;
+    display: inline-block;
+}
+.af-coupons-select_used {
+    font-size: 11px;
+    padding: 1px 5px;
+    line-height: 1;
+    background: #41aa92;
+    color: #fff;
+}
+.af-coupons-select_date {
+    color: #41AA92;
+    font-size: 12px;
+    font-weight: 700;
+}
+.af-coupons-select_name {
+    font-weight: 700;
+    padding: 3px 0;
+    font-size: 15px;
+}
+.used-coupon {
+    background: #0000003b;
+    color: #666;
+}
+.af-coupons-select_img.used-coupon img {
+    opacity: 0.7;
+}
+.used-coupon .af-coupons-select_date {
+    color: #666;
+}
+.af_right_btn_area.used-coupon span {
+    color: #ccc;
+}
+
+/*クーポン詳細*/
+.af-coupons_no {
+    text-align: center;
+    background: #f6f6f6;
+    padding: 5px 15px;
+    font-size: 11px;
+}
+.af-coupons_image {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.af-coupons_wrap {
+    margin: 0 auto;
+    max-width: 480px;
+    padding: 0 15px;
+}
+.af-coupons_name {
+    font-size: 16px;
+    font-weight: 700;
+}
+.af-coupons_date {
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+}
+
+/*受信箱
+-----------------------------------------*/
+.af-inboxes > div {
+    margin: 10px auto;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    overflow: hidden;
+    display: flex;
+}
+.af-inboxes_ico {
+    background: #A8D182;
+    color: #fff;
+    width: 20%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+.af-inboxes_center {
+    width: 70%;
+    padding: 10px;
+}
+.af-inboxes_right {
+    width: 10%;
+}
+.af-inboxes_ico_used {
+    background: #f6f6f6;
+    color: #ccc;
+}
+.af-inboxes_date {
+    font-weight: 700;
+}
+.af-inboxes_name {
+    font-weight: 400;
+    line-height: 1.4;
+    margin-top: 5px;
+}
+.af-inboxes-views_date {
+    font-weight: 700;
+    color: #41AA92;
+}
+
+
+/*トーク
+-----------------------------------------*/
+/* 注意書き部分 */
+.af-app-talks_title {
+    padding: 10px;
+    text-align: center;
+    font-size: 11px;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 100;
+}
+
+/* トーク部分全体 */
+.af-app-talks_container {
+    padding:0;
+    background: #f9f9f9;
+    overflow: hidden;
+    width: 100%;
+    font-size: 12px;
+    padding-bottom: 3px;
+}
+
+/* トーク部分スクロール可能部位 */
+.af-app-talks {
+    padding: 10px;
+    overflow: hidden;
+}
+
+/* スクロール可能領域指定 */
+.af-app-talks.scroll {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+/* ユーザー入力部分 */
+.talk-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 日付変更時に出力 */
+.af-app-talks_date {
+    width: 100%;
+    position: relative;
+    display: block;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    clear: both;
+}
+.af-app-talks_date_text {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+.af-app-talks_date_text span {
+    color: #999;
+    padding: 0 10px;
+}
+.af-app-talks_date_text:before, .af-app-talks_date_text:after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background: #eaeaea;
+    display: block;
+}
+
+/* 店舗側トーク */
+.af-app-talks .left-all {
+    min-height: 60px;
+    height: auto !important;
+    height: 60px;
+    clear: both;
+}
+.af-app-talks .left {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+    max-width: 80%;
+    clear: both;
+}
+
+/* 店舗側アイコン */
+.af-app-talks figure {
+    width: 50px;
+    position: absolute;
+    top: -5px;
+    left: 0;
+    padding: 0;
+    margin: 0;
+}
+.af-app-talks figure img{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+/* 店舗側画像 */
+.af-app-talks .left-image-box {
+    position: relative;
+    /*display: inline-block;*/
+    margin-bottom: 5px;
+    max-width: 100%;
+    clear: both;
+}
+.af-app-talks .left-image-box img.left-image{
+    height: auto;
+    box-sizing: border-box;
+    margin-left: 70px;
+    max-width:50%;
+}
+
+/* 店舗側トーク */
+.af-app-talks .left .left-text {
+    margin-left: 70px;
+}
+.af-app-talks .left .text {
+    margin: 0;
+    position: relative;
+    padding: 12px;
+    border-radius: 20px;
+    white-space: pre-wrap;
+    word-wrap : break-word;
+    background-color: #ffffff;
+}
+
+/* 店舗側時間表示 */
+.af-app-talks .left-date {
+    display: inline-block;
+    vertical-align: bottom;
+    text-align: left;
+    bottom: 0px;
+    font-size: 75%;
+    color: #999;
+}
+
+/* 店舗側画像送信時の時間表示 */
+.af-app-talks .left-image-date {
+    position: absolute;
+    vertical-align: bottom;
+    text-align: left;
+    bottom: 0px;
+    font-size: 75%;
+    color: #999;
+    margin-left: 5px;
+}
+
+/* 店舗側吹き出し */
+.af-app-talks .left .text::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    left: -10px;
+    top: 10px;
+    border-right: 20px solid #ffffff;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+/* ユーザー側トーク部分 */
+.af-app-talks .right-all {
+    min-height: 42px;
+    height: auto !important;
+    height: 42px;
+    clear: both;
+}
+.af-app-talks .right {
+    position: relative;
+    display: inline-block;
+    margin: 5px 0;
+    max-width: 75%;
+    float: right;
+    margin-right: 10px;
+    clear: both;
+}
+
+/* ユーザー側画像 */
+.af-app-talks .right-image-box {
+    position: relative;
+    display: inline-block;
+    margin: 5px 0;
+    max-width: 50%;
+    max-height: 400px;
+    text-align: right;
+    float: right;
+    margin-left: 5px;
+    margin-right: 10px;
+    clear: both;
+}
+.af-app-talks .right .image {
+    position: relative;
+    text-align: right;
+}
+
+/* ユーザー側トーク */
+.af-app-talks .right .text {
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #A8D182;
+    margin: 0;
+    margin-left: 5px;
+    white-space: pre-wrap;
+    word-wrap : break-word;
+}
+
+/* ユーザー側時間表示 */
+.af-app-talks .right-date {
+    position: absolute;
+    text-align: right;
+    left: -32px;
+    bottom: 0px;
+    font-size: 80%;
+    color: #999;
+}
+
+/* ユーザー側吹き出し */
+.af-app-talks .right .text::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    right: -10px;
+    top: 10px;
+    border-left: 20px solid #A8D182;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+/* ユーザー入力部分 */
+.talk-input-area, .select-picture-area {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    min-height: 58px;
+    transition:0.5s;
+}
+.talk-input-area .library-btn {
+    font-size: 30px;
+    padding-right: 5px;
+}
+.talk-camera-btn {
+    font-size: 30px;
+    padding-right: 10px;
+}
+.talk-input-area .send-btn,
+.send-picture-btn {
+    font-size: 30px;
+    padding: 0 10px;
+    color: #41AA92;
+}
+.talk-input {
+    width: 100%;
+}
+.talk-contents {
+    font-size: 14px;
+    height: 2em;
+    resize: none;
+    width: 100%;
+    border: solid 1px #eaeaea;
+    border-radius: 15px;
+    padding: 1px 7px;
+    display: block;
+    background: #f6f6f6;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+div.talk-input-area .file-btn {
+    display: none;
+}
+
+/* 画像選択時ユーザー入力部分 */
+.select-picture-area .cancel-btn {
+    background: none;
+    font-size: 20px;
+    padding: 0 10px;
+}
+.select-picture-area .selected {
+    width: 100%;
+}
+
+/* FAQ
+-----------------------------------------*/
+.af-faq_title {
+    font-size: 18px;
+    text-align: left;
+    margin: 1em 0;
+    font-weight: 700;
+    color: #41AA92;
+}
+.af-faq_wrap {
+    border-bottom: 1px solid #eaeaea;
+    padding: 24px 0;
+}
+.af-faq_title + .af-faq_wrap {
+    border-top: 1px solid #eaeaea;
+}
+.af-faq_q {
+    position: relative;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 1em;
+    display: flex;
+    align-items: center;
+}
+.af-faq_q::before {
+    content: "Q";
+    background: #eaeaea;
+    color: #fff;
+    border-radius: 50px;
+    width: 24px;
+    height: 24px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 15px;
+}
+.af-faq_a {
+    position: relative;
+    padding-left: 34px;
+}
+.af-faq_a::before {
+    content: "A";
+    background: rgb(167, 209, 130);
+    background: linear-gradient(45deg, #A8D182 0%,#41aa92 100%);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50px;
+    width: 24px;
+    height: 24px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.af-faq_a p {
+    margin: 0 0 1rem;
+}
+.af-faq_a p:last-child {
+    margin-bottom: 0;
+}
+.af-faq_type {
+    background: #f6f6f6;
+    padding: 0 5px;
+    font-weight: 700;
+    font-size: 13px;
+    margin-top: 1.6em;
+}
+.af-faq_ol {
+    list-style-type: decimal;
+    margin: 1em 0 2em;
+    padding-left: 1.3em;
+}
+.af-faq_ol > li {
+    margin-bottom: 0.5em;
+    font-size: 13px;
+    line-height: 1.25;
+}
+.af-faq_ul {
+    list-style-type: circle;
+    padding: 0;
+}
+.af-faq_ul > li {
+    margin-bottom: 1em;
+}
+

@@ -1,0 +1,67 @@
+
+#divMenuSettingsIndexLeft ul,
+#divMenuSettingsEditLeft ul{
+    background-color: #fff;
+}
+#divMenuSettingsIndexLeft ul.is_position_parent,
+#divMenuSettingsEditLeft ul.is_position_parent {
+    /* background-color: #cee; */
+}
+
+#divMenuSettingsIndexLeft li.is_position_parent,
+#divMenuSettingsEditLeft li.is_position_parent {
+    background-color: #cee;
+    border: 1px solid #555;
+}
+
+#divMenuSettingsIndexLeft span.is_position,
+#divMenuSettingsEditLeft span.is_position {
+    /* color: red; */
+}
+#divMenuSettingsIndexLeft span.selected,
+#divMenuSettingsEditLeft span.selected {
+    background-color: #ff7a7a;
+}
+
+span.authority_user {
+    background-color: #bbd0ff;
+}
+span.authority_manager_store {
+    background-color: #ffd0e1;
+}
+span.authority_manager_company {
+    background-color: #fff0b9;
+}
+span.authority_manager_head_company {
+    background-color: #c2f5ff;
+}
+span.authority_dealer {
+    background-color: #c2ffc7;
+}
+span.authority_system_support {
+    background-color: #ffdebb;
+}
+span.authority_system_exceed {
+    background-color: #f4bcff;
+}
+
+div.divMenuSettings ul{
+    background-color: #fff;
+}
+div.divMenuSettings ul.is_position_parent {
+    /* background-color: #cee; */
+}
+div.divMenuSettings li.is_position_parent {
+    background-color: #cee;
+    border: 1px solid #555;
+}
+div.divMenuSettings span.is_position {
+    /* color: red; */
+}
+div.divMenuSettings span.selected {
+    background-color: #ff7a7a;
+}
+
+.clickDisabled {
+    pointer-events: none;
+}

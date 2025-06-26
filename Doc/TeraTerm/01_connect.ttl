@@ -1,0 +1,18 @@
+
+; ---- プロジェクトフォルダのルートを指定
+include '_local_root.ttl'
+
+; ----- 設定の読み込みと接続
+inputbox 'Connect:' 'diff_ddl'
+
+CONNFILE = local_root
+strconcat CONNFILE '\Doc\TeraTerm\connect\'
+strconcat CONNFILE inputstr
+strconcat CONNFILE '.ttl'
+
+include CONNFILE
+
+
+; ----- SalonAnswer プロジェクトに移動
+sendln 'cd ' destination_root
+

@@ -1,0 +1,264 @@
+﻿
+/* ==========================================================================
+  jasperReport
+   ========================================================================== */
+
+#jasper td[width="50%"] {
+    width: auto;
+}
+
+.jrPage {
+    table-layout: fixed;
+    word-break: break-all;
+}
+
+.jrPage table {
+    table-layout: fixed;
+    word-break: break-all;
+}
+
+/* chromeの不具合対応 */
+@media all and (-webkit-min-device-pixel-ratio:0) {
+    .jrPage {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    .jrPage table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+}
+
+/* 売上日計表 */
+.PD00101 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 売上総合日報 */
+.PD00201 * {
+    font-family: inherit !important;
+    line-height: 6px !important;
+}
+
+/* 技術売上日報 */
+.PD00301 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 会員カード売上日報 */
+.PD00303 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 店販売上日報 */
+.PD00401 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 顧客売上明細一覧表 */
+.PD00501 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 会計修正チェックリスト */
+.PD00601 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 入出金明細リスト*/
+.PD00701 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* ドロア現金出納帳 */
+.PD00801 * {
+    font-family: inherit !important;
+    font-size: 10px !important;
+}
+
+/* 日別会社別クレジット明細一覧表 */
+.PD00901 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 日別顧客別クレジット明細一覧表 */
+.PD01001 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 担当売上集計表 */
+.PD01201 * {
+    font-family: inherit !important;
+    font-size: 10px !important;
+}
+
+/* 日別会社別電子マネー明細一覧表 */
+.PD01401 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 日別顧客別電子マネー明細一覧表 */
+.PD01501 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 前年同月対比月報 */
+.PM00101 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 経費別月報 */
+.PM00102 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 店舗別順位表 */
+.PM00105 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 店舗比較技術分類月報 */
+.PM00106 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 店舗比較店販分類月報 */
+.PM00107 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 売上目標達成月報 */
+.PM00801 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 担当日別目標達成表 */
+.PM01401 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 店舗比較月報(分析) */
+.PM02501 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 前年同月推移表 */
+.PY00101 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 担当前年同月推移表 */
+.PY00201 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 担当別順位表 */
+.PT00101 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 担当別技術別売上集計 */
+.PT00102 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 担当別店販別売上集計 */
+.PT00103 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 担当別日別売上管理集計 */
+.PT00104 * {
+    font-family: inherit !important;
+}
+
+/* 担当別会員カード売上集計表 */
+.PT00105 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 担当別曜日別時間帯別売上集計表 */
+.PT00107 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* 営業日別売上集計 */
+.PT00202 * {
+    font-family: inherit !important;
+    font-size: 8px !important;
+}
+
+/* 技術売上集計 */
+.PT00301 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 店販売上集計 */
+.PT00302 * {
+    font-family: inherit !important;
+    font-size: 11px !important;
+}
+
+/* 曜日別時間帯別売上集計表 */
+.PT00304 * {
+    font-family: inherit !important;
+    font-size: 9px !important;
+}
+
+/* 商品別売上順位表 */
+.PT00305 * {
+    font-family: inherit !important;
+    font-size: 9px !important;
+}
+
+/* 会員カード分類前年同月推移表 */
+.PY01601 * {
+    font-family: inherit !important;
+    font-size: 9px !important;
+}
+
+/* 会員カード前年同月推移表 */
+.PY01701 * {
+    font-family: inherit !important;
+    font-size: 9px !important;
+}
+
+/* ポイント残高一覧表*/
+.CP00801 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* コース消化集計 */
+.RT00301 * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+}

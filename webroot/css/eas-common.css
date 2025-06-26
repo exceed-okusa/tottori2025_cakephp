@@ -1,0 +1,371 @@
+/*共通*/
+
+/*幅
+------------------------------------------*/
+.width2 {
+    width: 2%;
+}
+.width3 {
+    width: 3%;
+}
+.width4 {
+    width: 4%;
+}
+.width5 {
+    width: 5%;
+}
+.width6 {
+    width: 6%;
+}
+.width7 {
+    width: 7%;
+}
+.width8 {
+    width: 8%;
+}
+.width9 {
+    width: 9%;
+}
+.width10 {
+    width: 10%;
+}
+.width11 {
+    width: 11%;
+}
+.width12 {
+    width: 12%;
+}
+.width13 {
+    width: 13%;
+}
+.width14 {
+    width: 14%;
+}
+.width15 {
+    width: 15%;
+}
+.width16 {
+    width: 16%;
+}
+.width18 {
+    width: 18%;
+}
+.width20 {
+    width: 20%;
+}
+.width21 {
+    width: 21%;
+}
+.width22 {
+    width: 22%;
+}
+.width24 {
+    width: 24%;
+}
+.width25 {
+    width: 25%;
+}
+.width29 {
+    width: 29%;
+}
+.width30 {
+    width: 30%;
+}
+.width32 {
+    width: 32%;
+}
+.width33 {
+  width: 33.33333333%;
+}
+.width35 {
+    width: 35%;
+}
+.width40 {
+    width: 40%;
+}
+.width42 {
+    width: 42%;
+}
+.width45 {
+    width: 45%;
+}
+.width47 {
+    width: 47%;
+}
+.width50 {
+    width: 50%;
+}
+.width55 {
+    width: 55%;
+}
+.width56 {
+    width: 56%;
+}
+.width60 {
+    width: 60%;
+}
+.width64 {
+    width: 64%;
+}
+.width80 {
+    width: 80%;
+}
+.width90 {
+    width: 90%;
+}
+.width100 {
+    width: 100%;
+}
+
+/*入力情報欄
+------------------------------------------*/
+/*通常*/
+.input_info {
+    margin: 5px 0;
+    background: #f9f9f9;
+    padding: 5px 5px;
+}
+/*両端寄せ*/
+.input_space_between {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 5px 5px;
+}
+.input_space_between > table {
+    width: 50%;
+}
+
+/*一覧
+------------------------------------------*/
+/*背景色*/
+.background_course {
+    padding: 5px;
+    background: #ffd8d8;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.background_goods {
+    padding: 5px;
+    background: #ffe9bf;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.background_course .flex_left .item_list li,
+.background_course .flex_right .item_list li,
+.background_goods .flex_left .item_list li,
+.background_goods .flex_right .item_list li {
+    background: #fff;
+}
+/*タイトル*/
+.mainTitle {
+    font-weight: 700;
+    font-size: 16px;
+    margin-right: 10px;
+    min-width: 112px;
+    border-right: 1px solid #ddd;
+    padding-right: 10px;
+}
+/*割引率*/
+.discountrate {
+    display: flex;;
+    align-items: center;
+    margin-left: auto;
+    font-size: 11px;
+    padding: 1px 5px;
+}
+.discountrate table {
+    margin: 0;
+}
+.discountrate table th {
+    font-weight: 400;
+}
+.discountrate table input {
+    padding: 4px 8px;
+    height: auto;
+    font-size: 12px;
+}
+
+/*左寄せ*/
+.flex_left {
+    display: flex;
+    justify-content: left;
+    -webkit-justify-content: left; /* Safari */
+    align-items: center;
+    margin: 5px 0;
+}
+/*右寄せ*/
+.flex_right {
+    display: flex;
+    justify-content: right;
+    -webkit-justify-content: right; /* Safari */
+    align-items: center;
+    margin: 5px 0;
+}
+.flex_left div,
+.flex_right div {
+    vertical-align: middle;
+}
+.flex_left .item_list li,
+.flex_right .item_list li {
+    box-sizing: border-box;
+    text-align: center;
+    margin-left: 3px;
+    background: #fff;
+    background: #e9f4f6;
+    border-radius: 4px;
+}
+.flex_left .item_list li a ,
+.flex_left .item_list li input,
+.flex_right .item_list li a ,
+.flex_right .item_list li input {
+    font-size: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    color: #17a6c3;
+    background: none;
+    border: 0;
+    line-height: 1.25;
+    display: block;
+    cursor: pointer;
+}
+
+/*明細行*/
+table.table_fixedForm {
+    border: 1px solid #bbb;
+    margin: 5px 0 10px;
+}
+.table_fixedForm thead tr,
+.table_fixedForm tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+.table_fixedForm thead th {
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;
+    background: #f7f5f2;
+    line-height: 1.15;
+    padding: 2px;
+}
+.table_fixedForm td {
+    line-height: 1.15;
+    padding: 2px 8px;
+}
+.table_fixedForm tbody td .form-control {
+    padding: 5px;
+    height: auto;
+    width: 100%;
+}
+
+/*明細行スクロール*/
+table.table_fixedForm_scroll {
+    border: 1px solid #bbb;
+    margin: 5px 0 10px;
+    table-layout: fixed;
+    background: #fff;
+}
+.table_fixedForm_scroll thead,
+.table_fixedForm_scroll tbody,
+.table_fixedForm_scroll tfoot {
+    display: block;
+}
+.table_fixedForm_scroll thead tr,
+.table_fixedForm_scroll tbody tr,
+.table_fixedForm_scroll tfoot tr {
+    display: flex;
+    align-items: center;
+}
+.table_fixedForm_scroll thead tr,
+.table_fixedForm_scroll tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+.table_fixedForm_scroll thead tr th:last-child {
+    margin-right: 17px;
+}
+.table_fixedForm_scroll thead tr {
+    background: #f7f5f2;
+}
+.table_fixedForm_scroll thead th {
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;
+    background: #f7f5f2;
+    line-height: 1.15;
+    padding: 2px;
+}
+.table_fixedForm_scroll tbody {
+    height:100px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #bbb;
+}
+.table_fixedForm_scroll tbody tr {
+    height: 50px;
+    width: 100%;
+}
+.table_fixedForm_scroll tbody td .form-control {
+    padding: 5px;
+    height: auto;
+    width: 100%;
+}
+.table_fixedForm_scroll tfoot tr td:last-child {
+    margin-right: 17px;
+}
+.table_fixedForm_scroll td {
+    line-height: 1.15;
+    padding: 2px 8px;
+}
+
+/* footer
+----------------------------- */
+/*中央寄せ*/
+.footer_center {
+    display: flex;
+    justify-content: center;
+    -webkit-justify-content: center; /* Safari */
+    bottom:0;
+    width: calc(100% - 250px);
+    box-sizing:border-box;
+    padding:12px 10px;
+    margin: 0;
+    text-align: center;
+    list-style-type: none;
+    align-items: center;
+}
+.footer_center li {
+    margin-right: 20px;
+}
+/*左寄せ*/
+.footer_left {
+    display: flex;
+    justify-content: left;
+    -webkit-justify-content: left; /* Safari */
+    bottom:0;
+    width:100%;
+    box-sizing:border-box;
+    padding:12px 10px;
+    margin: 0;
+    list-style-type: none;
+    align-items: center;
+}
+.footer_left li {
+    margin-right: 20px;
+}
+/*右寄せ*/
+.footer_right {
+    display: flex;
+    justify-content: right;
+    -webkit-justify-content: right; /* Safari */
+    bottom:0;
+    width:100%;
+    box-sizing:border-box;
+    padding:12px 10px;
+    margin: 0;
+    list-style-type: none;
+    align-items: center;
+}
+.footer_right li {
+    margin-right: 20px;
+}

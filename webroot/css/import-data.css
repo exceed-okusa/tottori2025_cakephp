@@ -1,0 +1,63 @@
+input[type="file"] {
+    display: inline;
+    border: solid 1px #b9b9b9;
+}
+#data-area{
+    position: fixed;
+    width: 50%;
+    float: left;
+    height: 100%;
+}
+#data-list {
+    height:90%;
+    overflow-y:scroll;
+}
+#data-list table{
+    margin-bottom: 10%;
+}
+#data-list .no_data{
+    visibility: hidden;
+}
+#data-list .doing{
+    background: #ffff7f;
+}
+#data-list .done{
+    background: #7fff7f;
+}
+#data-list .error{
+    background: #ff7f7f;
+}
+#history-area{
+    position: fixed;
+    width: 35%;
+    margin-left: 50%;
+    float: left;
+    height: 100%;
+}
+#history-list {
+    height:90%;
+    overflow-y:scroll;
+}
+#history-list button{
+    margin-bottom: 12px;
+}
+table {
+    font-size:85%;
+}
+table thead th {
+    text-align: center;
+    border: solid 1px #b9b9b9;
+    background: #CCFFCF;
+}
+table tbody td {
+    border: solid 1px #b9b9b9;
+}
+table tbody .dataCount,
+table tbody .startDatetime {
+    white-space: nowrap;
+}
+table tbody button {
+    width: 100%;
+    height: 100%;
+    margin: 2px;
+}
