@@ -55,7 +55,7 @@
 </style>
 
 <div id="vm">
-	<h1 style="margin-left:25px;">Timetable system</h1>
+	<h1 style="margin-left:25px;">Timetable system AA</h1>
 	<div id="login-main">
 		<div class="form-group">
 			<label for="login-account">アカウント</label>
