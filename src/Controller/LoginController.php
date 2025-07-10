@@ -14,7 +14,17 @@ class LoginController extends BaseController
     public function index()
     {
 		$this->logNotice('index opened');
+//         $where =['account'  => 'aaa',
+// 				 'password' => 'bbb', 
 
+//             ];
+//         $where['age'] = 39;
+//         $aaa=$this->Users->find()
+//             ->select(["id","account"])
+// 			->where($where)
+//             ->order(['id' => 'ASC'])
+// 			->first();
+//             $this -> logNotice($aaa);
 
     }
 
@@ -37,11 +47,17 @@ class LoginController extends BaseController
 			]
 		];
 
+
+
+        
+
 		$user = $this->Users->getOneByLogin($data['account'], $data['password']);
 		if (!empty($user)) {
             $ret['data'] = ['user'=> $user, 'status' => 'success', 'message' => 'ログイン成功'];
+
         } else {
             $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。'];
+                
         }
 
         $this->set([
