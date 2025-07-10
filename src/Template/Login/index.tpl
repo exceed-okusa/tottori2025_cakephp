@@ -10,6 +10,9 @@
 				account: '',
 				password: '',
 				loginErrorMessage: '',
+                //失敗回数
+                loginErrorCount: 0,
+                isShowCount:false
 			},
 			methods:{
 				login: function(){
@@ -17,6 +20,8 @@
 					const data = {
 						account: this.account,
 						password: this.password,
+                        //失敗回数
+                        loginErrorCount:0,
 					}; 
 					const fn = function(dataFromAjax){
 						console.log('結果:', dataFromAjax);
@@ -25,11 +30,13 @@
 							location.href = '{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/'+ userId;
 						} else {
 							vmMain.loginErrorMessage = dataFromAjax.message;
-						}
+                            vmMain.isShowCount=true;
+                            vmMain.loginErrorCount++;
+                        }
 					}
 					stsAjax(url, data, fn);
 				}
-			}
+			},
 		});
     //-->
     //]]>
@@ -50,8 +57,18 @@
 	#error-message {
 		margin-top	:20px;
 		color		:red;
+        text-align: center;
 		font-weight	:bold;
 	}
+
+    #count-message {
+		margin-top	:20px;
+		color		:red;
+        text-align: center;
+		font-weight	:bold;
+        border: solid 1px;
+	}
+
 </style>
 
 <div id="vm">
@@ -69,6 +86,8 @@
 			<button class="btn btn-primary btn-lg" @click="login()">ログイン</button>
 		</div>
 		<div id="error-message" v-text="loginErrorMessage"></div>
+        <div v-if="isShowCount" id="count-message" v-text="'Login Failed : ' + loginErrorCount "></div>
 	</div>
 </div>
+
 
