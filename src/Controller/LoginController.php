@@ -13,9 +13,9 @@ class LoginController extends BaseController
 {
     public function index()
     {
+        // Controller：制御
 		$this->logNotice('index opened');
-
-
+        
     }
 
     /**
@@ -34,6 +34,7 @@ class LoginController extends BaseController
 				'user' => null,
 				'status' => '',
 				'message' => '',
+                
 			]
 		];
 
@@ -42,6 +43,7 @@ class LoginController extends BaseController
             $ret['data'] = ['user'=> $user, 'status' => 'success', 'message' => 'ログイン成功'];
         } else {
             $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。'];
+            // $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。', 'message2' => 'ログイン失敗：～回'];
         }
 
         $this->set([
