@@ -13,9 +13,8 @@ class LoginController extends BaseController
 {
     public function index()
     {
+        // controllerで制御
 		$this->logNotice('index opened');
-
-
     }
 
     /**
@@ -37,11 +36,13 @@ class LoginController extends BaseController
 			]
 		];
 
+
 		$user = $this->Users->getOneByLogin($data['account'], $data['password']);
 		if (!empty($user)) {
             $ret['data'] = ['user'=> $user, 'status' => 'success', 'message' => 'ログイン成功'];
         } else {
             $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。'];
+            // $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。', 'message2' =>'ログイン失敗:'+'loginErrorCount'+'回'];
         }
 
         $this->set([

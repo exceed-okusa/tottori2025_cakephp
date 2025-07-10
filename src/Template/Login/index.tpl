@@ -10,6 +10,9 @@
 				account: '',
 				password: '',
 				loginErrorMessage: '',
+                loginErrorCount: 0,
+                isShow: false,
+                // loginErrorCountMessage: ''
 			},
 			methods:{
 				login: function(){
@@ -25,6 +28,9 @@
 							location.href = '{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/'+ userId;
 						} else {
 							vmMain.loginErrorMessage = dataFromAjax.message;
+                            vmMain.loginErrorCount++;
+                            // vmMain.loginErrorCountMessage = dataFromAjax.message2;
+                            vmMain.isShow = true;
 						}
 					}
 					stsAjax(url, data, fn);
@@ -52,6 +58,12 @@
 		color		:red;
 		font-weight	:bold;
 	}
+    #LoginFailedMessage{
+        color		:red;
+		font-weight	:bold;  
+        border: 3px red solid;
+        text-align: center;
+    }
 </style>
 
 <div id="vm">
@@ -69,6 +81,9 @@
 			<button class="btn btn-primary btn-lg" @click="login()">ログイン</button>
 		</div>
 		<div id="error-message" v-text="loginErrorMessage"></div>
-	</div>
+        <div id="LoginFailedMessage" v-if="isShow" v-text="'Login Failed : '+loginErrorCount"></div>
+		{* <div v-if="isShow" v-text="loginErrorCountMessage"></div> *}
+        {* 'ログイン失敗:'+loginErrorCount+'回' *}
+        </div>
 </div>
 
