@@ -27,6 +27,7 @@
                     || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
                 },
                 isShowCheckTimetable: function(){
+                    // Enumは値の説明をしてくれている
                     return this.authority == {$this->Enum->Authority->STUDENT->value} 
                     || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
                 }

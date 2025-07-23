@@ -7,6 +7,7 @@
 		const vmMain = new Vue({
 			el:'#vm',
 			data:{
+                // ↓sqlで取得した情報を使えるようにしてくれている
 				lectures    : {$lectures},
 				courseTimes : {$courseTimes},
 				editId      : null,
@@ -19,27 +20,38 @@
 				goDetail: function(){
                     // 未完成
 				},
+                deleteConfirm:function(){
+
+                },
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
 					if(result){
                         // 未完成
                         const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
                         const data = {
-
+                            // 編集する講座ID
+                            editId: this.editId,
+                            // 入力した内容
+                            selectedLecture: this.selectedLecture,
                         };
                         const fn = function(dataFromAjax){
-                        
+                        location.reload();
                         }
 						stsAjax(url, data, fn);
 					}
 				},
 			},
+            // 何かしらの評価・処理によって、1つの値を算出したいとき
 			computed: {
 				isShow: function(){
 					return this.selectedLecture != null;
 				}
 			},
             watch: {
+                // 監視
+                // 何か変更されるたびになにかしら処理を行うもの
+                // newVal: 変更後の値
+                // oldVal: 変更前の値
                 editId: function(newVal, oldVal){
                     // 途中です
                     console.log(newVal);
@@ -94,6 +106,7 @@ input, select {
 						<td>
 							<button style="margin:0 10px;" @click="goEdit(lecture.id)">編集</button>
 							<button style="margin:0 10px;" @click="goDetail(lecture.id)">詳細</button>
+                            <button style="margin:0 10px;" @click="deleteConfirm(lecture.id)">削除</button>
 						</td>
 					</tr>
 				</tbody>

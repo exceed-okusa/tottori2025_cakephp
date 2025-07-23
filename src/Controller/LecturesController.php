@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Utils\Enum;
 use Cake\Controller\Controller;
 
 /**
@@ -25,6 +26,12 @@ class LecturesController extends BaseController
 				'Lectures.area_of_study_id',
 				'AreaOfStudies.area_of_study_name',
 			])
+            // =>はsql流のイコール
+            ->where([
+                // Javascriptでphpを使いたいときは{}が必要なし
+                'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+                'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+            ])
 			->order([
 				'Lectures.id' => 'ASC'
 			])
@@ -40,10 +47,34 @@ class LecturesController extends BaseController
 		$this->set('lectures', json_encode($lectures));
 		$this->set('courseTimes', json_encode($courseTimes));
     }
-
+    // 入力したデータを保存する処理↓
 	public function save()
     {
 		// 未実装		
+        		$this->autoRender = false; // Viewを強制的に使わない
+        $data = $this->request->input('json_decode', true);
 
+		$ret = [
+			'errors' => '',
+			'data' => []
+		];
+
+        // $this->logNotice($data);
+        $lecture = $this->Lectures->get($data['editId']);
+        // patchEntityは変更されたものを上書き
+        $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
+        $this->Lectures->save($lecture);
+
+        $this->set([
+            'dataFromAjax' => $ret['data'],
+			'errors' => $ret['errors'],
+            '_serialize' => ['response']
+        ]);
+		// JSONヘッダーをセット
+		$this->response->type('json');
+		// JSON文字列を本文にセット
+		$this->response->body(json_encode($ret));
+
+		return $this->response;
     }
 }
