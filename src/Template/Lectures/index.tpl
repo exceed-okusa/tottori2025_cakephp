@@ -6,12 +6,14 @@
     {'<!--'}
 		const vmMain = new Vue({
 			el:'#vm',
+            // データを書いておくとき
 			data:{
 				lectures    : {$lectures},
 				courseTimes : {$courseTimes},
 				editId      : null,
                 selectedLecture: null,
 			},
+            // 登録ボタンとか作るとき
 			methods:{
 				goEdit: function(lectureId){
 					this.editId = lectureId;
@@ -19,22 +21,30 @@
 				goDetail: function(){
                     // 未完成
 				},
+                deleteConfirm: function(){
+
+                },
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
 					if(result){
                         // 未完成
                         const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
                         const data = {
+                        
+                        editId: this.editId,
+                        selectedLecture: this.selectedLecture
 
                         };
                         const fn = function(dataFromAjax){
-                        
+                        location.reload();
                         }
 						stsAjax(url, data, fn);
 					}
 				},
 			},
+            
 			computed: {
+                // 何かしらの評価・処理によって、一つの値を算出したいとき
 				isShow: function(){
 					return this.selectedLecture != null;
 				}
@@ -94,6 +104,7 @@ input, select {
 						<td>
 							<button style="margin:0 10px;" @click="goEdit(lecture.id)">編集</button>
 							<button style="margin:0 10px;" @click="goDetail(lecture.id)">詳細</button>
+                            <button style="margin:0 10px;" @click="goEdit(lecture.id)">削除</button>
 						</td>
 					</tr>
 				</tbody>

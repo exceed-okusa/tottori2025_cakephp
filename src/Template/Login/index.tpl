@@ -19,7 +19,6 @@
 					const data = {
 						account: this.account,
 						password: this.password,
-                        loginErrorCount: this.loginErrorCount,
 					}; 
 					const fn = function(dataFromAjax){
 						console.log('結果:', dataFromAjax);
