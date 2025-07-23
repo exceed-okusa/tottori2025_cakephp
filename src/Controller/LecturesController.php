@@ -25,6 +25,10 @@ class LecturesController extends BaseController
 				'Lectures.area_of_study_id',
 				'AreaOfStudies.area_of_study_name',
 			])
+			->where([
+				'Lectures.invalidation_flag' => $this->Enum->invalidation_flag->OFF->value,
+				'AreaOfStudies.invalidation_flag' => $this->Enum->invalidation_flag->OFF->value,
+			])
 			->order([
 				'Lectures.id' => 'ASC'
 			])
@@ -42,8 +46,30 @@ class LecturesController extends BaseController
     }
 
 	public function save()
-    {
-		// 未実装		
+	{
+		$this->autoRender = false; // Viewを強制的に使わない
+		$data = $this->request->input('json_decode', true);
 
-    }
+		$ret = [
+			'errors' => '',
+			'data' => []
+		];
+
+		$lecture = $this->Lectures->get($data['editId']);
+		$lecture = $this->Lectures->patchEntity($lecture, $data['selectedLecture'], ['associated' => false]);
+		$this->Lectures->save($lecture);
+
+		$this->set([
+			'dataFromAjax' => $ret['data'],
+			'errors' => $ret['errors'],
+			'_serialize' => ['response']
+		]);
+
+		// JSONヘッダーをセット
+		$this->response->type('json');
+		// JSON文字列を本文にセット
+		$this->response->body(json_encode($ret));
+
+		return $this->response;
+	}
 }

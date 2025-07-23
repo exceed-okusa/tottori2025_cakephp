@@ -7,10 +7,10 @@
 		const vmMain = new Vue({
 			el:'#vm',
 			data:{
-				lectures    : {$lectures},
-				courseTimes : {$courseTimes},
-				editId      : null,
-                selectedLecture: null,
+				lectures: {$lectures},
+				courseTimes: {$courseTimes},
+				editId: null,
+        selectedLecture: null,
 			},
 			methods:{
 				goEdit: function(lectureId){
@@ -19,17 +19,21 @@
 				goDetail: function(){
                     // 未完成
 				},
+				deleteConfirm: function(){
+                    // 未完成
+				},
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
 					if(result){
-                        // 未完成
-                        const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
-                        const data = {
-
-                        };
-                        const fn = function(dataFromAjax){
-                        
-                        }
+						// 未完成
+						const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
+						const data = {
+							editId: this.editId,
+              selectedLecture: this.selectedLecture,
+						};
+						const fn = function(dataFromAjax){
+							location.reload();
+						}
 						stsAjax(url, data, fn);
 					}
 				},
@@ -39,19 +43,15 @@
 					return this.selectedLecture != null;
 				}
 			},
-            watch: {
-                editId: function(newVal, oldVal){
-                    // 途中です
-                    console.log(newVal);
-                    console.log(oldVal);
-                    for(let i=0;i<this.lectures.length; i++){
+      watch: {
+        editId: function(newVal, oldVal){
+          for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == newVal){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
 						}
-					};
-					return null;
+					}
 				},
-            }
+      }
 		});
     //-->
     //]]>
@@ -94,6 +94,7 @@ input, select {
 						<td>
 							<button style="margin:0 10px;" @click="goEdit(lecture.id)">編集</button>
 							<button style="margin:0 10px;" @click="goDetail(lecture.id)">詳細</button>
+							<button style="margin:0 10px;" @click="deleteConfirm(lecture.id)">削除</button>
 						</td>
 					</tr>
 				</tbody>
