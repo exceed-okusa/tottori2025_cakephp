@@ -28,6 +28,7 @@ class LecturesTable extends BaseTable
 
 		$this->belongsTo('AreaOfStudies', [
 			'joinType'   => 'LEFT',
+            // 'bindingKey' => 'id',  
 			'foreignKey' => 'area_of_study_id',
 		]);
     }

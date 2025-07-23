@@ -19,37 +19,45 @@
 				goDetail: function(){
                     // 未完成
 				},
+                deleteConfirm: function(){
+                    // 未完成
+                },
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
 					if(result){
-                        // 未完成
                         const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
                         const data = {
-
+                            // 編集する講座ID 
+                            editId: this.editId,
+                            // 入力した内容
+                            selectedLecture: this.selectedLecture,
                         };
                         const fn = function(dataFromAjax){
-                        
+                            // 画面再描画
+                            location.reload();
                         }
 						stsAjax(url, data, fn);
 					}
 				},
 			},
 			computed: {
+                // 算出プロパティ（結果が変更されない限り、処理が動かない）
+                // なにかしらの評価・処理によって、１つの値を算出したいとき。
 				isShow: function(){
 					return this.selectedLecture != null;
 				}
 			},
             watch: {
+                // 監視する
+                // 値が変更されるたびに、なにかしら処理を行いたいとき。
+                // newVal: 変更後の値
+                // oldVal: 変更前の値
                 editId: function(newVal, oldVal){
-                    // 途中です
-                    console.log(newVal);
-                    console.log(oldVal);
                     for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == newVal){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
 						}
-					};
-					return null;
+					}
 				},
             }
 		});
@@ -94,6 +102,7 @@ input, select {
 						<td>
 							<button style="margin:0 10px;" @click="goEdit(lecture.id)">編集</button>
 							<button style="margin:0 10px;" @click="goDetail(lecture.id)">詳細</button>
+                            <button style="margin:0 10px;" @click="deleteConfirm(lecture.id)">削除</button>
 						</td>
 					</tr>
 				</tbody>
