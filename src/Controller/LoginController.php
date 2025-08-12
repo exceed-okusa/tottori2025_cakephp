@@ -44,7 +44,7 @@ class LoginController extends BaseController
         if (!empty($user)) {
             $ret['data'] = ['user' => $user, 'status' => 'success', 'message' => 'ログイン成功'];
         } else {
-            $ret['data'] = ['user' => null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。', 'count' => 'ログイン失敗 : ' + 'loginErrorCount' + '回'];
+            $ret['data'] = ['user' => null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。',];
         }
 
         $this->set([

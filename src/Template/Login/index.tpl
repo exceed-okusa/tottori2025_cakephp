@@ -21,7 +21,7 @@
 						account: this.account,
 						password: this.password,
                         //失敗回数
-                        loginErrorCount:0,
+                        loginErrorCount:this.loginErrorCount,
 					}; 
 					const fn = function(dataFromAjax){
 						console.log('結果:', dataFromAjax);
