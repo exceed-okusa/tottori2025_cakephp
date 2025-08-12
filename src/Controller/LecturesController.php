@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\I18n\FrozenTime;
 
 /**
  * Class LecturesController
@@ -46,18 +47,60 @@ class LecturesController extends BaseController
     }
 
 	public function save()
-	{
-		$this->autoRender = false; // Viewを強制的に使わない
-		$data = $this->request->input('json_decode', true);
+
+    {	
+        $this->autoRender = false; // Viewを強制的に使わない
+        $data = $this->request->input('json_decode', true);
 
 		$ret = [
 			'errors' => '',
 			'data' => []
 		];
 
-		$lecture = $this->Lectures->get($data['editId']);
-		$lecture = $this->Lectures->patchEntity($lecture, $data['selectedLecture'], ['associated' => false]);
-		$this->Lectures->save($lecture);
+        if(!empty($data['editId'])){
+            // 編集
+            $lecture = $this->Lectures->get($data['editId']);
+            $lecture = $this->Lectures->patchEntity($lecture, $data['selectedLecture'], ['associated'=>false]);
+        }else{
+            // 追加
+            $data['selectedLecture']['insert_user_id'] = 0;
+            $data['selectedLecture']['update_user_id'] = 0;
+            $lecture = $this->Lectures->newEntity($data['selectedLecture'], ['associated'=>false]);
+        }
+
+        $this->Lectures->save($lecture);
+
+        $this->set([
+            'dataFromAjax' => $ret['data'],
+			'errors' => $ret['errors'],
+            '_serialize' => ['response']
+        ]);
+		// JSONヘッダーをセット
+		$this->response->type('json');
+		// JSON文字列を本文にセット
+		$this->response->body(json_encode($ret));
+
+		return $this->response;
+    }
+
+    public function delete()
+    {
+        $this->autoRender = false; // Viewを強制的に使わない
+        $data = $this->request->input('json_decode', true);
+
+		$ret = [
+			'errors' => '',
+			'data' => []
+		];
+
+        $dataForPatch = [
+            'invalidation_flag' => $this->Enum->InvalidationFlag->ON->value,
+            'delete_date'       => new FrozenTime()
+        ];
+
+        $lecture = $this->Lectures->get($data['editId']);
+        $lecture = $this->Lectures->patchEntity($lecture, $dataForPatch, ['associated'=>false]);
+        $this->Lectures->save($lecture);
 
 		$this->set([
 			'dataFromAjax' => $ret['data'],
