@@ -186,28 +186,31 @@ input, select {
         <th>講座ID</th><td  v-text="selectedLecture.id"></td>
         </tr>
         <tr>
-        <th>講座名</th><td v-text='selectedLecture.name'></td>
+        <th>講座名</th><td v-text='selectedLecture.lecture_name'></td>
         </tr>
         <tr>
         <th>開講曜日</th><td v-text='selectedLecture.class_day'></td>
         </tr>
         <tr>
-        <th>開講時限</th><td v-text='selectedLecture.course_time'></td>
+        <th>開講時限</th><td v-text='selectedLecture.course_time + "限"'></td>
         </tr>
         <tr>
-        <th>学問分類ID</th><td v-text='selectedLecture.area_of_study_id'></td>
+        <th>学問分類</th><td v-text='selectedLecture.area_of_study.area_of_study_name'></td>
         </tr>
         <tr>
         <th>コマ数</th><td v-text='selectedLecture.number_of_frames'></td>
         </tr>
         <tr>
-        <th>ユーザーID</th><td v-text='selectedLecture.insert_user_id'></td>
+        <th>登録ユーザー</th><td  v-if ='selectedLecture.insert_user == null'></td>
+        <td v-else v-text="selectedLecture.insert_user.family_name + '' + selectedLecture.insert_user.first_name "></td>
+                            
         </tr>
         <tr>
         <th>登録日時</th><td v-text='selectedLecture.insert_date'></td>
         </tr>
         <tr>
-        <th>更新ユーザーID</th><td v-text='selectedLecture.update_user_id'></td>
+        <th>更新ユーザー</th><td  v-if ='selectedLecture.update_user == null'></td>
+        <td v-else v-text="selectedLecture.update_user.family_name + '' + selectedLecture.update_user.first_name "></td>
         </tr>
         <tr>
         <th>更新日時</th><td v-text='selectedLecture.update_date'></td>
