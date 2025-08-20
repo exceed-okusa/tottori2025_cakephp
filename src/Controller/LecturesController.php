@@ -15,16 +15,9 @@ class LecturesController extends BaseController
     {
 		$lectures = $this->Lectures->find()
 			->contain([
-				'AreaOfStudies'
-			])
-			->select([
-				'Lectures.id',
-				'Lectures.lecture_name',
-				'Lectures.class_day',
-				'Lectures.course_time',
-				'Lectures.number_of_frames',
-				'Lectures.area_of_study_id',
-				'AreaOfStudies.area_of_study_name',
+				'AreaOfStudies',
+                'InsertUser',
+                'UpdateUser',
 			])
             ->where([
                 'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,

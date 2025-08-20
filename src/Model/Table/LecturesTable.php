@@ -26,10 +26,24 @@ class LecturesTable extends BaseTable
         $this->displayField('id');
         $this->primaryKey('id');
 
+        // 多 対 1
 		$this->belongsTo('AreaOfStudies', [
 			'joinType'   => 'LEFT',
             // 'bindingKey' => 'id',  
 			'foreignKey' => 'area_of_study_id',
 		]);
+
+        $this->belongsTo('InsertUser', [
+			'className'    => 'Users',
+			'foreignKey'   => 'insert_user_id',
+            'propertyName' => 'insert_user'
+		]);
+
+        $this->belongsTo('UpdateUser', [
+			'className'    => 'Users',
+			'foreignKey'   => 'update_user_id',
+            'propertyName' => 'update_user'
+		]);
+
     }
 }
