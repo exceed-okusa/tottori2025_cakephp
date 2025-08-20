@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\AreaOfStudy;
 use Cake\Validation\Validator;
 
 /**
@@ -25,10 +26,20 @@ class LecturesTable extends BaseTable
         parent::initialize($config);
         $this->displayField('id');
         $this->primaryKey('id');
-
+        // 何もなくてもAreaOfStudies.idをつけてくれている
 		$this->belongsTo('AreaOfStudies', [
 			'joinType'   => 'LEFT',
 			'foreignKey' => 'area_of_study_id',
+		]);
+		$this->belongsTo('InsertUser', [
+            'className'    => 'Users',
+            'foreignKey'   => 'insert_user_id',
+            'propertyName' => 'insert_user',
+		]);
+		$this->belongsTo('UpdateUser', [
+            'className'    => 'Users',
+			'foreignKey'   => 'update_user_id',
+			'propertyName' => 'update_user',
 		]);
     }
 }
