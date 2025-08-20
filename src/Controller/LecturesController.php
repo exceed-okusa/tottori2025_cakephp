@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\I18n\FrozenTime;
+
 
 /**
  * Class LecturesController
@@ -14,16 +16,10 @@ class LecturesController extends BaseController
     {
 		$lectures = $this->Lectures->find()
 			->contain([
-				'AreaOfStudies'
-			])
-			->select([
-				'Lectures.id',
-				'Lectures.lecture_name',
-				'Lectures.class_day',
-				'Lectures.course_time',
-				'Lectures.number_of_frames',
-				'Lectures.area_of_study_id',
-				'AreaOfStudies.area_of_study_name',
+				'AreaOfStudies',
+                // 'Users'
+                'InsertUser',
+                'UpdateUser',
 			])
             ->where([
                 'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
@@ -59,12 +55,27 @@ class LecturesController extends BaseController
 				'message' => '',
 			]
 		];
+        
+        if(!empty($data['editId'])){
+            $lecture = $this->Lectures->get($data['editId']);
+            $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
+        }else{
+            $data['selectedLecture']['insert_user_id'] = 0;
+            $data['selectedLecture']['update_user_id'] = 0;
+            $data['selectedLecture']['insert_date'] = new FrozenTime();
+            $data['selectedLecture']['update_date'] = new FrozenTime();
 
+            $this->logNotice($data['selectedLecture']);
+            $lecture = $this->Lectures->newEntity($data['selectedLecture'],['associated'=>false]);
+
+        }
         // 
-        $lecture = $this->Lectures->get($data['editId']);
+        
         // $this->logNotice($lecture);
-        $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
+        
+        
         // $this->logNotice($lecture);
+        // $this->Lectures->delete($lecture);
         $this->Lectures->save($lecture);
 		
 
@@ -81,5 +92,43 @@ class LecturesController extends BaseController
 		return $this->response;
 		
     }
+
+    public function delete()
+    {
+		// 未実装		
+        $this->autoRender = false; // Viewを強制的に使わない
+        $data = $this->request->input('json_decode', true);
+
+		$ret = [
+			'errors' => '',
+			'data' => []
+		];
+
+        $dataForPatch = [
+            'invalidation_flag' => $this->Enum->InvalidationFlag->ON->value,
+            'delete_date'       => new FrozenTime()
+        ];
+        $lecture = $this->Lectures->get($data['editId']);
+        // $this->logNotice($lecture);
+        $lecture = $this->Lectures->patchEntity($lecture,['invalidation_flag'=>$this->Enum->InvalidationFlag->ON->value],['associated'=>false]);
+        // $this->logNotice($lecture);
+        // $this->Lectures->delete($lecture);
+        $this->Lectures->save($lecture);
+		
+
+        $this->set([
+            'dataFromAjax' => $ret['data'],
+			'errors' => $ret['errors'],
+            '_serialize' => ['response']
+        ]);
+		// JSONヘッダーをセット
+		$this->response->type('json');
+		// JSON文字列を本文にセット
+		$this->response->body(json_encode($ret));
+
+		return $this->response;
+		
+    }
+
 }
 
