@@ -9,7 +9,6 @@
 			data:{
 				user: 	   {$user},
 				authority: {$user->authority},
-				isShowAddLecture: false,
 			},
 			methods:{
 				goLectures: function(){
