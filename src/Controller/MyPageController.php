@@ -12,10 +12,10 @@ class MyPageController extends BaseController
 {
     public function edit($id)
     {
-		// ゆくゆくはsessionへ
-		$user = $this->Users->get($id);
-		// $this->logNotice($user);
+        $this->logNotice($this->request->session()->read());        // ゆくゆくはsessionへ
+        $user = $this->Users->get($id);
+        // $this->logNotice($user);
 
-		$this->set(compact('user'));
+        $this->set(compact('user'));
     }
 }

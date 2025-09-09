@@ -5,7 +5,10 @@ namespace App\Utils;
 /**
  * Class Enum
  *
- * @property \Utils\enums\Enum\EnumItem\Authority $Authority
+ * @property \Utils\enums\Enum\EnumItem\Authority            $Authority
+ * @property \Utils\enums\Enum\EnumItem\InvalidationFlag     $InvalidationFlag
+ * @property \Utils\enums\Enum\EnumItem\DayOfWeek            $DayOfWeek
+ * @property \Utils\enums\Enum\EnumItem\PageMode             $PageMode
  */
 class Enum
 {
@@ -18,8 +21,8 @@ class Enum
      */
     public function __get($name)
     {
-        if ( empty($this->$name) ) {
-            if ( file_exists(ROOT . '/src/Utils/enums/enumlist/' . $name . '.php') ) {
+        if (empty($this->$name)) {
+            if (file_exists(ROOT . '/src/Utils/enums/enumlist/' . $name . '.php')) {
                 $enums = enums();
                 $this->$name = $enums->$name;
                 if (!empty($this->_parent)) {

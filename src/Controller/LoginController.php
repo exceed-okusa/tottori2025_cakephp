@@ -15,7 +15,7 @@ class LoginController extends BaseController
     {
         // Controllerの起動
         $this->logNotice('index opened');
-        //ログ出力
+        $this->logNotice($this->request->session()->read());
     }
 
     /**
@@ -38,11 +38,12 @@ class LoginController extends BaseController
             ]
         ];
 
-
+        $this->logNotice($this->request->session()->read());
 
         $user = $this->Users->getOneByLogin($data['account'], $data['password']);
         if (!empty($user)) {
             $ret['data'] = ['user' => $user, 'status' => 'success', 'message' => 'ログイン成功'];
+            $this->request->session()->write('loginUserId', $user->id);
         } else {
             $ret['data'] = ['user' => null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。',];
         }

@@ -11,23 +11,20 @@
 				courseTimes : {$courseTimes},
 				editId      : null,
                 selectedLecture: null,
-                isShow      : false,
-                isShowDetail: false,
+                pageMode    : {$this->Enum->PageMode->LIST->value},
 			},
 			methods:{
 				goEdit: function(lectureId){
-                    this.isShowDetail = false;
+                    this.pageMode = {$this->Enum->PageMode->EDIT->value};
 					this.editId = lectureId;
                     for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == lectureId){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
-                            this.isShow = true;
 						}
 					};
 				},
 				goDetail: function(lectureId){
-                    this.isShow = false;
-                    this.isShowDetail = true;
+                    this.pageMode = {$this->Enum->PageMode->DETAIL->value};
                     for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == lectureId){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
@@ -35,6 +32,7 @@
 					};
 				},
                 goAdd: function(){
+                    this.pageMode = {$this->Enum->PageMode->ADD->value};
                     this.editId = null;
                     this.selectedLecture = {
                     id               : null,
@@ -44,11 +42,8 @@
                     area_of_study_id : null,
                     number_of_frames : 1,
                     };
-                    this.isShow = true;
-                    this.isShowDetail = false;
 				},
                 deleteConfirm: function(lectureId){
-                    this.selectedLecture = null;
 					const result = window.confirm('削除しますか？');
                     if(result){
                         const url = '{$this->Url->build(['action'=>'delete', '_ext'=>'json'])}';
@@ -60,6 +55,9 @@
                         }
 						stsAjax(url, data, fn);
 					}
+                    this.pageMode = {$this->Enum->PageMode->LIST->value};
+                    this.selectedLecture = null;
+
 				},
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
@@ -76,6 +74,15 @@
 					}
 				},
 			},
+            computed: {
+                    isShow: function() {
+                            return (this.pageMode == {$this->Enum->PageMode->ADD->value} || this.pageMode == {$this->Enum->PageMode->EDIT->value});
+                        },
+                    isShowDetail:function() {
+                            return (this.pageMode == {$this->Enum->PageMode->DETAIL->value});
+                    },
+                }
+            
 		});
 
 </script>
@@ -107,7 +114,7 @@ width: 300px;
     margin: 0.67em 0;
     margin-right: 100px;
 }
-#course-edit {
+.course-edit {
 	margin-left: 200px;
 	min-width:350px;
 }
@@ -119,7 +126,9 @@ input, select {
 }
 </style>
 
+<a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}">マイページへ戻る</a>
 <div id="vm" style="display:flex;">
+{* id=1 のuser pageに遷移してしまう *}
 	<div id="course-right">
 		<b id="header-size">講座一覧</b>
         <span><button style="margin:0 10px;" @click="goAdd()">追加</button></span>
@@ -146,7 +155,7 @@ input, select {
 				</tbody>
 			</table>
 	</div>
-	<div id="course-edit" v-if="isShow">
+	<div class="course-edit" v-if="isShow">
         <h1 v-if='editId == null'>講座内容 登録</h1>
 		<h1 v-else>講座内容 編集</h1>
 		<div>
@@ -179,8 +188,8 @@ input, select {
 		</div>
 		<button @click="saveConfirm()">登録</button>
 	</div>
-    <div  id="course-left" v-if='isShowDetail'>
-    <b id="header-size">講座詳細</b>
+    <div  id="course-left" class="course-edit" v-if='isShowDetail'>
+    <h1>講座詳細</h1>
     <table>
         <tr>
         <th>講座ID</th><td  v-text="selectedLecture.id"></td>
@@ -189,7 +198,7 @@ input, select {
         <th>講座名</th><td v-text='selectedLecture.lecture_name'></td>
         </tr>
         <tr>
-        <th>開講曜日</th><td v-text='selectedLecture.class_day'></td>
+        <th>開講曜日</th><td v-text='selectedLecture.class_day_label'></td>
         </tr>
         <tr>
         <th>開講時限</th><td v-text='selectedLecture.course_time + "限"'></td>
@@ -201,16 +210,14 @@ input, select {
         <th>コマ数</th><td v-text='selectedLecture.number_of_frames'></td>
         </tr>
         <tr>
-        <th>登録ユーザー</th><td  v-if ='selectedLecture.insert_user == null'></td>
-        <td v-else v-text="selectedLecture.insert_user.family_name + '' + selectedLecture.insert_user.first_name "></td>
-                            
+        <th>登録ユーザー</th>
+        <td v-text = 'selectedLecture.insert_user_name'></td>
         </tr>
         <tr>
         <th>登録日時</th><td v-text='selectedLecture.insert_date'></td>
         </tr>
         <tr>
-        <th>更新ユーザー</th><td  v-if ='selectedLecture.update_user == null'></td>
-        <td v-else v-text="selectedLecture.update_user.family_name + '' + selectedLecture.update_user.first_name "></td>
+        <th>更新ユーザー</th><td  v-text='selectedLecture.update_user_name'></td>
         </tr>
         <tr>
         <th>更新日時</th><td v-text='selectedLecture.update_date'></td>
