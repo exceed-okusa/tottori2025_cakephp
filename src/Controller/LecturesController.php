@@ -14,6 +14,10 @@ class LecturesController extends BaseController
 {
     public function index()
     {
+
+$this->logNotice($this->request->session()->read());
+        $loginUserId = $this->logNotice($this->request->session()->read('loginUserId'));
+
 		$lectures = $this->Lectures->find()
 			->contain([
 				'AreaOfStudies',
@@ -38,6 +42,8 @@ class LecturesController extends BaseController
 			$number++;
 		}
 
+        // $setはindex.tpl(Lecturesのやつ)でも使えるようにするもの
+        $this->set(compact('loginUserId'));
 		$this->set('lectures', json_encode($lectures));
 		$this->set('courseTimes', json_encode($courseTimes));
     }

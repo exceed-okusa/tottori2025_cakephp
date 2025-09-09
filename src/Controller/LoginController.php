@@ -15,6 +15,15 @@ class LoginController extends BaseController
     {
         // controllerで制御
 		$this->logNotice('index opened');
+
+        $this->request->session()->delete('fruits');
+
+        // ↓一時的なかごを作成している
+        $this->logNotice($this->request->session()->read());
+
+        
+
+
     }
 
     /**
@@ -35,15 +44,17 @@ class LoginController extends BaseController
 				'message' => '',
 			]
 		];
-
+        $this->logNotice($this->request->session()->read());
 
 		$user = $this->Users->getOneByLogin($data['account'], $data['password']);
 		if (!empty($user)) {
+        $this->request->session()->write('loginUserId' , $user->id);
             $ret['data'] = ['user'=> $user, 'status' => 'success', 'message' => 'ログイン成功'];
         } else {
             $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。'];
             // $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。', 'message2' =>'ログイン失敗:'+'loginErrorCount'+'回'];
         }
+         $this->logNotice($this->request->session()->read());
 
         $this->set([
             'dataFromAjax' => $ret['data'],
