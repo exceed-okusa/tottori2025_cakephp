@@ -6,6 +6,9 @@ namespace App\Utils;
  * Class Enum
  *
  * @property \Utils\enums\Enum\EnumItem\Authority $Authority
+ * @property \Utils\enums\Enum\EnumItem\DayOfWeek $DayOfWeek
+ * @property \Utils\enums\Enum\EnumItem\InvalidationFlag $InvalidationFlag
+ * @property \Utils\enums\Enum\EnumItem\PageMode $PageMode
  */
 class Enum
 {

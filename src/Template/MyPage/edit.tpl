@@ -13,8 +13,13 @@
 			},
 			methods:{
 				goLectures: function(){
-					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}'
+                    // 画面遷移
+					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}';
 				},
+                logout: function(){
+                    
+                    window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}';
+                },
 			},
             // 何かしらの判定を通して、1つの結果を得る
             computed: {
@@ -61,6 +66,9 @@
         <div class="main-button" v-if="authority == {$this->Enum->Authority->TEACHER->value} || authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value}">
 			<button class="btn btn-primary btn-lg" @click="goLectures()">講座管理</button>
 		</div>
+        <div class="main-button">
+            <button class="btn btn-primary btn-lg" @click="logout()">ログアウト</button>
+        </div>
 	</div>
 </div>
 
