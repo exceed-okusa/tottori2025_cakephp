@@ -11,25 +11,21 @@
 				courseTimes     : {$courseTimes},
 				editId          : null,
                 selectedLecture : null,
-                // 各ボタンからmodeを決定->再びisShow,isShowDetailをcomputedへ
-                isShow          : false,
-                isShowDetail    : false,
+                pageMode        : {$this->Enum->PageMode->LIST->value},
 			},
 			methods:{
 				goEdit: function(lectureId){
-                    this.isShowDetail = false;
+                    this.pageMode = {$this->Enum->PageMode->EDIT->value};
 					this.editId = lectureId;
                     for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == lectureId){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
-                            this.isShow = true;
 						}
 					}
 				},
 				goDetail: function(lectureId){
+                    this.pageMode = {$this->Enum->PageMode->DETAIL->value};
                     this.editId = lectureId;
-                    this.isShow = false;
-                    this.isShowDetail = true;
                     for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == lectureId){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
@@ -37,6 +33,7 @@
 					}
 				},
                 goAdd: function(){
+                    this.pageMode = {$this->Enum->PageMode->ADD->value};
                     this.editId = null;
                     this.selectedLecture = {
                         id               : null,
@@ -46,13 +43,8 @@
                         area_of_study_id : null,
                         number_of_frames : 1,
                     };
-                    this.isShow = true;
-                    this.isShowDetail = false;
 				},
                 deleteConfirm: function(lectureId){
-                    this.selectedLecture = null;
-                    this.isShow = false;
-                    this.isShowDetail = false;
                     this.editId = lectureId;
                     const result = window.confirm('削除します。よろしいですか？');
                     if(result){
@@ -67,6 +59,9 @@
                         }
 						stsAjax(url, data, fn);
 					}
+                    // 右側の表示を非表示にするため
+                    this.pageMode = {$this->Enum->PageMode->LIST->value};
+                    this.selectedLecture = null;
                 },
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
@@ -86,6 +81,15 @@
 					}
 				},
 			},
+            computed: {
+                isShow: function(){
+                    return (this.pageMode == {$this->Enum->PageMode->ADD->value}
+                         || this.pageMode == {$this->Enum->PageMode->EDIT->value});
+                },
+                isShowDetail: function(){
+                    return this.pageMode == {$this->Enum->PageMode->DETAIL->value};
+                },
+            }
 		});
     //-->
     //]]>
@@ -128,7 +132,9 @@ input, select {
 }
 </style>
 
+<a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}">< マイページへ戻る</a>
 <div id="vm" style="display:flex;">
+
 	<div id="course-list">
     <div id="lectures-header">
         <h1>講座一覧</h1>
@@ -205,8 +211,7 @@ input, select {
                 </tr>
                 <tr>
                     <th>開講曜日</th>
-                    {* ohkusa案件・・・ <td>{$this->Enum->DayOfWeek->getTextByValue(selectedLecture.class_day)}</td> *}
-                    <td v-text="selectedLecture.class_day"></td>
+                    <td v-text="selectedLecture.class_day_label"></td>
                 </tr>
                 <tr>
                     <th>開講時限</th>
@@ -222,8 +227,7 @@ input, select {
                 </tr>
                 <tr>
                     <th>登録ユーザー</th>
-                    <td v-if="selectedLecture.insert_user == null"></td>
-                    <td v-else v-text="selectedLecture.insert_user.family_name + ' ' + selectedLecture.insert_user.first_name"></td>
+                    <td v-text="selectedLecture.insert_user_name"></td>
                 </tr>
                 <tr>
                     <th>登録日時</th>
@@ -231,8 +235,7 @@ input, select {
                 </tr>
                 <tr>
                     <th>更新ユーザー</th>
-                    <td v-if="selectedLecture.update_user == null"></td>
-                    <td v-else v-text="selectedLecture.update_user.family_name + ' ' + selectedLecture.update_user.first_name"></td>
+                    <td v-text="selectedLecture.update_user_name"></td>
                 </tr>
                 <tr>
                     <th>登録日時</th>
