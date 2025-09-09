@@ -15,7 +15,7 @@ class LoginController extends BaseController
     {
 		$this->logNotice('index opened');
 
-
+        $this->logNotice($this->request->session()->read());
     }
 
     /**
@@ -39,10 +39,13 @@ class LoginController extends BaseController
 
 		$user = $this->Users->getOneByLogin($data['account'], $data['password']);
 		if (!empty($user)) {
+            $this->request->session()->write('loginUserId', $user->id);
             $ret['data'] = ['user'=> $user, 'status' => 'success', 'message' => 'ログイン成功'];
         } else {
             $ret['data'] = ['user'=> null, 'status' => 'error', 'message' => 'アカウントまたはパスワードが間違っています。'];
         }
+        
+$this->logNotice($this->request->session()->read());
 
         $this->set([
             'dataFromAjax' => $ret['data'],
