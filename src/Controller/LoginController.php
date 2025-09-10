@@ -15,13 +15,11 @@ class LoginController extends BaseController
     {
         // controllerで制御
 		$this->logNotice('index opened');
-
-        $this->request->session()->delete('fruits');
+        
+        $this->request->session()->delete('loginUserId');
 
         // ↓一時的なかごを作成している
         $this->logNotice($this->request->session()->read());
-
-        
 
 
     }

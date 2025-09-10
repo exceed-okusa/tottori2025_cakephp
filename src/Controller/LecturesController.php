@@ -16,7 +16,7 @@ class LecturesController extends BaseController
     {
 
 $this->logNotice($this->request->session()->read());
-        $loginUserId = $this->logNotice($this->request->session()->read('loginUserId'));
+        $loginUserId = $this->request->session()->read('loginUserId');
 
 		$lectures = $this->Lectures->find()
 			->contain([

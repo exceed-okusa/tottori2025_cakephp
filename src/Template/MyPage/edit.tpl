@@ -15,9 +15,9 @@
 				goLectures: function(){
 					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}'
 				},
-                logout: function(){
-                    window.location.href = '{$this->Url->build(['controller'=>'login', 'action'=>'index'])}'
-                }
+                // logout: function(){
+                //     window.location.href = '{$this->Url->build(['controller'=>'login', 'action'=>'index'])}'
+                // }
 			},
             // 何かの判定を通して、一つの結果を得る
             computed:{
@@ -67,9 +67,6 @@
 		</div>
         <div class="main-button" v-if="isShowCheckTimetable">
             <div class="btn btn-primary btn-lg">時間割確認</div>
-        </div>
-        <div class="main-button">
-            <div class="btn btn-primary btn-lg" @click="logout">ログアウト</div>
         </div>
 	</div>
 </div>
