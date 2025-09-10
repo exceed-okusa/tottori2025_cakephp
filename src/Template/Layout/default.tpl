@@ -32,7 +32,28 @@
 </head>
 <body>
 
+{* {if $aaa == 3 && $bbb == 4}
+
+{elseif $aaa == 6}
+
+{else}
+
+{/if} *}
+
+{if $this->request->params['controller'] == 'Login' && $this->request->params['action'] == 'index'}
+{else}
+    {$this->request->params['controller']}
+    {$this->request->params['action']}
+    {$this->Html->link('ログアウト',['controller' => 'Login', 'action' => 'index'],['class' => 'btn btn-danger','style' => 'margin: 5px;'])}
+{/if}
+
+
+    
+
+
+
 {$this->fetch('content')}
+
 
 {$this->fetch('scriptBottom')}
 </body>

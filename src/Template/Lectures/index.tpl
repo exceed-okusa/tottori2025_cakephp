@@ -178,9 +178,9 @@ input, select {
 }
 
 </style>
-
-<div id="vm" style="display:flex;">
-    <a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}">マイページへ戻る</a>
+<a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}">＜マイページへ戻る</a>
+{*display:flex; 子要素を全部横並びにする *}
+<div id="vm" style="display:flex;">    
 	<div id="course-list">
         <div style="display:flex; align-items:center;">
 		<h1>講座一覧</h1>

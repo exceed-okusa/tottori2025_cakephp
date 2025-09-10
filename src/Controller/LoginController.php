@@ -20,6 +20,8 @@ class LoginController extends BaseController
 
         $this->logNotice($this->request->session()->read());
         
+        $this->request->session()->delete('loginUserId');
+        
 //         $where =['account'  => 'aaa',
 // 				 'password' => 'bbb', 
 
