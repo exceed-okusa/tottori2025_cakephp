@@ -15,6 +15,8 @@ class LoginController extends BaseController
     {
 		$this->logNotice('index opened');
 
+        $this->request->session()->delete('loginUserId');
+
         $this->logNotice($this->request->session()->read());
     }
 
