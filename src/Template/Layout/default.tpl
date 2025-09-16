@@ -31,7 +31,11 @@
     {$this->Html->script(['common'])}
 </head>
 <body>
-
+{if !($this->request->params['controller']=='Login' && $this->request->params['action']=='index')}
+    <div>
+    {$this->Html->link('ログアウト',['controller' => 'Login', 'action' => 'index'],['class' => 'btn btn-danger','style' => 'margin : 5px;'])}
+    </div>
+{{/if}}
 {$this->fetch('content')}
 
 {$this->fetch('scriptBottom')}

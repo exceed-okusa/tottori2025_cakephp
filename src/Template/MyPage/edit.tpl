@@ -15,10 +15,6 @@
 				goLectures: function(){
 					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}'
 				},
-                logout : function(){
-                    window.location.href = '{$this->Url->build(['controller'=>'Login', 'action'=>'index'])}'
-
-                }
 			},
             computed: {
                 isShowLectureRegistration :function(){
@@ -65,8 +61,6 @@
 		</div>
         <div class="main-button" v-if="isShowLectureManagement">
         <button class="btn btn-primary btn-lg" @click="goLectures()">講座管理</button>
-        </div>
-        <div><button class="btn btn-primary btn-lg" @click="logout()">ログアウト</button>
         </div>
 	</div>
 </div>
