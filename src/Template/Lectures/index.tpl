@@ -19,7 +19,7 @@
             // 登録ボタンとか作るとき
 			methods:{
 				goEdit: function(lectureId){
-                    this.pageMode == {$this->Enum->PageMode->EDIT->value};
+                    this.pageMode = {$this->Enum->PageMode->EDIT->value};
                     // this.isShowDetail = false;
 					this.editId = lectureId;
                     for(let i=0;i<this.lectures.length; i++){
@@ -30,7 +30,7 @@
 					};
 				},
 				goDetail: function(lectureId){
-                    this.pageMode == {$this->Enum->PageMode->DETAIL->value};
+                    this.pageMode = {$this->Enum->PageMode->DETAIL->value};
                     // this.isShow = false;
                     // this.isShowDetail = true;
                     for(let i=0;i<this.lectures.length; i++){
@@ -40,7 +40,7 @@
 					};
 				},
                 goAdd: function(){
-                    this.pageMode == {$this->Enum->PageMode->ADD->value};
+                    this.pageMode = {$this->Enum->PageMode->ADD->value};
                     this.editId = null;
                     this.selectedLecture = {
                         id               : null,
@@ -90,7 +90,8 @@
                         selectedLecture: this.selectedLecture
                         };
                         const fn = function(dataFromAjax){
-                            location.reload();
+                            // location.reload();
+                            console.log(dataFromAjax);
                         }
 						stsAjax(url, data, fn);
 				    }

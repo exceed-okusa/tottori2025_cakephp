@@ -61,13 +61,37 @@ class LecturesController extends BaseController
 				'user' => null,
 				'status' => '',
 				'message' => '',
+                'areaOfStudyIdError' => false,
 			]
 		];
-        
+        $areaOfStudyIds = [];
+        $areaOfStudyList = $this->AreaOfStudies->find()
+            ->select([
+                'id'
+            ])
+            ->where([
+                'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
+            ])
+            ->toArray();
+            foreach($areaOfStudyList as $areaOfStudy){
+                $areaOfStudyIds[] = $areaOfStudy['id'];
+            }
+        $this->logNotice($areaOfStudyList);
+        $this->logNotice($areaOfStudyIds);
+
+        if(!in_array($data['selectedLecture']['area_of_study_id'],$areaOfStudyIds)) {
+            $ret['data']['areaOfStudyIdError'] = true;
+            
+        }
+        // $data['selectedLecture']['area_of_study_id']がどうやって思いつくのか
+        // $dataの中身をlogNoticeに入れて調べてみる
+
         if(!empty($data['editId'])){
+            // 編集
             $lecture = $this->Lectures->get($data['editId']);
             $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
         }else{
+            // 追加
             $data['selectedLecture']['insert_user_id'] = 0;
             $data['selectedLecture']['update_user_id'] = 0;
             $data['selectedLecture']['insert_date'] = new FrozenTime();
@@ -78,13 +102,15 @@ class LecturesController extends BaseController
 
         }
         // 
-        
+        if(!$ret['data']['areaOfStudyIdError']) {
+            $this->Lectures->save($lecture);
+        }
         // $this->logNotice($lecture);
         
         
         // $this->logNotice($lecture);
         // $this->Lectures->delete($lecture);
-        $this->Lectures->save($lecture);
+        
 		
 
         $this->set([
