@@ -90,8 +90,13 @@
                         selectedLecture: this.selectedLecture
                         };
                         const fn = function(dataFromAjax){
-                            // location.reload();
-                            console.log(dataFromAjax);
+                        
+                            
+                            if(dataFromAjax.areaOfStudyIdError){
+                                alert('学問分類IDを正しく入力してください。');
+                            }else{
+                                location.reload();
+                            }
                         }
 						stsAjax(url, data, fn);
 				    }
