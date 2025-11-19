@@ -53,8 +53,22 @@ $this->logNotice($this->request->session()->read());
 
 		$ret = [
 			'errors' => '',
-			'data' => []
+			'data' => [
+                'areaOfStudyIdError' => false, 
+            ]
 		];
+        
+        // 有効な学問分類IDを取得
+        $areaOfStudyList = $this->AreaOfStudies->find()
+            ->select(['id'])
+            ->where(['invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value])
+            ->toArray();
+        
+        $areaOfStudyIds = array_column($areaOfStudyList, 'id');
+
+        if (!in_array($data['selectedLecture']['area_of_study_id'], $areaOfStudyIds)) {
+            $ret['data']['areaOfStudyIdError'] = true;
+        }
 
         if(!empty($data['editId'])){
             // 編集
@@ -67,7 +81,9 @@ $this->logNotice($this->request->session()->read());
             $lecture = $this->Lectures->newEntity($data['selectedLecture'], ['associated'=>false]);
         }
 
-        $this->Lectures->save($lecture);
+        if (!$ret['data']['areaOfStudyIdError']) {
+            $this->Lectures->save($lecture);
+        }
 
         $this->set([
             'dataFromAjax' => $ret['data'],

@@ -74,8 +74,13 @@
                             selectedLecture: this.selectedLecture,
                         };
                         const fn = function(dataFromAjax){
-                            // 画面再描画
-                            location.reload();
+                            // { areaOfStudyIdError: false }
+                            if(dataFromAjax.areaOfStudyIdError){
+                                alert('学問分類IDを正しく入力してください。');
+                            }else{
+                                // 画面再描画(正常に登録処理を行うときのみ)
+                                location.reload();
+                            }
                         }
 						stsAjax(url, data, fn);
 					}
