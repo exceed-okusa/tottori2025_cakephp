@@ -26,7 +26,7 @@ $this->logNotice($this->request->session()->read());
 			])
             // =>はsql流のイコール
             ->where([
-                // Javascriptでphpを使いたいときは{}が必要なし
+                // Javascriptでphpを使いたいときは{}が必要なし、そのまま０でもいいがEnumの中に数字の説明が記載されている。
                 'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
                 'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
             ])
@@ -52,12 +52,32 @@ $this->logNotice($this->request->session()->read());
     {
 		// 未実装		
         		$this->autoRender = false; // Viewを強制的に使わない
+                // ↓これはindex.tplのdataの中身
         $data = $this->request->input('json_decode', true);
 
 		$ret = [
 			'errors' => '',
-			'data' => []
+			'data' => [
+                'areaOfStudyIdError' => false,
+            ]
 		];
+
+        // 有効な学問分類IDの取得
+        $areaOfStudyIds = [];
+
+        $areaOfStudyList = $this->AreaOfStudies->find()
+            // =>はsql流のイコール
+            ->select(['id'])
+            ->where([
+                // Javascriptでphpを使いたいときは{}が必要なし
+                'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
+            ])
+			->toArray();
+            $areaOfStudyIds = array_column($areaOfStudyList, 'id');
+        
+        $this->logNotice($areaOfStudyList);   
+        $this->logNotice($areaOfStudyIds);   
+
         $this->logNotice($data);
         $this->logNotice(!empty($data['editId']));
         if(!empty($data['editId'])){
@@ -69,16 +89,25 @@ $this->logNotice($this->request->session()->read());
             $data['selectedLecture']['update_user_id'] = 0;
             $lecture = $this->Lectures->newEntity($data['selectedLecture'],['associated'=>false]);
         }
+
+        if(!in_array($data['selectedLecture']['area_of_study_id'],$areaOfStudyIds)){
+            $ret['data']['areaOfStudyIdError'] = true;
+        }
+        $this->logNotice($ret['data']['areaOfStudyIdError']);        
         // $this->logNotice($data['invalidation']);
         // $this->logNotice($data);
         // patchEntityは変更されたものを上書き
-        $this->Lectures->save($lecture);
+        if($ret['data']['areaOfStudyIdError']){
+            $this->Lectures->save($lecture);
+        }
 
+        $this->logNotice($ret);
         $this->set([
             'dataFromAjax' => $ret['data'],
 			'errors' => $ret['errors'],
             '_serialize' => ['response']
         ]);
+        
 		// JSONヘッダーをセット
 		$this->response->type('json');
 		// JSON文字列を本文にセット

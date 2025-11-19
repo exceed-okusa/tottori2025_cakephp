@@ -23,7 +23,6 @@
                     for(let i=0;i<this.lectures.length; i++){
 						if(this.lectures[i].id == lectureId){
 							this.selectedLecture = Object.assign({}, this.lectures[i]);
-                            console.log(this.isShow)
 						}
                     }
 
@@ -80,11 +79,17 @@
                         const data = {
                             // 編集する講座ID
                             editId: this.editId,
-                            // 入力した内容
+                            // 入力した内容 左のほうはただの名前
                             selectedLecture: this.selectedLecture,
                         };
                         const fn = function(dataFromAjax){
-                        location.reload();
+                            if(dataFromAjax.areaOfStudyIdError){
+                                console.log('a')
+                                window.alert('学問分類IDを正しく入力してください。')
+                            }else{
+                                // 正常に登録処理を行うときのみ
+                                location.reload();
+                            }
                         }
 						stsAjax(url, data, fn);
                         this.pageMode = {$this->Enum->PageMode->LIST->value};
