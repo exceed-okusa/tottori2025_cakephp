@@ -8,6 +8,7 @@ namespace App\Utils;
  * @property \Utils\enums\Enum\EnumItem\Authority        $Authority
  * @property \Utils\enums\Enum\EnumItem\Authority        $DayOfWeek
  * @property \Utils\enums\Enum\EnumItem\InvalidationFlag $InvalidationFlag
+* @property \Utils\enums\Enum\EnumItem\CourseTime        $CourseTime
  * @property \Utils\enums\Enum\EnumItem\PageMode         $PageMode
  */
 class Enum

@@ -11,6 +11,8 @@ use Cake\Event\Event;
  *
  * @property \App\Model\Table\LecturesTable $Lectures
  * @property \App\Model\Table\UsersTable 	$Users
+ * @property \App\Model\Table\AttendancesTable 	$Attendances
+ * @property \App\Model\Table\AreaOfStudiesTable 	$AreaOfStudies
  *
  * @property string $dbNameDefault
  * @property string $dbNameHcTemplate
