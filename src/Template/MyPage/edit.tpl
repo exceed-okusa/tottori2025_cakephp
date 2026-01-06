@@ -11,25 +11,27 @@
 				authority: {$user->authority},
 			},
 			methods:{
-				goLectures: function(){
-                    // 画面遷移
-					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}';
-				},
+
 			},
-			computed: {
-				isShowLectureRegistration: function(){
-					return this.authority === {$this->Enum->Authority->STUDENT->value}
-							|| this.authority === {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
-				},
-				isShowCheckTimetable: function(){
-					return this.authority === {$this->Enum->Authority->STUDENT->value}
-							|| this.authority === {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
-				},
-				isShowLectureManagement: function(){
-					return this.authority === {$this->Enum->Authority->TEACHER->value}
-							|| this.authority === {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
-				}
-			},
+            // 何かしらの判定を通して、１つの結果を得る
+            computed: {
+                isShowLectureRegistration: function(){
+                    return this.authority == {$this->Enum->Authority->STUDENT->value}
+                        || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
+                },
+                isShowCheckTimetable: function(){
+                    return this.authority == {$this->Enum->Authority->STUDENT->value}
+                        || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
+                },
+                isShowLectureManagement: function(){
+                    return this.authority == {$this->Enum->Authority->TEACHER->value}
+                        || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
+                },
+                isShowAttendanceManagement: function(){
+                    return this.authority == {$this->Enum->Authority->TEACHER->value}
+                        || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
+                }
+            }
 		});
     //-->
     //]]>
@@ -58,8 +60,14 @@
 		<div class="main-button" v-if="isShowCheckTimetable">
 			<button class="btn btn-primary btn-lg">時間割確認</button>
 		</div>
-		<div class="main-button" v-if="isShowLectureManagement">
-			<button class="btn btn-primary btn-lg" @click="goLectures()">講座管理</button>
+        <div class="main-button" v-if="isShowLectureManagement">
+            {$this->Html->link('講座管理',['controller' => 'Lectures', 'action' => 'index'],['class' => 'btn btn-primary btn-lg'])}
+		</div>
+        <div class="main-button" v-if="isShowAttendanceManagement">
+            {$this->Html->link('出席管理',['controller' => 'Attendances', 'action' => 'edit'],['class' => 'btn btn-primary btn-lg'])}
+		</div>
+        <div class="main-button" v-else>
+            {$this->Html->link('出席状況',['controller' => 'Attendances', 'action' => 'index'],['class' => 'btn btn-primary btn-lg'])}
 		</div>
 	</div>
 </div>

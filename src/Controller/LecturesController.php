@@ -13,10 +13,50 @@ class LecturesController extends BaseController
 {
     public function index()
     {
+        $requestData = $this->request->query;
+        $this->logNotice($requestData);
 
-$this->logNotice($this->request->session()->read());
+        $isShowSearchArea = false;
+        if ($requestData) { // $requestData != []
+            $requestData['course_time'] = mb_convert_kana($requestData['course_time'], "n");
+            $requestData['number_of_frames'] = mb_convert_kana($requestData['number_of_frames'], "n");
+            // 検索条件の表示・非表示の判定
+            foreach ($requestData as $value) {
+                if ($value != '') {
+                    $isShowSearchArea = true;
+                    break;
+                }
+            }
+        }
+
+        // 配列からEntityへ変更
+        $lectureConditions = $this->Lectures->newEntity($requestData);
+        $this->logNotice($lectureConditions);
 
         $loginUserId = $this->request->session()->read('loginUserId');
+
+        $where = [
+            'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+            'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
+        ];
+
+        if ($requestData) {
+            if ($requestData['lecture_name'] != '') {
+                $where['Lectures.lecture_name LIKE'] = '%' . $requestData['lecture_name'] . '%';
+            }
+            if ($requestData['area_of_study_name'] != '') {
+                $where['AreaOfStudies.area_of_study_name LIKE'] = '%' . $requestData['area_of_study_name'] . '%';
+            }
+            if (in_array($requestData['class_day'], $this->Enum->DayOfWeek->getValues(), true)) {
+                $where['Lectures.class_day'] = $requestData['class_day'];
+            }
+            if (!empty($requestData['course_time'])) {
+                $where['Lectures.course_time'] = $requestData['course_time'];
+            }
+            if (!empty($requestData['number_of_frames'])) {
+                $where['Lectures.number_of_frames'] = $requestData['number_of_frames'];
+            }
+        }
 
 		$lectures = $this->Lectures->find()
 			->contain([
@@ -24,10 +64,7 @@ $this->logNotice($this->request->session()->read());
                 'InsertUser',
                 'UpdateUser',
 			])
-			->where([
-				'Lectures.invalidation_flag' => $this->Enum->invalidation_flag->OFF->value,
-				'AreaOfStudies.invalidation_flag' => $this->Enum->invalidation_flag->OFF->value,
-			])
+            ->where($where) 
 			->order([
 				'Lectures.id' => 'ASC'
 			])
@@ -40,10 +77,25 @@ $this->logNotice($this->request->session()->read());
 			$number++;
 		}
 
-        // $this->set('loginUserId', $loginUserId);
-		$this->set(compact('loginUserId'));
+        $studyAreaOptions = [];
+        $areaOfStudyList = $this->AreaOfStudies->find()
+            ->select(['id', 'area_of_study_name'])
+            ->where([
+                'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
+            ])
+            ->toArray();
+
+        foreach ($areaOfStudyList as $areaOfStudy) {
+            $studyAreaOptions[] = [
+                'value' => $areaOfStudy->id,
+                'text'  => $areaOfStudy->area_of_study_name,
+            ];
+        }
+
+		$this->set(compact('loginUserId', 'lectureConditions', 'isShowSearchArea'));
         $this->set('lectures', json_encode($lectures));
 		$this->set('courseTimes', json_encode($courseTimes));
+        $this->set('studyAreaOptions', json_encode($studyAreaOptions));
     }
 
 	public function save()
@@ -54,22 +106,8 @@ $this->logNotice($this->request->session()->read());
 
 		$ret = [
 			'errors' => '',
-			'data' => [
-                'areaOfStudyIdError' => false, 
-            ]
+			'data' => []
 		];
-        
-        // 有効な学問分類IDを取得
-        $areaOfStudyList = $this->AreaOfStudies->find()
-            ->select(['id'])
-            ->where(['invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value])
-            ->toArray();
-        
-        $areaOfStudyIds = array_column($areaOfStudyList, 'id');
-
-        if (!in_array($data['selectedLecture']['area_of_study_id'], $areaOfStudyIds)) {
-            $ret['data']['areaOfStudyIdError'] = true;
-        }
 
         if(!empty($data['editId'])){
             // 編集
@@ -82,9 +120,7 @@ $this->logNotice($this->request->session()->read());
             $lecture = $this->Lectures->newEntity($data['selectedLecture'], ['associated'=>false]);
         }
 
-        if (!$ret['data']['areaOfStudyIdError']) {
-            $this->Lectures->save($lecture);
-        }
+        $this->Lectures->save($lecture);
 
         $this->set([
             'dataFromAjax' => $ret['data'],

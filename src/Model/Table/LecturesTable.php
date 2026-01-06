@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Table;
 
+use Cake\Database\Query;
 use Cake\Validation\Validator;
 
 /**
@@ -43,6 +44,27 @@ class LecturesTable extends BaseTable
 			'foreignKey'   => 'update_user_id',
             'propertyName' => 'update_user'
 		]);
+    }
 
+    /**
+     * 講座・学問分類を結合させ、有効なデータを取得する。
+     * @param array $select
+     * @return \App\Model\Entity\Lecture[]
+     */
+    public function getEffectiveList(array $select = [])
+    {
+        return $this->find()
+			->contain([
+				'AreaOfStudies',
+			])
+            ->select($select)
+            ->where([
+                'Lectures.invalidation_flag'      => $this->Enum->InvalidationFlag->OFF->value,
+                'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
+            ])
+			->order([
+				'Lectures.id' => 'ASC'
+            ])
+            ->toArray();
     }
 }

@@ -7,11 +7,13 @@
 		const vmMain = new Vue({
 			el:'#vm',
 			data:{
-				lectures        : {$lectures},
-				courseTimes     : {$courseTimes},
-				editId          : null,
-                selectedLecture : null,
-                pageMode        : {$this->Enum->PageMode->LIST->value},
+				lectures         : {$lectures},
+				courseTimes      : {$courseTimes},
+                studyAreaOptions : {$studyAreaOptions},
+				editId           : null,
+                selectedLecture  : null,
+                pageMode         : {$this->Enum->PageMode->LIST->value},
+                isShowSearchArea : '{$isShowSearchArea}',
 			},
 			methods:{
 				goEdit: function(lectureId){
@@ -90,17 +92,15 @@
                             selectedLecture: this.selectedLecture,
                         };
                         const fn = function(dataFromAjax){
-                            // { areaOfStudyIdError: false }
-                            if(dataFromAjax.areaOfStudyIdError){
-                                alert('学問分類IDを正しく入力してください。');
-                            }else{
-                                // 画面再描画(正常に登録処理を行うときのみ)
-                                location.reload();
-                            }
+                            // 画面再描画(正常に登録処理を行うときのみ)
+                            location.reload();
                         }
 						stsAjax(url, data, fn);
 					}
 				},
+                switchingSearchConditions: function () {
+                    this.isShowSearchArea = !this.isShowSearchArea;
+                }
 			},
             computed: {
                 isShow: function(){
@@ -110,7 +110,13 @@
                 isShowDetail: function(){
                     return this.pageMode == {$this->Enum->PageMode->DETAIL->value};
                 },
-            }
+                toggleText: function() {
+                    if (this.isShowSearchArea) {
+                        return '▼';
+                    }
+                    return '▶';
+                }
+            },
 		});
     //-->
     //]]>
@@ -119,15 +125,24 @@
 
 <style>
 #lectures-header {
-    display: flex;
+    /* 子要素を横並びにさせる */
+    display: flex; 
     align-items: center;
 }
 .add-button {
     margin-left: 80px;
 }
+
 #course-list {
 	min-width:460px;
 }
+/* 検索条件部分 */
+#search-conditions-area {
+    border: black 1px solid;
+    padding: 3px 15px;
+    margin-bottom: 10px;
+}
+
 .sub-menu-title {
 	margin-left: 200px;
 	min-width:350px;
@@ -155,12 +170,62 @@ input, select {
 
 <a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}">< マイページへ戻る</a>
 <div id="vm" style="display:flex;">
-
 	<div id="course-list">
-    <div id="lectures-header">
-        <h1>講座一覧</h1>
-        <button @click="goAdd()" class="add-button">追加</button>
-	</div>
+        <div id="lectures-header">
+            <h1>講座一覧</h1>
+            <button @click="goAdd()" class="add-button">追加</button>
+        </div>
+        <div id="search-conditions-area">
+            <span @click="switchingSearchConditions()" style="cursor: pointer;" v-text="toggleText"></span>
+            <span>検索条件</span>
+            <div style="padding: 3px 25px;" v-show="isShowSearchArea">
+                {$this->Form->create($lectureConditions,['type'=>'get'])}
+                <div>
+                    <label for="lecture-name">
+                        講座名
+                    </label>
+                    <span>
+                        {$this->Form->input('lecture_name', ['type'=> 'text'])}
+                    </span>
+                </div>
+                <div>
+                    <label for="area-of-study-name">
+                        学問分類名
+                    </label>
+                    <span>
+                        {$this->Form->input('area_of_study_name', ['type'=> 'text'])}
+                    </span>
+                </div>
+                <div>
+                    <label for="class-day">
+                        開講曜日
+                    </label>
+                    <span>
+                        {$this->Form->input('class_day', ['options' => $this->Enum->DayOfWeek->getValuesAndTexts(), 'empty' => '選択してください'])}
+                    </span>
+                </div>
+                <div>
+                    <label for="course-time">
+                        開講時限
+                    </label>
+                    <span>
+                        {$this->Form->input('course_time', ['type'=> 'text'])}
+                    </span>
+                </div>
+                <div>
+                    <label for="number-of-frames">
+                        コマ数
+                    </label>
+                    <span>
+                        {$this->Form->input('number_of_frames', ['type'=> 'text'])}
+                    </span>
+                </div>
+                <div style="text-align: right;">
+                    <button>検索</button>
+                </div>
+                {$this->Form->end()}
+            </div>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -197,7 +262,7 @@ input, select {
 		</div>
 		<div>
 			<label for="class-day">開講曜日</label>
-			{$this->Form->input('class_day',['options'=>$this->Enum->DayOfWeek->getValuesAndTexts(), 'v-model'=>'selectedLecture.class_day'])}		
+			{$this->Form->input('class_day',['options'=>$this->Enum->DayOfWeek->getValuesAndTexts(), 'v-model'=>'selectedLecture.class_day'])}
 		</div>
 		<div>
 			<label for="course-time">開講時限</label>
@@ -206,8 +271,10 @@ input, select {
 			</select>
 		</div>
 		<div>
-			<label for="area-of-study-id">学問分類ID</label>
-			<input id="area-of-study-id" v-model="selectedLecture.area_of_study_id"/>
+			<label for="area-of-study-id">学問分類</label>
+			<select id="area-of-study-id" v-model="selectedLecture.area_of_study_id">
+				<option v-for="studyAreaOption in studyAreaOptions" :value="studyAreaOption.value" v-text="studyAreaOption.text"></option>
+			</select>
 		</div>
 		<div>
 			<label for="number-of-frames">コマ数</label>
