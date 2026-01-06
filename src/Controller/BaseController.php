@@ -33,8 +33,8 @@ class BaseController extends AppController
         if (class_exists('App\Model\Table\\'. $name. 'Table')) {
             if (TableRegistry::exists($name)) {
                 $this->$name = TableRegistry::get($name);
-                $this->$name->setDbNameHc($this->dbNameHc);
-                $this->$name->setDatabaseAndTable();
+                // $this->$name->setDbNameHc($this->dbNameHc);
+                // $this->$name->setDatabaseAndTable();
             } else {
                 $this->$name = TableRegistry::get($name, [
                     'exceedSpecialOptions' => [

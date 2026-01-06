@@ -11,10 +11,7 @@
 				authority: {$user->authority},
 			},
 			methods:{
-				goLectures: function(){
-                    // 画面遷移
-					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}';
-				},
+
 			},
             // 何かしらの判定を通して、１つの結果を得る
             computed: {
@@ -27,6 +24,10 @@
                         || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
                 },
                 isShowLectureManagement: function(){
+                    return this.authority == {$this->Enum->Authority->TEACHER->value}
+                        || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
+                },
+                isShowAttendanceManagement: function(){
                     return this.authority == {$this->Enum->Authority->TEACHER->value}
                         || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
                 }
@@ -60,7 +61,13 @@
 			<button class="btn btn-primary btn-lg">時間割確認</button>
 		</div>
         <div class="main-button" v-if="isShowLectureManagement">
-			<button class="btn btn-primary btn-lg" @click="goLectures()">講座管理</button>
+            {$this->Html->link('講座管理',['controller' => 'Lectures', 'action' => 'index'],['class' => 'btn btn-primary btn-lg'])}
+		</div>
+        <div class="main-button" v-if="isShowAttendanceManagement">
+            {$this->Html->link('出席管理',['controller' => 'Attendances', 'action' => 'edit'],['class' => 'btn btn-primary btn-lg'])}
+		</div>
+        <div class="main-button" v-else>
+            {$this->Html->link('出席状況',['controller' => 'Attendances', 'action' => 'index'],['class' => 'btn btn-primary btn-lg'])}
 		</div>
 	</div>
 </div>
