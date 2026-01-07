@@ -84,7 +84,10 @@
 				},
                 switchingSearchConditions: function () {
                     this.isShowSearchArea = !this.isShowSearchArea;
-                }
+                },
+                clear: function () {
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}';
+                },
 			},
             computed: {
                 isShow: function(){
@@ -99,6 +102,21 @@
                         return '▼';
                     }
                     return '▶';
+                }
+            },
+            // ※ なぜこっちでも同じ挙動になるか？【疑問】
+            // created() {
+            //     if (this.lectures.length == 0) {
+            //         setTimeout(() => {
+            //             alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
+            //         }, 1);
+            //     }
+            // },
+            mounted() {
+                if (this.lectures.length == 0) {
+                    setTimeout(() => {
+                        alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
+                    }, 1);
                 }
             },
 		});
@@ -117,8 +135,8 @@
     margin-left: 80px;
 }
 
-#course-list {
-	min-width:460px;
+.course-list {
+	min-width:540px;
 }
 /* 検索条件部分 */
 #search-conditions-area {
@@ -154,7 +172,7 @@ input, select {
 
 <a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}">< マイページへ戻る</a>
 <div id="vm" style="display:flex;">
-	<div id="course-list">
+	<div class="course-list">
         <div id="lectures-header">
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button">追加</button>
@@ -205,12 +223,13 @@ input, select {
                     </span>
                 </div>
                 <div style="text-align: right;">
-                    <button>検索</button>
+                    <button type="button" @click="clear()">クリア</button>
+                    <button>検索</button> 
                 </div>
                 {$this->Form->end()}
             </div>
         </div>
-        <table>
+        <table class="course-list">
             <thead>
                 <tr>
                     <th>講座ID</th>
