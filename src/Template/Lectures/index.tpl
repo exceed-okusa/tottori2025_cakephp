@@ -15,8 +15,22 @@
                 selectedLecture : null,
                 pageMode        : {$this->Enum->PageMode->LIST->value},
                 studyAreaOptions: {$studyAreaOptions},
-                isShowSearchArea : '{$lectureCondition}',
+                isShowSearchArea : '{$isShowSearchArea}',
 			},
+            // created(){
+            //     if(this.lectures.length == 0){
+            //         setTimeout(() => {
+            //             alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
+            //         }, 1);                    
+            //     }
+            // },
+            mounted(){  
+                if(this.lectures.length == 0){
+                    setTimeout(() => {
+                        const result = alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
+                    }, 1);                    
+                }
+            },
 			methods:{
 				goEdit: function(lectureId){
                     // selectedlectureに講座を代入
@@ -96,7 +110,12 @@
                 switchingSearchConditions: function(){
                     // this.isShowSearchAreaとは反対の判定に変更している
                     this.isShowSearchArea = !this.isShowSearchArea;
-                }
+                },
+
+                clear: function(){
+                    console.log('クリアボタンを押しました。')
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}'
+                },
 			},
             // 何かしらの評価(true,false)・処理によって、1つの値を算出したいとき
 			computed: {
@@ -148,13 +167,14 @@
     margin-left: 80px;
 }
 .course-list {
-	min-width:460px;
+	min-width:540px;
 }
 #search-conditions-area{
  border: black 1px solid; 
  padding: 3px 15px; 
  margin-bottom: 10px   
 }
+
 .course-edit {
 	margin-left: 200px;
 	min-width:350px;
@@ -163,7 +183,7 @@ label {
 	width: 120px;
 }
 input, select {
-	width: 120px;
+	width: 200px;
 }
 #detail-table {
     border: 2px black solid;
@@ -183,15 +203,15 @@ input, select {
 </style>
 
 <a href="{$this->Url->build(['controller'=>'MyPage', 'action'=>'edit'])}/{$loginUserId}"> <  マイページへ戻る</a>
-<div id="vm" style="display:flex;">
+<div id="vm" style="display:flex;" class="main-size">
 	<div class="course-list">
-        <div id="course-list">
+        <div>
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
         </div>
  {*  *}
         <div id="search-conditions-area">
-            {$this->Form->create($lectureConditions,['type'=>'get'])}        
+            {$this->Form->create($isShowSearchArea,['type'=>'get'])}        
             <span @click="switchingSearchConditions()" style="cursor: pointer" v-text="varietyTriangle"></span>
                 検索条件
             <div style="padding: 3px 25px;" v-if="isShowSearchArea">
@@ -236,13 +256,15 @@ input, select {
                     </span>
                 </div>
                 <div style="text-align: right;">
+                    <button type="button" @click="clear()">クリア</button>
+                    {* ↓type="submit"が省略されている *}
                     <button>検索</button>
                 </div>
                 {* ↓input内に入った文字がControllerに送られてもう一度indexが動くようになっている *}
                 {$this->Form->end()}
             </div>
         </div>
-        <table>
+        <table class="course-list">
             <thead>
                 <tr>
                     <th>講座ID</th>

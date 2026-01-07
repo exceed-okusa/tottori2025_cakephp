@@ -25,8 +25,11 @@ class LecturesController extends BaseController
             $requestData['number_of_frames'] = mb_convert_kana( $requestData['number_of_frames'] , "n");
             // 検索条件の表示・非表示の判定 $valueは配列の右側の意味
             foreach($requestData as $value){
+                $this->logNotice($value != '');
                 if($value != ''){
+                    // $this->logNotice('aaa');
                     $isShowSearchArea = true;
+                    // $this->logNotice($isShowSearchArea);
                     break;
                 }
             }   
@@ -98,7 +101,7 @@ class LecturesController extends BaseController
             ];
         }
 
-            
+        $this->logNotice($isShowSearchArea);
         // $setはindex.tpl(Lecturesのやつ)でも使えるようにするもの
         $this->set(compact('loginUserId'));
 		$this->set('lectures', json_encode($lectures));
