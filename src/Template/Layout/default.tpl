@@ -40,15 +40,12 @@
 
 {/if} *}
 
-{if $this->request->params['controller'] == 'Login' && $this->request->params['action'] == 'index'}
-{else}
-    {$this->request->params['controller']}
-    {$this->request->params['action']}
+{if !($this->request->params['controller'] == 'Login' && $this->request->params['action'] == 'index')}
     {$this->Html->link('ログアウト',['controller' => 'Login', 'action' => 'index'],['class' => 'btn btn-danger','style' => 'margin: 5px;'])}
 {/if}
 
 
-    
+
 
 
 

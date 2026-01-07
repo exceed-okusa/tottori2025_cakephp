@@ -9,8 +9,10 @@ use Cake\Event\Event;
 /**
  * Application Controller
  *
- * @property \App\Model\Table\LecturesTable $Lectures
- * @property \App\Model\Table\UsersTable 	$Users
+ * @property \App\Model\Table\AreaOfStudiesTable 	$AreaOfStudies
+ * @property \App\Model\Table\AttendancesTable 	    $Attendances
+ * @property \App\Model\Table\LecturesTable         $Lectures
+ * @property \App\Model\Table\UsersTable 	        $Users
  *
  * @property string $dbNameDefault
  * @property string $dbNameHcTemplate

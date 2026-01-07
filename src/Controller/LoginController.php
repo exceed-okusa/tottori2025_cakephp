@@ -61,6 +61,7 @@ $this->logNotice($this->request->session()->read());
 		$user = $this->Users->getOneByLogin($data['account'], $data['password']);
 		if (!empty($user)) {
             $this->request->session()->write('loginUserId', $user->id);
+            $this->request->session()->write('loginUser', $user->id);
             $ret['data'] = ['user'=> $user, 'status' => 'success', 'message' => 'ログイン成功'];
 
         } else {

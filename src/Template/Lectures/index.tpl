@@ -10,11 +10,13 @@
 			data:{
 				lectures    : {$lectures},
 				courseTimes : {$courseTimes},
+                studyAreaOptions : {$studyAreaOptions},
 				editId      : null,
                 selectedLecture: null,
                 // isShow      : false,
                 // isShowDetail: false,
                 pageMode    : {$this->Enum->PageMode->LIST->value},
+                isShowSearchArea: '{$isShowSearchArea}',
 			},
             // 登録ボタンとか作るとき
 			methods:{
@@ -90,17 +92,16 @@
                         selectedLecture: this.selectedLecture
                         };
                         const fn = function(dataFromAjax){
-                        
-                            
-                            if(dataFromAjax.areaOfStudyIdError){
-                                alert('学問分類IDを正しく入力してください。');
-                            }else{
-                                location.reload();
-                            }
+                            location.reload();
                         }
 						stsAjax(url, data, fn);
 				    }
 			    },
+                switchingSearchConditions: function(){
+                    // console.log('aaa');
+                    this.isShowSearchArea = !this.isShowSearchArea;
+
+                },
             },
             computed: {
                 isShow: function(){
@@ -117,6 +118,12 @@
                     // }
                     // return false;
                 },
+                toggleText: function(){
+                    if(this.isShowSearchArea){
+                        return '▼';
+                    }
+                    return '▶';
+                }
                 // returnの後 文字列、判定結果、条件に対してtrueかfalseかを返す、オブジェクトが来る
             }
 			// computed: {
@@ -155,6 +162,12 @@
 #course-list {
 	min-width:460px;
 }
+#search-conditions-area {
+    border: 1px black solid;
+    padding: 3px 15px;
+    margin-bottom: 10px;
+    transition: 
+}
 #course-edit {
 	margin-left: 200px;
 	min-width:350px;
@@ -191,8 +204,60 @@ input, select {
         <div style="display:flex; align-items:center;">
 		<h1>講座一覧</h1>
 		<button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
-
 	</div>
+    
+    <div id="search-conditions-area">
+    {$this->Form->create($lectureConditions,['type'=>'get'])}
+    <span @click="switchingSearchConditions()" style="cursor: pointer;" v-text="toggleText"></span>
+        検索条件
+        <div v-if="isShowSearchArea">
+            <div>
+                <label for="lecture-name">
+                    講座名
+                </label>
+                <span>
+                    {$this->Form->input('lecture_name', ['type'=> 'text'])}
+                </span>
+            </div>
+            <div>
+                <label for="area-of-study-name">
+                    学問分類名
+                </label>
+                <span>
+                    {$this->Form->input('area_of_study_name', ['type'=> 'text'])}
+                </span>
+            </div>
+            <div>
+                <label for="class-day">
+                    開講曜日
+                </label>
+                <span>
+                    {$this->Form->input('class_day', ['options' => $this->Enum->DayOfWeek->getValuesAndTexts(),'empty' => '選択してください'])}
+                </span>
+            </div>
+            <div>
+                <label for="course-time">
+                    開講時限
+                </label>
+                <span>
+                    {$this->Form->input('course_time', ['type'=> 'text'])}
+                </span>
+            </div>
+            <div>
+                <label for="number-of-frames">
+                    コマ数
+                </label>
+                <span>
+                    {$this->Form->input('number_of_frames', ['type'=> 'text'])}
+                </span>
+            </div>
+            
+            <button class="add-button" style="margin-left: 300px;">検索</button>
+        </div>
+        
+    {$this->Form->end()}
+    </div>
+        
 			<table>
 				<thead>
 					<tr>
@@ -238,8 +303,11 @@ input, select {
 			</select>
 		</div>
 		<div>
-			<label for="area-of-study-id">学問分類ID</label>
-			<input id="area-of-study-id" v-model="selectedLecture.area_of_study_id"/>
+        {* ブラウザで「学問分類」をクリックしたときにセレクトボックスが反応するようにするためにlabel forとidの名前を同じにしないといけない *}
+			<label for="area-of-study-id">学問分類</label>
+            <select id="area-of-study-id" v-model="selectedLecture.area_of_study_id">
+                <option v-for="studyAreaOption in studyAreaOptions" :value="studyAreaOption.value" v-text="studyAreaOption.text"></option>
+            </select>
 		</div>
 		<div>
 			<label for="number-of-frames">コマ数</label>
