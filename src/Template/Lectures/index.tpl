@@ -100,7 +100,9 @@
                 switchingSearchConditions: function(){
                     // console.log('aaa');
                     this.isShowSearchArea = !this.isShowSearchArea;
-
+                },
+                clear: function(){
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}';
                 },
             },
             computed: {
@@ -125,7 +127,25 @@
                     return '▶';
                 }
                 // returnの後 文字列、判定結果、条件に対してtrueかfalseかを返す、オブジェクトが来る
-            }
+            },
+            
+            mounted() {
+                if(this.lectures.length == 0){
+                    setTimeout(()=>{
+                    alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
+                    },1);
+                    
+                }
+            },
+            // created() {
+            //     if(this.lectures.length == 0){
+            //         setTimeout(() => {
+            //         alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
+            //         },1);
+                    
+            //     }    
+            // },
+
 			// computed: {
             //     // 何かしらの評価・処理によって、一つの値を算出したいとき
 			// 	isShow: function(){
@@ -159,8 +179,8 @@
 .add-button {
     margin-left: 80px;
 }
-#course-list {
-	min-width:460px;
+#course-list, #course-list-table {
+	min-width:540px;
 }
 #search-conditions-area {
     border: 1px black solid;
@@ -251,14 +271,17 @@ input, select {
                     {$this->Form->input('number_of_frames', ['type'=> 'text'])}
                 </span>
             </div>
+            <div style="text-align: right;">
+                <button type="button" @click="clear()">クリア</button>
+            <button>検索</button>
+            </div>
             
-            <button class="add-button" style="margin-left: 300px;">検索</button>
         </div>
         
     {$this->Form->end()}
     </div>
         
-			<table>
+			<table id="course-list-table">
 				<thead>
 					<tr>
 						<th>講座ID</th>
