@@ -14,7 +14,8 @@
                 selectedLecture  : null,
                 pageMode         : {$this->Enum->PageMode->LIST->value},
                 isShowSearchArea : '{$isShowSearchArea}',
-                isOrderAsc : true,
+                isOrderAsc       : true,
+                hasOrderColumn   : 'lecture_id', // 講座ID:'lecture_id',講座名:'lecture_name',学問分類:'study_area_name'
 			},
 			methods:{
 				goEdit: function(lectureId){
@@ -86,7 +87,10 @@
                 switchingSearchConditions: function () {
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
-                switchingDisplayOrder: function () {
+                switchingDisplayOrder: function (column) {
+                    {* 処理はこれから作成します・・・ *}
+                    
+
                     this.isOrderAsc = !this.isOrderAsc;
                 },
                 clear: function () {
@@ -237,10 +241,13 @@ input, select {
             <thead>
                 <tr>
                     <th>
-                        <span class="pointer">講座ID</span>
-                        <span class="pointer" @click="switchingDisplayOrder()" v-text="displayOrderLabel"></span>
+                        <span class="pointer" @click="switchingDisplayOrder('lecture_id')">講座ID</span>
+                        <span class="pointer" v-show="hasOrderColumn == 'lecture_id'" @click="switchingDisplayOrder('lecture_id')" v-text="displayOrderLabel"></span>
                     </th>
-                    <th>講座名</th>
+                    <th>
+                        <span @click="switchingDisplayOrder('lecture_name')">講座名</span>
+                        <span class="pointer" v-show="hasOrderColumn == 'lecture_name'" @click="switchingDisplayOrder('lecture_name')" v-text="displayOrderLabel"></span>
+                    </th>
                     <th>学問分類名</th>
                     <th></th>
                 </tr>
