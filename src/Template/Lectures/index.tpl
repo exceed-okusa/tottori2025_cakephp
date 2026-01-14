@@ -17,6 +17,8 @@
                 // isShowDetail: false,
                 pageMode    : {$this->Enum->PageMode->LIST->value},
                 isShowSearchArea: '{$isShowSearchArea}',
+                // isShowDisplayOrderLabel : false,
+                isOrderAsc : true,
 			},
             // 登録ボタンとか作るとき
 			methods:{
@@ -101,6 +103,12 @@
                     // console.log('aaa');
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
+                // useDisplayOrder: function(){
+                //     this.isShowDisplayOrderLabel = true;
+                // },
+                switchingDisplayOrder: function(){
+                    this.isOrderAsc = !this.isOrderAsc;
+                },
                 clear: function(){
                     window.location.href = '{$this->Url->build(['action'=>'index'])}';
                 },
@@ -125,7 +133,13 @@
                         return '▼';
                     }
                     return '▶';
-                }
+                },
+                displayOrderLabel: function(){
+                    if(this.isOrderAsc){
+                        return '▲';
+                    }
+                    return '▼';
+                },
                 // returnの後 文字列、判定結果、条件に対してtrueかfalseかを返す、オブジェクトが来る
             },
             
@@ -188,6 +202,9 @@
     margin-bottom: 10px;
     transition: 
 }
+.pointer {
+    cursor : pointer;
+}
 #course-edit {
 	margin-left: 200px;
 	min-width:350px;
@@ -228,7 +245,7 @@ input, select {
     
     <div id="search-conditions-area">
     {$this->Form->create($lectureConditions,['type'=>'get'])}
-    <span @click="switchingSearchConditions()" style="cursor: pointer;" v-text="toggleText"></span>
+    <span @click="switchingSearchConditions()" class="pointer" v-text="toggleText"></span>
         検索条件
         <div v-if="isShowSearchArea">
             <div>
@@ -284,7 +301,10 @@ input, select {
 			<table id="course-list-table">
 				<thead>
 					<tr>
-						<th>講座ID</th>
+						<th>
+                            <span class="pointer" {* @click="useDisplayOrder()" *} >講座ID</span>
+                            <span class="pointer" {* v-if="isShowDisplayOrderLabel"  *} @click="switchingDisplayOrder()" v-text="displayOrderLabel"></span>
+                        </th>
 						<th>講座名</th>
 						<th>学問分類名</th>
 						<th></th>
