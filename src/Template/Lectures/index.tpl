@@ -17,8 +17,8 @@
                 // isShowDetail: false,
                 pageMode    : {$this->Enum->PageMode->LIST->value},
                 isShowSearchArea: '{$isShowSearchArea}',
-                // isShowDisplayOrderLabel : false,
                 isOrderAsc : true,
+                hasOrderColumn : 'lecture_id',
 			},
             // 登録ボタンとか作るとき
 			methods:{
@@ -77,11 +77,16 @@
                         }
 						stsAjax(url, data, fn);
 					}
+
                     // 一覧を設定する
                     // 削除を押したら詳細や編集などの右側の表示を見えなくしたいから、一覧だけを表示するために書く                    
                     this.pageMode = {$this->Enum->PageMode->LIST->value};
                     // 表がなくなったから何も選ばれてない状態にしよう
                     this.selectedLecture = null;
+                },
+                aaa: function(){
+                    console.log('tes');
+                    this.hasOrderColumn = 'lecture_name';
                 },
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
@@ -103,9 +108,6 @@
                     // console.log('aaa');
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
-                // useDisplayOrder: function(){
-                //     this.isShowDisplayOrderLabel = true;
-                // },
                 switchingDisplayOrder: function(){
                     this.isOrderAsc = !this.isOrderAsc;
                 },
@@ -302,10 +304,15 @@ input, select {
 				<thead>
 					<tr>
 						<th>
-                            <span class="pointer" {* @click="useDisplayOrder()" *} >講座ID</span>
-                            <span class="pointer" {* v-if="isShowDisplayOrderLabel"  *} @click="switchingDisplayOrder()" v-text="displayOrderLabel"></span>
+                            <span class="pointer" @click="switchingDisplayOrder()">講座ID</span>
+                            <span class="pointer" @click="switchingDisplayOrder()" v-show="hasOrderColumn == 'lecture_id'" v-text="displayOrderLabel"></span>
                         </th>
-						<th>講座名</th>
+						<th>
+                            <span @click="aaa()">講座名</span>
+                            <span class="pointer" @click="aaa()" v-show="hasOrderColumn == 'lecture_name'" v-text="displayOrderLabel"></span>
+
+                            <span></span>
+                        </th>
 						<th>学問分類名</th>
 						<th></th>
 					</tr>
