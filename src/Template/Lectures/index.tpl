@@ -9,13 +9,14 @@
 			data:{
             // selectedLectureで設定した要素をlecturesで使えるようにしている
                 // ↓sqlで取得した情報を使えるようにしてくれている
-				lectures        : {$lectures},
-				courseTimes     : {$courseTimes},
-				editId          : null,
-                selectedLecture : null,
-                pageMode        : {$this->Enum->PageMode->LIST->value},
-                studyAreaOptions: {$studyAreaOptions},
+				lectures         : {$lectures},
+				courseTimes      : {$courseTimes},
+				editId           : null,
+                selectedLecture  : null,
+                pageMode         : {$this->Enum->PageMode->LIST->value},
+                studyAreaOptions : {$studyAreaOptions},
                 isShowSearchArea : '{$isShowSearchArea}',
+                sortTriangle     : true,
 			},
             // created(){
             //     if(this.lectures.length == 0){
@@ -112,6 +113,11 @@
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
 
+                switchingSortConditions: function(){
+                    // this.isShowSearchAreaとは反対の判定に変更している
+                    this.sortTriangle = !this.sortTriangle;
+                },
+
                 clear: function(){
                     console.log('クリアボタンを押しました。')
                     window.location.href = '{$this->Url->build(['action'=>'index'])}'
@@ -132,8 +138,14 @@
                     }else{
                         return "▶";
                     }
+                },
+                triangleMark: function(){
+                    if(this.sortTriangle){
+                        return "▲";
+                    }else{
+                        return "▼";
+                    }
                 }
-
 			},
             // watch: {
             //     // 監視
@@ -174,6 +186,9 @@
  padding: 3px 15px; 
  margin-bottom: 10px   
 }
+.pointer {
+    cursor: pointer;
+}
 
 .course-edit {
 	margin-left: 200px;
@@ -212,7 +227,7 @@ input, select {
  {*  *}
         <div id="search-conditions-area">
             {$this->Form->create($isShowSearchArea,['type'=>'get'])}        
-            <span @click="switchingSearchConditions()" style="cursor: pointer" v-text="varietyTriangle"></span>
+            <span @click="switchingSearchConditions()" class="pointer" v-text="varietyTriangle"></span>
                 検索条件
             <div style="padding: 3px 25px;" v-if="isShowSearchArea">
                 <div>
@@ -267,7 +282,10 @@ input, select {
         <table class="course-list">
             <thead>
                 <tr>
-                    <th>講座ID</th>
+                    <th>
+                        <span class="pointer">講座ID</span>
+                        <span @click="switchingSortConditions()" class="pointer" v-text='triangleMark'></span>
+                    </th>
                     <th>講座名</th>
                     <th>学問分類名</th>
                     <th></th>
