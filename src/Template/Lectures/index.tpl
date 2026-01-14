@@ -14,6 +14,7 @@
                 selectedLecture  : null,
                 pageMode         : {$this->Enum->PageMode->LIST->value},
                 isShowSearchArea : '{$isShowSearchArea}',
+                isOrderAsc : true,
 			},
 			methods:{
 				goEdit: function(lectureId){
@@ -101,6 +102,9 @@
                 switchingSearchConditions: function () {
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
+                switchingDisplayOrder: function () {
+                    this.isOrderAsc = !this.isOrderAsc;
+                },
                 clear: function () {
                     window.location.href = '{$this->Url->build(['action'=>'index'])}';
                 },
@@ -118,16 +122,14 @@
                         return '▼';
                     }
                     return '▶';
-                }
+                },
+                displayOrderLabel: function() {
+                    if (this.isOrderAsc) {
+                        return '▲';
+                    }
+                    return '▼';
+                },
             },
-            // ※ なぜこっちでも同じ挙動になるか？【疑問】
-            // created() {
-            //     if (this.lectures.length == 0) {
-            //         setTimeout(() => {
-            //             alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
-            //         }, 1);
-            //     }
-            // },
             mounted() {
                 if (this.lectures.length == 0) {
                     setTimeout(() => {
@@ -160,7 +162,9 @@
     padding: 3px 15px;
     margin-bottom: 10px;
 }
-
+.pointer {
+    cursor: pointer;
+}
 .sub-menu-title {
 	margin-left: 200px;
 	min-width:350px;
@@ -194,7 +198,7 @@ input, select {
             <button @click="goAdd()" class="add-button">追加</button>
         </div>
         <div id="search-conditions-area">
-            <span @click="switchingSearchConditions()" style="cursor: pointer;" v-text="toggleText"></span>
+            <span @click="switchingSearchConditions()" class="pointer" v-text="toggleText"></span>
             <span>検索条件</span>
             <div style="padding: 3px 25px;" v-show="isShowSearchArea">
                 {$this->Form->create($lectureConditions,['type'=>'get'])}
@@ -248,7 +252,10 @@ input, select {
         <table class="course-list">
             <thead>
                 <tr>
-                    <th>講座ID</th>
+                    <th>
+                        <span class="pointer">講座ID</span>
+                        <span class="pointer" @click="switchingDisplayOrder()" v-text="displayOrderLabel"></span>
+                    </th>
                     <th>講座名</th>
                     <th>学問分類名</th>
                     <th></th>
