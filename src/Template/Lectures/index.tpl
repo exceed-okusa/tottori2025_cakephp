@@ -17,6 +17,9 @@
                 studyAreaOptions : {$studyAreaOptions},
                 isShowSearchArea : '{$isShowSearchArea}',
                 sortTriangle     : true,
+                hasOrderPositionId : true,
+                hasOrderPositionName : false,
+                hasOrderColumn   : 'lecture_id',
 			},
             // created(){
             //     if(this.lectures.length == 0){
@@ -116,6 +119,10 @@
                 switchingSortConditions: function(){
                     // this.isShowSearchAreaとは反対の判定に変更している
                     this.sortTriangle = !this.sortTriangle;
+                },
+
+                onChangeTrianglePositionName: function(column){
+                    this.hasOrderColumn = 'lecture_name'
                 },
 
                 clear: function(){
@@ -283,10 +290,13 @@ input, select {
             <thead>
                 <tr>
                     <th>
-                        <span class="pointer">講座ID</span>
-                        <span @click="switchingSortConditions()" class="pointer" v-text='triangleMark'></span>
+                        <span @click="onChangeTrianglePositionName()" class="pointer">講座ID</span>
+                        <span @click="onChangeTrianglePositionName()" v-show="hasOrderColumn == 'lecture_id'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionId"></span>
                     </th>
-                    <th>講座名</th>
+                    <th>
+                        <span @click="onChangeTrianglePositionName()" class="pointer">講座名</span>
+                        <span @click="onChangeTrianglePositionName()" v-show="hasOrderColumn == 'lecture_name'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionName"></span>
+                    </th>
                     <th>学問分類名</th>
                     <th></th>
                 </tr>
