@@ -14,8 +14,8 @@
                 selectedLecture  : null,
                 pageMode         : {$this->Enum->PageMode->LIST->value},
                 isShowSearchArea : '{$isShowSearchArea}',
-                isOrderAsc       : true,
-                hasOrderColumn   : 'lecture_id', // 講座ID:'lecture_id',講座名:'lecture_name',学問分類:'study_area_name'
+                isOrderAsc       : '{$isOrderAsc}', // 昇順かどうか
+                hasOrderColumn   : '{$hasOrderColumn}', // 講座ID:'lecture_id',講座名:'lecture_name',学問分類名:'study_area_name'
 			},
 			methods:{
 				goEdit: function(lectureId){
@@ -88,13 +88,19 @@
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
                 switchingDisplayOrder: function (column) {
-                    {* 処理はこれから作成します・・・ *}
-                    
-
-                    this.isOrderAsc = !this.isOrderAsc;
+                    if (this.hasOrderColumn == column) {
+                        this.isOrderAsc = !this.isOrderAsc;
+                    } else {
+                        this.hasOrderColumn = column;
+                        this.isOrderAsc = true;
+                    }
                 },
                 clear: function () {
                     window.location.href = '{$this->Url->build(['action'=>'index'])}';
+                },
+                test: function () {
+                    const order = (this.isOrderAsc ? 'ASC' : 'DESC'); // 三項演算子 (条件 ? trueの場合 : falseの場合)
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + order;
                 },
 			},
             computed: {
@@ -184,6 +190,7 @@ input, select {
         <div id="lectures-header">
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button">追加</button>
+            <button @click="test()">テスト</button>
         </div>
         <div id="search-conditions-area">
             <span @click="switchingSearchConditions()" class="pointer" v-text="toggleText"></span>
@@ -245,10 +252,13 @@ input, select {
                         <span class="pointer" v-show="hasOrderColumn == 'lecture_id'" @click="switchingDisplayOrder('lecture_id')" v-text="displayOrderLabel"></span>
                     </th>
                     <th>
-                        <span @click="switchingDisplayOrder('lecture_name')">講座名</span>
+                        <span class="pointer" @click="switchingDisplayOrder('lecture_name')">講座名</span>
                         <span class="pointer" v-show="hasOrderColumn == 'lecture_name'" @click="switchingDisplayOrder('lecture_name')" v-text="displayOrderLabel"></span>
                     </th>
-                    <th>学問分類名</th>
+                    <th>
+                        <span class="pointer" @click="switchingDisplayOrder('study_area_name')">学問分類名</span>
+                        <span class="pointer" v-show="hasOrderColumn == 'study_area_name'" @click="switchingDisplayOrder('study_area_name')" v-text="displayOrderLabel"></span>
+                    </th>
                     <th></th>
                 </tr>
             </thead>

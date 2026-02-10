@@ -16,8 +16,20 @@ class LecturesController extends BaseController
         $requestData = $this->request->query;
         $this->logNotice($requestData);
 
+        // 初期表示（クリア）・検索・テストボタン
+        // 初期表示：「/lectures」まで
+        // 検索：lecture_name,course_timeなどがある
+        // テスト：sortが存在する
+        $isInitial = empty($requestData);
+        $isSearch = false;
+        $isTest = false;
+        if (!$isInitial) {
+            $isTest   =  array_key_exists('sort', $requestData);
+            $isSearch = !array_key_exists('sort', $requestData);
+        }
+
         $isShowSearchArea = false;
-        if ($requestData) { // $requestData != []
+        if ($isSearch) { // $requestData != []
             $requestData['course_time'] = mb_convert_kana($requestData['course_time'], "n");
             $requestData['number_of_frames'] = mb_convert_kana($requestData['number_of_frames'], "n");
             // 検索条件の表示・非表示の判定
@@ -40,7 +52,7 @@ class LecturesController extends BaseController
             'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
         ];
 
-        if ($requestData) {
+        if ($isSearch) {
             if ($requestData['lecture_name'] != '') {
                 $where['Lectures.lecture_name LIKE'] = '%' . $requestData['lecture_name'] . '%';
             }
@@ -58,6 +70,28 @@ class LecturesController extends BaseController
             }
         }
 
+        $order = [
+            'Lectures.id' => 'ASC',
+        ];
+        if ($isTest) {
+            $column = '';
+            switch ($requestData['sort']) {
+                case 'lecture_id':
+                    $column = 'Lectures.id';
+                    break;
+                case 'lecture_name':
+                    $column = 'Lectures.lecture_name';
+                    break;
+                case 'study_area_name':
+                    $column = 'AreaOfStudies.area_of_study_name';
+                    break;
+            }
+
+            $order = [
+                $column => $requestData['direction'],
+            ];
+        }
+
 		$lectures = $this->Lectures->find()
 			->contain([
 				'AreaOfStudies',
@@ -65,9 +99,7 @@ class LecturesController extends BaseController
                 'UpdateUser',
 			])
             ->where($where) 
-			->order([
-				'Lectures.id' => 'ASC'
-			])
+			->order($order)
 			->toArray();
 
 		$courseTimes = [];
@@ -92,6 +124,18 @@ class LecturesController extends BaseController
             ];
         }
 
+        // ▲の向き・位置を決める
+        $isOrderAsc = true;
+        $hasOrderColumn = 'lecture_id';
+        // $requestData['direction'] :ASC なら true / DESC なら false
+        if ($isTest) {
+            if ($requestData['direction'] == 'DESC') {
+                $isOrderAsc = false;
+            }
+            $hasOrderColumn = $requestData['sort'];
+        }
+
+        $this->set(compact('isOrderAsc', 'hasOrderColumn'));
 		$this->set(compact('loginUserId', 'lectureConditions', 'isShowSearchArea'));
         $this->set('lectures', json_encode($lectures));
 		$this->set('courseTimes', json_encode($courseTimes));
