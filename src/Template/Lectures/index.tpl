@@ -17,8 +17,8 @@
                 // isShowDetail: false,
                 pageMode    : {$this->Enum->PageMode->LIST->value},
                 isShowSearchArea: '{$isShowSearchArea}',
-                isOrderAsc : true,
-                hasOrderColumn : 'lecture_id',
+                isOrderAsc : '{$isOrderAsc}',// ★★★★★★★★どうやったらそういう発想になるか聞く
+                hasOrderColumn : '{$hasOrderColumn}',// 講座ID:'lecture_id',講座名:'lecture_name',学問分類名:'study_area_name'
 			},
             // 登録ボタンとか作るとき
 			methods:{
@@ -84,10 +84,6 @@
                     // 表がなくなったから何も選ばれてない状態にしよう
                     this.selectedLecture = null;
                 },
-                aaa: function(){
-                    console.log('tes');
-                    this.hasOrderColumn = 'lecture_name';
-                },
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
 					if(result){
@@ -108,11 +104,30 @@
                     // console.log('aaa');
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
-                switchingDisplayOrder: function(){
-                    this.isOrderAsc = !this.isOrderAsc;
+                switchingDisplayOrder: function(column){
+                    if(this.hasOrderColumn == column){
+                        // ▲表示箇所とクリックした項目が同じ
+                        // 上下切替 
+                        // 上向き下向きの三角を切り替えて代入
+                        this.isOrderAsc = !this.isOrderAsc;
+                    }else{
+                        // ▲表示箇所とクリックした項目が異なる
+                        // 表示箇所を変更するけど切り替えは行わない
+                        // 三角を表示する項目
+                        this.hasOrderColumn = column;
+                        // 三角を上向きにする
+                        this.isOrderAsc = true;
+                    }
                 },
                 clear: function(){
                     window.location.href = '{$this->Url->build(['action'=>'index'])}';
+                },
+                test: function(){
+                    let judgeOrder = 'ASC';
+                    if(!this.isOrderAsc){
+                        judgeOrder = 'DESC';
+                    }
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + judgeOrder;
                 },
             },
             computed: {
@@ -243,6 +258,7 @@ input, select {
         <div style="display:flex; align-items:center;">
 		<h1>講座一覧</h1>
 		<button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
+        <button @click="test()" >テスト</button>
 	</div>
     
     <div id="search-conditions-area">
@@ -304,16 +320,18 @@ input, select {
 				<thead>
 					<tr>
 						<th>
-                            <span class="pointer" @click="switchingDisplayOrder()">講座ID</span>
-                            <span class="pointer" @click="switchingDisplayOrder()" v-show="hasOrderColumn == 'lecture_id'" v-text="displayOrderLabel"></span>
+                            <span class="pointer" @click="switchingDisplayOrder('lecture_id')">講座ID</span>
+                            <span class="pointer" v-show="hasOrderColumn == 'lecture_id'" @click="switchingDisplayOrder('lecture_id')" v-text="displayOrderLabel"></span>
                         </th>
-						<th>
-                            <span @click="aaa()">講座名</span>
-                            <span class="pointer" @click="aaa()" v-show="hasOrderColumn == 'lecture_name'" v-text="displayOrderLabel"></span>
-
-                            <span></span>
+                        <th>
+                            <span class="pointer" @click="switchingDisplayOrder('lecture_name')">講座名</span>
+                            <span class="pointer" v-show="hasOrderColumn == 'lecture_name'" @click="switchingDisplayOrder('lecture_name')" v-text="displayOrderLabel"></span>
                         </th>
-						<th>学問分類名</th>
+                        <th>
+                            <span class="pointer" @click="switchingDisplayOrder('study_area_name')">学問分類名</span>
+                            <span class="pointer" v-show="hasOrderColumn == 'study_area_name'" @click="switchingDisplayOrder('study_area_name')" v-text="displayOrderLabel"></span>
+                        </th>
+						
 						<th></th>
 					</tr>
 				</thead>

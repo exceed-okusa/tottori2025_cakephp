@@ -16,41 +16,49 @@ class LecturesController extends BaseController
     {
         $requestData = $this->request->query;
         $this->logNotice($requestData);
+
+        $isInitial = false;
+        $isSearch = false;
+        $isTest = false;
+        // if(empty($requestData)){
+        //     $isInitial = true;
+        //     $isSearch = false;
+        //     $isTest = false;
+        // }
+        // if($isSearch == true){
+        //     $isInitial = false;
+        //     $isTest = false;
+        // }
+        // if($isTest == true){
+        //     $isInitial = false;
+        //     $isSearch = false;
+        // }
+        if (!empty($requestData)) {
+            // sortがある
+            if (array_key_exists('sort', $requestData)) {
+                $isTest = true;
+            } else {
+                $isSearch = true;
+            }
+        } else {
+            // empty($requestData)
+            $isInitial = true;
+        }
+
         // 配列の中にキーがあるかを確認する
         $isShowSearchArea = false;
-        if(array_key_exists('course_time',$requestData)){
-            // if($requestData['course_time'] != ''){
-            //     $isShowSearchArea = true;
-            // }
-            // if($requestData['number_of_frames'] != ''){
-            //     $isShowSearchArea = true;
-            // }
-            // if($requestData['area_of_study_name'] != ''){
-            //     $isShowSearchArea = true;
-            // }
-            // $requestDatas = [
-            //             'course_time' => ''
 
-            // ];
+        if($isSearch){
             foreach ($requestData as $value) {
                 if ($value != '') {
                     $isShowSearchArea = true;
                     break;
                 }
             }
-                
-            // foreach($requestDatas as $key => $requestData){
-            //     $requestDatas 
-            // }
+            $requestData['number_of_frames'] = mb_convert_kana($requestData['number_of_frames'],"n");
             $requestData['course_time'] = mb_convert_kana($requestData['course_time'],"n");
         }
-        if(array_key_exists('number_of_frames',$requestData)){
-            $requestData['number_of_frames'] = mb_convert_kana($requestData['number_of_frames'],"n");
-        }
-        
-        
-        
-        
+
         // 配列からEntityへ変更
 
         $lectureConditions = $this->Lectures->newEntity($requestData);
@@ -65,8 +73,7 @@ class LecturesController extends BaseController
                 'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
                 'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
         ];
-
-        if($requestData) {
+        if($isSearch) {
             if($requestData['lecture_name'] != '') {
                 $where['Lectures.lecture_name LIKE'] = '%' . $requestData['lecture_name'] . '%';
             }
@@ -83,19 +90,35 @@ class LecturesController extends BaseController
                 $where['Lectures.number_of_frames'] = $requestData['number_of_frames'];
             }
         }
+
+        $order = [
+            'Lectures.id' => 'ASC',
+        ];
+        if($isTest){
+            $column = '';
+            if($requestData['sort'] == 'lecture_id'){
+                $column = 'Lectures.id';
+            }
+            if($requestData['sort'] == 'lecture_name'){
+                $column = 'Lectures.lecture_name';
+            }
+            if($requestData['sort'] == 'study_area_name'){
+                $column = 'AreaOfStudies.area_of_study_name';
+            }
         
+            $order = [
+                $column => $requestData['direction'],
+            ];
+        }
 
 		$lectures = $this->Lectures->find()
 			->contain([
 				'AreaOfStudies',
-                // 'Users'
                 'InsertUser',
                 'UpdateUser',
 			])
             ->where($where)
-			->order([
-				'Lectures.id' => 'ASC'
-			])
+			->order($order)
 			->toArray();
 
 		$courseTimes = [];
@@ -120,7 +143,19 @@ class LecturesController extends BaseController
             ];
         }        
             // $studyAreaOptions = array_column($areaOfStudySubject, 'area_of_study_name');
+        
+        $isOrderAsc = true;
+        $hasOrderColumn = 'lecture_id';//study_area_nameのこと
 
+        if($isTest){
+            if($requestData['direction'] == 'DESC'){
+                $isOrderAsc = false;
+            }
+            $hasOrderColumn = $requestData['sort'];
+        }
+
+
+        $this->set(compact('isOrderAsc','hasOrderColumn'));
         // $this->set('loginUserId',$loginUserId);
         $this->set(compact('loginUserId','lectureConditions'));
 		$this->set('lectures', json_encode($lectures));
