@@ -15,12 +15,40 @@ class LecturesController extends BaseController
     public function index()
     {
         // str=文字列
-        // ↓検索ボタンを押したときに検索欄に記入された配列
+        // ↓検索ボタンを押したときに検索欄に記入された配列or上のURLに書かれているもの
         $requestData = $this->request->query;
+        $this->logNotice($this->request->query);
         $this->logNotice($requestData);
 
-        $isShowSearchArea = false;
+        // 初期表示(クリア)・検索・テストボタン
+        // 初期表示：「/lectures」まで
+        // 検索：lectures_name,course_timeなどがある
+        // テスト：sortが存在する
+        
+        $isInitial = false;
+        $isSearch = false;
+        $isTest = false;
+        
+
         if($requestData){
+            if(array_key_exists('sort',$requestData)){
+                $isTest = true;
+            }else{
+                $isSearch = true;
+            }
+        }else{
+            $isInitial = true;
+        }
+
+        // 短縮例↓
+        // $isTest = array_key_exists('sort',$requestData)
+
+        $this->logNotice($isInitial);
+        $this->logNotice($isSearch);        
+        $this->logNotice($isTest);
+
+        $isShowSearchArea = false;
+        if($isSearch){
             $requestData['course_time'] = mb_convert_kana( $requestData['course_time'] , "n");
             $requestData['number_of_frames'] = mb_convert_kana( $requestData['number_of_frames'] , "n");
             // 検索条件の表示・非表示の判定 $valueは配列の右側の意味
@@ -46,7 +74,39 @@ class LecturesController extends BaseController
                 'Lectures.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
                 'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
         ];
-        if($requestData){
+        $order = [
+            'Lectures.id' => 'ASC',
+        ];
+        $sort = false;
+        $direction = 'ASC';
+        if($isTest){
+            // if($requestData['sort'] == 'lecture_id'){
+            //     $column = 'Lectures.id';
+            // }elseif($requestData['sort'] == 'lecture_name'){
+            //     $column = 'Lectures.lecture_name';
+            // }elseif($requestData['sort'] == 'study_area_name'){
+            //     $column = 'AreaOfStudies.area_of_study_name';
+            // }
+            $column = '';
+            switch ($requestData['sort']) {
+                case 'lecture_id';
+                    $column = 'Lectures.id';
+                    break;
+                case 'lecture_name';
+                    $column = 'Lectures.lecture_name';
+                    break;
+                case 'study_area_name';
+                    $column = 'AreaOfStudies.area_of_study_name';
+                    break;
+            }
+            $order = [
+                $column => $requestData['direction'],
+            ];
+            $sort = $requestData['sort'];
+            $direction = $requestData['direction'];
+        }
+
+        if($isSearch){
             if($requestData['lecture_name'] != ''){
                 $where['Lectures.lecture_name like'] = '%'. $requestData['lecture_name'] .'%';
             }
@@ -75,10 +135,10 @@ class LecturesController extends BaseController
             ->where($where
                 // Javascriptでphpを使いたいときは{}が必要なし、そのまま０でもいいがEnumの中に数字の説明が記載されている。
             )
-			->order([
-				'Lectures.id' => 'ASC'
-			])
+			->order($order)
 			->toArray();
+
+             $this->logNotice($lectures);
 
 		$courseTimes = [];
 		$number = 1;
@@ -109,7 +169,8 @@ class LecturesController extends BaseController
         $this->set('studyAreaOptions', json_encode($studyAreaOptions));
         $this->set(compact('lectureConditions'));
         $this->set(compact('isShowSearchArea'));
-        // $this->set('isShowSearchArea', json_encode($isShowSearchArea));
+        $this->set(compact('sort'));
+        $this->set(compact('direction'));
     }
     // 入力したデータを保存する処理↓
 	public function save()

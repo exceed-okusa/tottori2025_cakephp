@@ -9,17 +9,19 @@
 			data:{
             // selectedLectureで設定した要素をlecturesで使えるようにしている
                 // ↓sqlで取得した情報を使えるようにしてくれている
-				lectures         : {$lectures},
-				courseTimes      : {$courseTimes},
-				editId           : null,
-                selectedLecture  : null,
-                pageMode         : {$this->Enum->PageMode->LIST->value},
-                studyAreaOptions : {$studyAreaOptions},
-                isShowSearchArea : '{$isShowSearchArea}',
-                sortTriangle     : true,
-                hasOrderPositionId : true,
+				lectures             : {$lectures},
+				courseTimes          : {$courseTimes},
+				editId               : null,
+                selectedLecture      : null,
+                pageMode             : {$this->Enum->PageMode->LIST->value},
+                studyAreaOptions     : {$studyAreaOptions},
+                isShowSearchArea     : '{$isShowSearchArea}',
+                sortTriangle         : true,
+                hasOrderPositionId   : true,
                 hasOrderPositionName : false,
-                hasOrderColumn   : 'lecture_id',
+                hasOrderColumn       : 'lecture_id',
+                sort                 : '{$sort}',
+                direction            : '{$direction}',
 			},
             // created(){
             //     if(this.lectures.length == 0){
@@ -34,6 +36,16 @@
                         const result = alert('検索結果が０件でした。条件を変更して再度検索を行ってください。');
                     }, 1);                    
                 }
+                // ↓初期表示で▲が消えているから修正
+                if(this.sort){
+                    this.hasOrderColumn = this.sort
+                }
+                if(this.direction == 'DESC'){
+                    this.sortTriangle = false
+                }else{
+                    this.sortTriangle = true
+                }
+                console.log(this.sort)
             },
 			methods:{
 				goEdit: function(lectureId){
@@ -116,18 +128,27 @@
                     this.isShowSearchArea = !this.isShowSearchArea;
                 },
 
-                switchingSortConditions: function(){
-                    // this.isShowSearchAreaとは反対の判定に変更している
-                    this.sortTriangle = !this.sortTriangle;
-                },
-
-                onChangeTrianglePositionName: function(column){
-                    this.hasOrderColumn = 'lecture_name'
+                onChangeTrianglePositionName: function(column){                   
+                    if(this.hasOrderColumn == column){
+                        this.sortTriangle = !this.sortTriangle;
+                    }else{
+                        this.hasOrderColumn = column;
+                        this.sortTriangle = true;
+                    }    
                 },
 
                 clear: function(){
                     console.log('クリアボタンを押しました。')
                     window.location.href = '{$this->Url->build(['action'=>'index'])}'
+                },
+                test: function(){
+                    console.log('クリアボタンを押しました。')
+                    let judgeOrder = 'ASC';
+                    if(!this.sortTriangle){
+                        judgeOrder = 'DESC';
+                    }
+                    // const order = (this.isOrderAsc ?)
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + judgeOrder;
                 },
 			},
             // 何かしらの評価(true,false)・処理によって、1つの値を算出したいとき
@@ -230,10 +251,11 @@ input, select {
         <div>
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
+            <button @click="test()">テスト</button>
         </div>
  {*  *}
         <div id="search-conditions-area">
-            {$this->Form->create($isShowSearchArea,['type'=>'get'])}        
+            {$this->Form->create($lectureConditions,['type'=>'get'])}        
             <span @click="switchingSearchConditions()" class="pointer" v-text="varietyTriangle"></span>
                 検索条件
             <div style="padding: 3px 25px;" v-if="isShowSearchArea">
@@ -242,11 +264,11 @@ input, select {
                         講座名
                     </label>
                     <span>
-                        {$this->Form->input('lecture_name',['type'=>'get'])}
+                        {$this->Form->input('lecture_name',['type'=>'text'])}
                     </span>
                 </div>
                 <div>
-                    <label for='area_of_study_name'>
+                    <label for='area-of-study-name'>
                         学問分類名    
                     </label>
                     <span>
@@ -290,14 +312,17 @@ input, select {
             <thead>
                 <tr>
                     <th>
-                        <span @click="onChangeTrianglePositionName()" class="pointer">講座ID</span>
-                        <span @click="onChangeTrianglePositionName()" v-show="hasOrderColumn == 'lecture_id'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionId"></span>
+                        <span @click="onChangeTrianglePositionName('lecture_id')" class="pointer">講座ID</span>
+                        <span @click="onChangeTrianglePositionName('lecture_id')" v-show="hasOrderColumn == 'lecture_id'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionId"></span>
                     </th>
                     <th>
-                        <span @click="onChangeTrianglePositionName()" class="pointer">講座名</span>
-                        <span @click="onChangeTrianglePositionName()" v-show="hasOrderColumn == 'lecture_name'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionName"></span>
+                        <span @click="onChangeTrianglePositionName('lecture_name')" class="pointer">講座名</span>
+                        <span @click="onChangeTrianglePositionName('lecture_name')" v-show="hasOrderColumn == 'lecture_name'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionName"></span>
                     </th>
-                    <th>学問分類名</th>
+                    <th>
+                        <span @click="onChangeTrianglePositionName('study_area_name')" class="pointer">学問分類名</span>
+                        <span @click="onChangeTrianglePositionName('study_area_name')" v-show="hasOrderColumn == 'study_area_name'" class="pointer" v-text='triangleMark' v-show="hasOrderPositionName"></span>
+                    </th>
                     <th></th>
                 </tr>
             </thead>
