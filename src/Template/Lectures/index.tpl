@@ -36,22 +36,6 @@
 						}
 					}
 				},
-                deleteConfirm: function(){
-                        // 未完成
-                },
-                saveConfirm: function(){		
-                        const result = window.confirm('この内容で登録します。よろしいですか？');
-                        if(result){
-                            // 未完成
-                            const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
-                            const data = {
-                                editId: this.editId,
-                                selectedLecture: this.selectedLecture,
-                            };
-                            const fn = function(dataFromAjax){
-                                location.reload();
-                            }
-                },
                 goAdd: function(){
                     this.pageMode = {$this->Enum->PageMode->ADD->value};
                     this.editId = null;
@@ -110,13 +94,12 @@
                         this.hasOrderColumn = column;
                         this.isOrderAsc = true;
                     }
+
+                    const order = (this.isOrderAsc ? 'ASC' : 'DESC'); // 三項演算子 (条件 ? trueの場合 : falseの場合)
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + order;
                 },
                 clear: function () {
                     window.location.href = '{$this->Url->build(['action'=>'index'])}';
-                },
-                test: function () {
-                    const order = (this.isOrderAsc ? 'ASC' : 'DESC'); // 三項演算子 (条件 ? trueの場合 : falseの場合)
-                    window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + order;
                 },
 			},
             computed: {
@@ -206,7 +189,6 @@ input, select {
         <div id="lectures-header">
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button">追加</button>
-            <button @click="test()">テスト</button>
         </div>
         <div id="search-conditions-area">
             <span @click="switchingSearchConditions()" class="pointer" v-text="toggleText"></span>
