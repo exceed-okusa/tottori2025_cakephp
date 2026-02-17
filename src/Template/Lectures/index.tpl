@@ -118,17 +118,18 @@
                         // 三角を上向きにする
                         this.isOrderAsc = true;
                     }
-                },
-                clear: function(){
-                    window.location.href = '{$this->Url->build(['action'=>'index'])}';
-                },
-                test: function(){
                     let judgeOrder = 'ASC';
                     if(!this.isOrderAsc){
                         judgeOrder = 'DESC';
                     }
                     window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + judgeOrder;
                 },
+                clear: function(){
+                    window.location.href = '{$this->Url->build(['action'=>'index'])}';
+                },
+                // test: function(){
+                    
+                // },
             },
             computed: {
                 isShow: function(){
@@ -258,7 +259,7 @@ input, select {
         <div style="display:flex; align-items:center;">
 		<h1>講座一覧</h1>
 		<button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
-        <button @click="test()" >テスト</button>
+        {* <button @click="test()" >テスト</button> *}
 	</div>
     
     <div id="search-conditions-area">
