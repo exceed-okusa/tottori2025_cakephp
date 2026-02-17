@@ -135,20 +135,15 @@
                         this.hasOrderColumn = column;
                         this.sortTriangle = true;
                     }    
-                },
-
-                clear: function(){
-                    console.log('クリアボタンを押しました。')
-                    window.location.href = '{$this->Url->build(['action'=>'index'])}'
-                },
-                test: function(){
-                    console.log('クリアボタンを押しました。')
                     let judgeOrder = 'ASC';
                     if(!this.sortTriangle){
                         judgeOrder = 'DESC';
                     }
-                    // const order = (this.isOrderAsc ?)
                     window.location.href = '{$this->Url->build(['action'=>'index'])}?sort=' + this.hasOrderColumn + '&direction=' + judgeOrder;
+                },
+
+                clear: function(){
+                    console.log('クリアボタンを押しました。')
                 },
 			},
             // 何かしらの評価(true,false)・処理によって、1つの値を算出したいとき
@@ -251,7 +246,6 @@ input, select {
         <div>
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
-            <button @click="test()">テスト</button>
         </div>
  {*  *}
         <div id="search-conditions-area">
