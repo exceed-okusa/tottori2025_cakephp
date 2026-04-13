@@ -63,6 +63,9 @@
         <div class="main-button" v-if="isShowLectureManagement">
             {$this->Html->link('講座管理',['controller' => 'Lectures', 'action' => 'index'],['class' => 'btn btn-primary btn-lg'])}
 		</div>
+        <div class="main-button" v-if="isShowLectureManagement"> <!--isShowLectureManagementは変数名が微妙だがとりあえず保留 -->
+            {$this->Html->link('学問分類管理',['controller' => 'AreaOfStudies', 'action' => 'index'],['class' => 'btn btn-primary btn-lg'])}
+        </div>
         <div class="main-button" v-if="isShowAttendanceManagement">
             {$this->Html->link('出席管理',['controller' => 'Attendances', 'action' => 'edit'],['class' => 'btn btn-primary btn-lg'])}
 		</div>
