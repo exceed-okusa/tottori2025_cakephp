@@ -179,20 +179,7 @@ class LecturesController extends BaseController
                 
 			]
 		];
-        $areaOfStudyIds = [];
-        $areaOfStudyList = $this->AreaOfStudies->find()
-            ->select([
-                'id'
-            ])
-            ->where([
-                'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
-            ])
-            ->toArray();
-            foreach($areaOfStudyList as $areaOfStudy){
-                $areaOfStudyIds[] = $areaOfStudy['id'];
-            }
-        $this->logNotice($areaOfStudyList);
-        $this->logNotice($areaOfStudyIds);
+        
 
         
         // $data['selectedLecture']['area_of_study_id']がどうやって思いつくのか

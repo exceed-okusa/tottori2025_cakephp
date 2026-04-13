@@ -258,7 +258,7 @@ input, select {
 	<div id="course-list">
         <div style="display:flex; align-items:center;">
 		<h1>講座一覧</h1>
-		<button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
+		<button @click="goAdd()" class="add-button">追加</button>
         {* <button @click="test()" >テスト</button> *}
 	</div>
     
@@ -309,7 +309,7 @@ input, select {
             </div>
             <div style="text-align: right;">
                 <button type="button" @click="clear()">クリア</button>
-            <button>検索</button>
+                <button>検索</button>
             </div>
             
         </div>

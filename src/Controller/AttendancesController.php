@@ -37,6 +37,10 @@ class AttendancesController extends BaseController
 			])
 			->toArray();
 
+        $attendances = $this->Attendances->find()
+            ->toArray();
+
+
 		$courseTimes = [];
 		$number = 1;
 		while($number <= 6){
@@ -64,17 +68,32 @@ class AttendancesController extends BaseController
 			]
 		];
         
-        if(!empty($data['editId'])){
-            $lecture = $this->Lectures->get($data['editId']);
-            $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
-        }else{
-            $data['selectedLecture']['insert_user_id'] = 0;
-            $data['selectedLecture']['update_user_id'] = 0;
-            $data['selectedLecture']['insert_date'] = new FrozenTime();
-            $data['selectedLecture']['update_date'] = new FrozenTime();
+        // $studentUserIds = [];
+        // $areaOfStudyList = $this->AreaOfStudies->find()
+        //     ->select([
+        //         'id'
+        //     ])
+        //     ->where([
+        //         'AreaOfStudies.invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value
+        //     ])
+        //     ->toArray();
+        //     foreach($areaOfStudyList as $areaOfStudy){
+        //         $areaOfStudyIds[] = $areaOfStudy['id'];
+        //     }
+        // $this->logNotice($areaOfStudyList);
+        // $this->logNotice($studentUserIds);
 
-            $this->logNotice($data['selectedLecture']);
-            $lecture = $this->Lectures->newEntity($data['selectedLecture'],['associated'=>false]);
+        if(!empty($data['editId'])){
+            $attendance = $this->Attendances->get($data['editId']);
+            $attendance = $this->Attendances->patchEntity($attendance,$data['selectedAttendance'],['associated'=>false]);
+        }else{
+            $data['selectedAttendance']['insert_user_id'] = 0;
+            $data['selectedAttendance']['update_user_id'] = 0;
+            $data['selectedAttendance']['insert_date'] = new FrozenTime();
+            $data['selectedAttendance']['update_date'] = new FrozenTime();
+
+            $this->logNotice($data['selectedAttendance']);
+            $attendance = $this->Attendances->newEntity($data['selectedAttendance'],['associated'=>false]);
 
         }
         // 
@@ -82,9 +101,9 @@ class AttendancesController extends BaseController
         // $this->logNotice($lecture);
         
         
-        // $this->logNotice($lecture);
+        $this->logNotice($attendance);
         // $this->Lectures->delete($lecture);
-        $this->Lectures->save($lecture);
+        $this->Attendances->save($attendance);
 		
 
         $this->set([

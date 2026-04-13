@@ -16,6 +16,9 @@
                     // 画面遷移
 					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}';
 				},
+                goAreaOfStudies: function(){
+                    window.location.href = '{$this->Url->build(['controller'=>'AreaOfStudies', 'action'=>'index'])}';
+                },
                 goAttendancesEdit: function(){
                     window.location.href = '{$this->Url->build(['controller'=>'Attendances', 'action'=>'edit'])}';
                 },
@@ -73,6 +76,9 @@
 		</div>
         <div class="main-button" v-if="authority == {$this->Enum->Authority->TEACHER->value} || authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value}">
 			<button class="btn btn-primary btn-lg" @click="goLectures()">講座管理</button>
+		</div>
+        <div class="main-button" v-if="authority == {$this->Enum->Authority->TEACHER->value} || authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value}">
+			<button class="btn btn-primary btn-lg" @click="goAreaOfStudies()">学問分類管理</button>
 		</div>
         <div class="main-button" v-if="authority == {$this->Enum->Authority->STUDENT->value}">
 			<button class="btn btn-primary btn-lg" @click="goAttendances()">出席状況</button>

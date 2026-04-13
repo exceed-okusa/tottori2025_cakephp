@@ -10,6 +10,8 @@
                 students :{$students},
                 lectures :{$lectures},
                 studentId :{$studentId},
+                editId      : null,
+                selectedLecture: null,
                 test_status :1,
                 statusList :[],
                 
@@ -23,14 +25,31 @@
                     }
                     this.statusList.push(row);
                 }
-                
-                
                 // this.statusList.push(2);
-                
-                
-                
-                
-            }
+            },
+            methods:{
+                saveData: function(){
+                    const result = window.confirm('登録します。よろしいですか？');
+                    if(result){
+
+                        const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
+                        const data = {
+
+                            editId: this.editId,
+                            selectedAttendance: this.selectedAttendance
+                        };
+                        const fn = function(dataFromAjax){
+                            location.reload();
+                        }
+                        stsAjax(url, data, fn);
+                    }
+                },
+            },
+            computed: {
+                isShow: function(){
+                    return (this.pageMode == {$this->Enum->PageMode->ADD->value} || this.pageMode == {$this->Enum->PageMode->EDIT->value});
+                },
+            },
         });
     //-->
     //]]>
@@ -71,6 +90,13 @@
                     </tr>
                 </thead>
             </table>
-            
-
+            <button @click="saveData()">登録</button>
 </div>
+{* <div class="sub-menu-title" id="course-edit" v-if="isShow">
+		<h1 v-if="editId !==null">出席内容 編集</h1>
+        <h1 v-else>出席内容 登録</h1>
+		<div v-if="editId !==null">
+			<label for="attendance-id">出席ID</label>
+			<span id="attendance-id" v-text="selectedAttendance.id"></span>
+		</div>
+</div> *}
