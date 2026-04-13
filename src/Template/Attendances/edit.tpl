@@ -12,18 +12,25 @@
                 attendances:      {$attendances},
                 valueCheck:       null,
                 attendanceStatus: null,
+                selectedLecture:  "",
                 students: [
                 ],
                 status: [
                 ],
 			},
-            created: 
+            created:
+            // // if(){
+
+            // // } 
+            // //     for(let i=0;i<this.attendances.length; i++){
+            // //         this.selectedLecture = Object.assign({}, this.attendances[i]);
+            // //     }
                 function informationConnect(index1,index2){
-                    for(let i = 0; i<2; i++){
+                    for(let i = 0; i<this.attendances.length; i++){
                         let statusList = [];
-                        for(let j = 0; j<15; j++){  
+                        for(let j = 0; j<this.attendances; j++){  
                             statusList.push(
-                                { student_attendance: ' ' }
+                                { student_attendance: this.attendances.attendance_status }
                             );
                         }
                         this.students.push(
@@ -50,8 +57,9 @@
                     console.log(index1)
                     console.log(index2)
                     console.log(this.students)
+                    console.log(this.attendances)
                 },
-                informationConnect:function(index1) {
+                informationConnect:function() {
                     for(let i = 0; i<2; i++){
                         let statusList = [];
                         for(let j = 0; j<15; j++){
@@ -64,8 +72,16 @@
                             statusList
                         );
                     }
-               },
-            }
+                },
+                onSelectChange: function(index1,index2){
+                    if(index2 == 'attendances[index1].lecture_number'){
+                        this.selectedLecture = "attendances[index1].attendance_status";
+                        console.log('aaa')
+                    }else{
+                        this.selectedLecture =  null;
+                    }
+                }
+            },
 		});
     //-->
     //]]>
@@ -111,25 +127,25 @@ label {
             <table class="course-check">
                 <thead>
                     <tr class="course-count">
-                        <td  class= "leftTopBox"></td>
-                        <td  v-for="n in 15" v-text="'第'+n+'回'">
-                        </td>
+                        <th  class= "leftTopBox"></th>
+                        <th  v-for="n in 15" v-text="'第'+n+'回'"></th>
                     </tr>
+                </thead>
+                <tbody>
                     <tr v-for="(user, index1) in users" v-if = "user.authority == 0">
-                        <th v-text="user.family_name + '  ' + user.first_name" class="subjectName"></th>
-                        <td v-for="(n, index2) in 15" value=n>
-                            <select>
+                        <td v-text="user.family_name + '  ' + user.first_name" class="subjectName"></td>
+                        <td v-for="(n, index2) in 15" value = 'i'>
+                            {* lecture_numberをうまく関連させる *}
+                            <select v-model = "selectedLecture">
                                 <option></option>
                                 <option value='1'>〇</option>
                                 <option value='2'>△</option>
                                 <option value='3'>✖</option>
                             </select>
-                            <span>
-                            </span>
                             <button @click="confirmation(index1,index2)">確認</button>
                         </td>
-                    </tr>                
-                </thead>
+                    </tr>
+                </tbody>                    
             </table>
         </div>
         <div>

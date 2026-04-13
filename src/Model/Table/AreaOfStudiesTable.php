@@ -26,5 +26,19 @@ class AreaOfStudiesTable extends BaseTable
         $this->displayField('id');
         $this->primaryKey('id');
 
+        $this->belongsTo('AreaOfStudies', [
+			'joinType'   => 'LEFT',
+			'foreignKey' => 'area_of_study_id',
+		]);
+		$this->belongsTo('InsertUser', [
+            'className'    => 'Users',
+            'foreignKey'   => 'insert_user_id',
+            'propertyName' => 'insert_user',
+		]);
+		$this->belongsTo('UpdateUser', [
+            'className'    => 'Users',
+			'foreignKey'   => 'update_user_id',
+			'propertyName' => 'update_user',
+		]);
     }
 }

@@ -15,6 +15,9 @@
 				goLectures: function(){
 					window.location.href = '{$this->Url->build(['controller'=>'Lectures', 'action'=>'index'])}'
 				},
+                goAreaOfStudies: function(){
+					window.location.href = '{$this->Url->build(['controller'=>'AreaOfStudies', 'action'=>'index'])}'
+				},
                 goAttendances: function(){
                     window.location.href = '{$this->Url->build(['controller'=>'Attendances', 'action'=>'index'])}'
                 },
@@ -30,7 +33,7 @@
                 isShowLectureManagement: function(){
                     return this.authority == {$this->Enum->Authority->TEACHER->value} 
                     || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
-                    },
+                },
                 isShowLectureRegistration: function(){
                     return this.authority == {$this->Enum->Authority->STUDENT->value} 
                     || this.authority == {$this->Enum->Authority->SYSTEM_ADMINISTRATOR->value};
@@ -73,6 +76,9 @@
 	<div class="col-sm-2">
 		<div class="main-button" v-if="isShowLectureManagement">
          	<button class="btn btn-primary btn-lg" @click="goLectures()">講座管理</button>
+		</div>
+        <div class="main-button" v-if="isShowLectureManagement">
+         	<button class="btn btn-primary btn-lg" @click="goAreaOfStudies()">学問分類管理</button>
 		</div>		
 		<div class="main-button" v-if="isShowLectureRegistration">
 			<div class="btn btn-primary btn-lg">履修登録</div>

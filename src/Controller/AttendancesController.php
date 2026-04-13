@@ -15,7 +15,7 @@ class AttendancesController extends BaseController
     public function index()
     {
 
-        $this->logNotice($this->request->session()->read());
+        // $this->logNotice($this->request->session()->read());
             $loginUserId = $this->request->session()->read('loginUserId');
 
             $lectures = $this->Lectures->find();
@@ -25,28 +25,28 @@ class AttendancesController extends BaseController
     public function edit()
     {
         $attendances = $this->Attendances->find()
-        // // ->contain([
-        // //     'Users',
-        // // ])
-        ->where([
-            'Attendances.student_user_id' => 'Users.id'
+        ->contain([
+            'Users',
         ])
+        // ->where([
+        //     'Attendances.student_user_id' => 'Users.id'
+        // ])
         ->order([
-            'Attendances.id' => 'ASC'
+            'Attendances.student_user_id' => 'ASC'
         ])
         ->toArray();
         $this->logNotice($attendances);
 
-        $this->logNotice($this->request->session()->read());
+        // $this->logNotice($this->request->session()->read());
             $loginUserId = $this->request->session()->read('loginUserId');
 
             $users = $this->Users->find()->toArray();
             $lectures = $this->Lectures->find()->toArray();
             $attendances = $this->Attendances->find()->toArray();
-            $this->logNotice($attendances);
+            // $this->logNotice($users);
             // $target = ($attendances['student_user_name'] == $users['id']);
             $this->set(compact('loginUserId'));
-            // $this->set(compact('target'));
+            $this->set(compact('target'));
             $this->set('users', json_encode($users));
             $this->set('lectures', json_encode($lectures));
             $this->set('attendances', json_encode($attendances));

@@ -17,8 +17,8 @@ class LecturesController extends BaseController
         // str=文字列
         // ↓検索ボタンを押したときに検索欄に記入された配列or上のURLに書かれているもの
         $requestData = $this->request->query;
-        $this->logNotice($this->request->query);
-        $this->logNotice($requestData);
+        // $this->logNotice($this->request->query);
+        // $this->logNotice($requestData);
 
         // 初期表示(クリア)・検索・テストボタン
         // 初期表示：「/lectures」まで
@@ -43,9 +43,9 @@ class LecturesController extends BaseController
         // 短縮例↓
         // $isTest = array_key_exists('sort',$requestData)
 
-        $this->logNotice($isInitial);
-        $this->logNotice($isSearch);        
-        $this->logNotice($isTest);
+        // $this->logNotice($isInitial);
+        // $this->logNotice($isSearch);        
+        // $this->logNotice($isTest);
 
         $isShowSearchArea = false;
         if($isSearch){
@@ -53,21 +53,18 @@ class LecturesController extends BaseController
             $requestData['number_of_frames'] = mb_convert_kana( $requestData['number_of_frames'] , "n");
             // 検索条件の表示・非表示の判定 $valueは配列の右側の意味
             foreach($requestData as $value){
-                $this->logNotice($value != '');
+                // $this->logNotice($value != '');
                 if($value != ''){
-                    // $this->logNotice('aaa');
                     $isShowSearchArea = true;
-                    // $this->logNotice($isShowSearchArea);
                     break;
                 }
             }   
         }
         
-
         $lectureConditions = $this->Lectures->newEntity($requestData);
 
-        $this->logNotice($requestData);
-        $this->logNotice($this->request->session()->read());
+        // $this->logNotice($requestData);
+        // $this->logNotice($this->request->session()->read());
         $loginUserId = $this->request->session()->read('loginUserId');
 
         $where = [
@@ -80,13 +77,6 @@ class LecturesController extends BaseController
         $sort = false;
         $direction = 'ASC';
         if($isTest){
-            // if($requestData['sort'] == 'lecture_id'){
-            //     $column = 'Lectures.id';
-            // }elseif($requestData['sort'] == 'lecture_name'){
-            //     $column = 'Lectures.lecture_name';
-            // }elseif($requestData['sort'] == 'study_area_name'){
-            //     $column = 'AreaOfStudies.area_of_study_name';
-            // }
             $column = '';
             switch ($requestData['sort']) {
                 case 'lecture_id';
@@ -138,7 +128,7 @@ class LecturesController extends BaseController
 			->order($order)
 			->toArray();
 
-             $this->logNotice($lectures);
+            //  $this->logNotice($lectures);
 
 		$courseTimes = [];
 		$number = 1;
@@ -161,7 +151,6 @@ class LecturesController extends BaseController
             ];
         }
 
-        $this->logNotice($isShowSearchArea);
         // $setはindex.tpl(Lecturesのやつ)でも使えるようにするもの
         $this->set(compact('loginUserId'));
 		$this->set('lectures', json_encode($lectures));
@@ -176,7 +165,7 @@ class LecturesController extends BaseController
 	public function save()
     {
 		// 未実装		
-        		$this->autoRender = false; // Viewを強制的に使わない
+        $this->autoRender = false; // Viewを強制的に使わない
                 // ↓これはindex.tplのdataの中身
         $data = $this->request->input('json_decode', true);
 
@@ -187,14 +176,13 @@ class LecturesController extends BaseController
 		];
 
         // 有効な学問分類IDの取得
-        $areaOfStudyIds = [];
 
         //         // Javascriptでphpを使いたいときは{}が必要なし
         $this->logNotice($data);
-        $this->logNotice(!empty($data['editId']));
+        // $this->logNotice(!empty($data['editId']));
         if(!empty($data['editId'])){
             $lecture = $this->Lectures->get($data['editId']);
-                $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
+            $lecture = $this->Lectures->patchEntity($lecture,$data['selectedLecture'],['associated'=>false]);
         }else{
             // ～の～というようにデータを指定しているさらにそのデータをある値に指定している
             $data['selectedLecture']['insert_user_id'] = 0;
@@ -204,15 +192,16 @@ class LecturesController extends BaseController
 
         // patchEntityは変更されたものを上書き
         // saveは上書きしただけのものを張り付けるもののイメージ
-            $this->Lectures->save($lecture);
+        $this->logNotice($lecture);
+        $this->Lectures->save($lecture);
 
-        $this->logNotice($ret);
+        // $this->logNotice($ret);
         $this->set([
             'dataFromAjax' => $ret['data'],
 			'errors' => $ret['errors'],
             '_serialize' => ['response']
         ]);
-        
+
 		// JSONヘッダーをセット
 		$this->response->type('json');
 		// JSON文字列を本文にセット
@@ -223,7 +212,6 @@ class LecturesController extends BaseController
 
     public function delete()
     {
-		// 未実装		
         		$this->autoRender = false; // Viewを強制的に使わない
         $data = $this->request->input('json_decode', true);
 
@@ -238,7 +226,6 @@ class LecturesController extends BaseController
             'delete_date'       => new FrozenTime()
         ];
 
-        // $this->logNotice($data);
         $lecture = $this->Lectures->get($data['editId']);
         // patchEntityは変更されたものを上書き
         $lecture = $this->Lectures->patchEntity(

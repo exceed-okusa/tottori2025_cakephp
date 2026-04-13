@@ -148,7 +148,6 @@
 			},
             // 何かしらの評価(true,false)・処理によって、1つの値を算出したいとき
 			computed: {
-                // selectedlectureと条件が一致したときにisShowをtrueやfalseに変更する
 				isShow: function(){
 					return (this.pageMode == {$this->Enum->PageMode->ADD->value} || this.pageMode == {$this->Enum->PageMode->EDIT->value});
 				},
@@ -247,7 +246,7 @@ input, select {
             <h1>講座一覧</h1>
             <button @click="goAdd()" class="add-button" style="margin-left: 80px;">追加</button>
         </div>
- {*  *}
+{*  *}
         <div id="search-conditions-area">
             {$this->Form->create($lectureConditions,['type'=>'get'])}        
             <span @click="switchingSearchConditions()" class="pointer" v-text="varietyTriangle"></span>
@@ -401,8 +400,6 @@ input, select {
                     </tr>
                     <tr>
                         <th>登録ユーザー</th>
-                        {* <td v-if='selectedLecture.insert_user == null'></td>
-                        <td v-else v-text="selectedLecture.insert_user.family_name + ' ' + selectedLecture.insert_user.first_name "  ></td> *}
                         <td v-text="selectedLecture.insert_user_name"></td>
                     </tr>
                     <tr>
@@ -411,8 +408,6 @@ input, select {
                     </tr>
                     <tr>
                         <th>更新ユーザー</th>
-                        {* <td v-if='selectedLecture.update_user == null'></td>
-                        <td v-else v-text="selectedLecture.update_user.family_name +' ' + selectedLecture.update_user.first_name"></td> *}
                         <td v-text='selectedLecture.update_user_name'></td>
                     </tr>
                     <tr>
