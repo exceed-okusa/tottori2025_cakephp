@@ -13,6 +13,7 @@ class LecturesController extends BaseController
 {
     public function index()
     {
+        // 
         $requestData = $this->request->query;
         $this->logNotice($requestData);
 
