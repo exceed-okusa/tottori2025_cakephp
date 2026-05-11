@@ -37,36 +37,17 @@ class MyPageController extends BaseController
 
         // $this->logNotice($attendanceList);
 
-
-        // IDをキーにしたマップを作成
-        $lectureMap = array_column($lectures, null, 'id');
-        $userMap    = array_column($userList, null, 'id');
-
-        // 講座ごとに出席データをグループ化
-        $result = [];
-        foreach ($attendanceList as $a) {
-            $lid = $a->lecture_id;
-            $uid = $a->student_user_id;
-
-            if (!isset($result[$lid])) {
-                $result[$lid] = [
-                    'lecture_name' => isset($lectureMap[$lid]) ? $lectureMap[$lid]->lecture_name : '',
-                    'attendances'  => [],
-                ];
-            }
-            $result[$lid]['attendances'][] = [
-                'user_name'      => isset($userMap[$uid]) ? $userMap[$uid]->family_name . ' ' . $userMap[$uid]->first_name : '',
-                'lecture_number' => $a->lecture_number,
-                'status'         => $a->attendance_status,
-            ];
+        $attendancesGrouped = [];
+        foreach ($attendanceList as $attendance) {
+            $attendancesGrouped[$attendance->lecture_id][$attendance->student_user_id][$attendance->lecture_number] = $attendance->attendance_status;
         }
 
-        $this->logNotice($result);
+        $this->logNotice($attendancesGrouped);
 
         
 		// ゆくゆくはsessionへ
 		$user = $this->Users->get($id);
 
-		$this->set(compact('user'));
+		$this->set(compact('user', 'attendancesGrouped'));
     }
 }
