@@ -13,6 +13,7 @@
                 editId      : null,
                 selectedLecture: null,
                 selectedLectureId: null,
+                attendances : {$attendances},
                 test_status :1,
                 statusList :[],
                 attendanceStatusOptions : {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
@@ -39,6 +40,7 @@
                             break;
                         }
                     }
+                
 
             },
             methods:{
@@ -87,10 +89,10 @@
                     </tr>
 
                     
-                    <tr v-for="student in students">
+                    <tr v-for="(student, index) in students"> 
                         <td v-text="student.family_name + ' ' + student.first_name"></td>
                         <td v-for="n in 15">
-                            <select {* v-model="test_status" *}>
+                            <select {* v-model="test_status" *} v-model="attendancesForSelectedLecture[idx].attendance_status_list[i]">
                                 <option value=""></option>
                                 <option v-for="(status,index) in attendanceStatusOptions"
                                         v-text="status"
