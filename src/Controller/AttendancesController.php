@@ -19,6 +19,7 @@ class AttendancesController extends BaseController
 
         $loginUserId = $this->request->session()->read('loginUserId');
 
+    
 
 
 		$lectures = $this->Lectures->find()
@@ -37,9 +38,36 @@ class AttendancesController extends BaseController
 			])
 			->toArray();
 
-        $attendances = $this->Attendances->find()
+        // $attendances = $this->Attendances->find()
+        //     ->contain([
+                
+        //     ])
+        //     ->toArray();
+        // $userIds = array_column($users, 'id');
+
+        $select = [
+                    'Attendances.student_user_id',
+                    'Attendances.semester',
+                    'Attendances.lecture_id',
+                    'Attendances.attendance_status',
+                    'Attendances.lecture_number',
+        ];
+        // $attendances = $this->Attendances->getEffectiveListByStudentUserIds($userIds,$select);
+
+        $attendanceList = $this->Attendances->find()
+            // ->select()
+            ->where([
+                'semester'          => $this->Enum->Semester->FIRST_SEMESTER->value,
+                'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+            ])
             ->toArray();
 
+        $attendancesGrouped = [];
+        
+        foreach($attendanceList as $attendance){
+            $attendancesGrouped[$attendance->lecture_id][$attendance->student_user_id][$attendance->lecture_number] = $attendance->attendance_status;
+        }
+        $this->logNotice($attendancesGrouped);
 
 		$courseTimes = [];
 		$number = 1;
@@ -50,7 +78,12 @@ class AttendancesController extends BaseController
         // $this->set('loginUserId',$loginUserId);
         $this->set(compact('loginUserId'));
 		$this->set('lectures', json_encode($lectures));
-		$this->set('courseTimes', json_encode($courseTimes));
+		// $this->set('users', json_encode($users));
+        $this->set('attendancesGrouped', json_encode($attendancesGrouped));
+        $this->set('attendancesStatusOptions',json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions()));
+
+        
+
     }
 
 	public function save()
@@ -83,27 +116,13 @@ class AttendancesController extends BaseController
         // $this->logNotice($areaOfStudyList);
         // $this->logNotice($studentUserIds);
 
-        if(!empty($data['editId'])){
-            $attendance = $this->Attendances->get($data['editId']);
-            $attendance = $this->Attendances->patchEntity($attendance,$data['selectedAttendance'],['associated'=>false]);
-        }else{
-            $data['selectedAttendance']['insert_user_id'] = 0;
-            $data['selectedAttendance']['update_user_id'] = 0;
-            $data['selectedAttendance']['insert_date'] = new FrozenTime();
-            $data['selectedAttendance']['update_date'] = new FrozenTime();
-
-            $this->logNotice($data['selectedAttendance']);
-            $attendance = $this->Attendances->newEntity($data['selectedAttendance'],['associated'=>false]);
-
-        }
+        
         // 
         
         // $this->logNotice($lecture);
         
         
-        $this->logNotice($attendance);
-        // $this->Lectures->delete($lecture);
-        $this->Attendances->save($attendance);
+    
 		
 
         $this->set([
@@ -120,74 +139,87 @@ class AttendancesController extends BaseController
 		
     }
 
-    public function delete()
-    {
-		// 未実装		
-        $this->autoRender = false; // Viewを強制的に使わない
-        $data = $this->request->input('json_decode', true);
-
-		$ret = [
-			'errors' => '',
-			'data' => []
-		];
-
-        $dataForPatch = [
-            'invalidation_flag' => $this->Enum->InvalidationFlag->ON->value,
-            'delete_date'       => new FrozenTime()
-        ];
-        $lecture = $this->Lectures->get($data['editId']);
-        // $this->logNotice($lecture);
-        $lecture = $this->Lectures->patchEntity($lecture,['invalidation_flag'=>$this->Enum->InvalidationFlag->ON->value],['associated'=>false]);
-        // $this->logNotice($lecture);
-        // $this->Lectures->delete($lecture);
-        $this->Lectures->save($lecture);
-		
-
-        $this->set([
-            'dataFromAjax' => $ret['data'],
-			'errors' => $ret['errors'],
-            '_serialize' => ['response']
-        ]);
-		// JSONヘッダーをセット
-		$this->response->type('json');
-		// JSON文字列を本文にセット
-		$this->response->body(json_encode($ret));
-
-		return $this->response;
-		
-    }
+    
 
     public function edit()
     {
-        $students = $this->Users->find()
-            ->select([
-                'id','family_name','first_name'
-            ])
-            ->where([
-                'Users.authority' => $this->Enum->Authority->STUDENT->value
-            ])
-            ->toArray();
-            $this->logNotice($students);
-
-        $this->set('students',json_encode($students));
-
         $lectures = $this->Lectures->find()
-            ->select([
-                'id','lecture_name'
+            ->where([
+                'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
             ])
             ->toArray();
-            $this->logNotice($lectures);
 
-        $this->set('lectures',json_encode($lectures));
-
-        $studentId = $this->Attendances->find()
-            ->select([
-                'id','student_user_id','attendance_status','lecture_number','lecture_id'
+        $userList = $this->Users->find()
+            ->where([
+                'authority' => $this->Enum->Authority->STUDENT->value,
             ])
             ->toArray();
-            $this->logNotice($studentId);
 
-        $this->set('studentId',json_encode($studentId));
+
+        // $this->logNotice($attendanceList);
+        $this->logNotice($lectures);
+        // $this->logNotice($userList);
+        // $this->logNotice($this->request->session()->read());
+                
+        // foreach($attendanceList as $attendance){
+        //     if($attendance['student_user_id'] == 3 && $attendance['lecture_id'] == 1){
+                
+        //     }
+        // }
+        $attendanceList = $this->Attendances->find()
+        // ->select()
+        ->where([
+            'semester'          => $this->Enum->Semester->FIRST_SEMESTER->value,
+            'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+        ])
+        ->toArray();
+
+        $attendancesGrouped = [];
+        foreach ($attendanceList as $attendance) {
+            $attendancesGrouped[$attendance->lecture_id][$attendance->student_user_id][$attendance->lecture_number] = $attendance->attendance_status;
+        }
+
+        foreach($lectures as $lecture){
+            $data = [];
+            foreach($userList as $user){
+                
+                $attendancesData = $this->Attendances->find()
+                    ->select(['lecture_number', 'attendance_status'])
+                    ->where([
+                        'lecture_id'        =>$lecture->id,
+                        'student_user_id'   =>$user->id,
+                        'semester'          =>$this->Enum->Semester->FIRST_SEMESTER->value,
+                        'invalidation_flag' =>$this->Enum->InvalidationFlag->OFF->value,
+                    ])
+                    ->toArray();
+
+                    $attendanceStatusList = [];
+                    for($i=1; $i<=15; $i++){
+                        $attendanceStatusList[$i] = '';
+                    }
+                    foreach($attendancesData as $entity){
+                        $attendanceStatusList[$entity->lecture_number] = $entity->attendance_status;
+                    }
+
+                    $data = [
+                        'student_user_id' => $user->id,
+                        'attendance_status_list' => [],
+                    ];
+            }
+
+            $attendancesGrouped[] = [
+                'lecture_id' => $lecture->id,
+                'data'       => [],
+            ];
+            
+        }
+
+        $this->logNotice($attendancesGrouped);
+
+        $this->set(compact('loginUserId'));
+        $this->set('lectures', json_encode($lectures));
+        $this->set('users', json_encode($userList));
+        $this->set('attendances', json_encode($attendanceList));
     }
 }
 

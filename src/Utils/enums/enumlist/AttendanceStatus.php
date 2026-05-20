@@ -19,9 +19,10 @@ Final Class AttendanceStatus extends Enum
     public $ABSENCE;
 
     public function __construct(){
-        $this->ATTENDANCE 			 = array('value' => 0, 'text' => '出席', 'description' => "");
-        $this->LATE  			     = array('value' => 1, 'text' => '遅刻', 'description' => "");
-        $this->ABSENCE               = array('value' => 2, 'text' => '欠席', 'description' => "");
+        $this->ATTENDANCE 			 = array('value' => 0, 'text' => '出席', 'description' => "〇");
+        $this->LATE  			     = array('value' => 1, 'text' => '遅刻', 'description' => "△");
+        $this->ABSENCE               = array('value' => 2, 'text' => '欠席', 'description' => "✕");
         parent::__construct();
     }
 }
+
