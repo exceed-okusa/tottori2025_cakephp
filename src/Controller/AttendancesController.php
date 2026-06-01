@@ -51,33 +51,70 @@ class AttendancesController extends BaseController
     public function edit()
     {
         $loginUserId = $this->request->session()->read('loginUserId');
-        $lectures = $this->Lectures->getEffectiveList();
-
-        // 受講している学生を取得
-        $users = $this->Users->find()
+        
+        //講座一覧
+        $lectures = $this->Lectures->find()
             ->where([
-                'authority' => $this->Enum->Authority->STUDENT->value
+                'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
             ])
-            ->order(['id'])
             ->toArray();
 
-        $userIds = array_column($users, 'id');
-        
-        // ★ ひとまず全部の講座
-        // ★ いずれ講座を限定したい
-        $select = [
-                    'Attendances.student_user_id',
-                    'Attendances.semester',
-                    'Attendances.lecture_id',
-                    'Attendances.attendance_status',
-                    'Attendances.lecture_number',
-        ];
-        $attendances = $this->Attendances->getEffectiveListByStudentUserIds($userIds, $select);
+        // 学生一覧
+        $userList = $this->Users->find()
+            ->where([
+                'authority' => $this->Enum->Authority->STUDENT->value,
+            ])
+            ->toArray();
+
+        $attendancesGrouped = [];
+        foreach ($lectures as $lecture) {
+            // data
+            $data = [];
+            foreach ($userList as $user) {
+                $attendancesData = $this->Attendances->find()
+                    ->select(['lecture_number', 'attendance_status'])
+                    ->where([
+                        'lecture_id'        => $lecture->id,
+                        'student_user_id'   => $user->id,
+                        'semester'          => $this->Enum->Semester->FIRST_SEMESTER->value,
+                        'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+                    ])
+                    ->toArray();
+                
+                $attendanceStatusList = [];
+                // 初期値をセット
+                for ($i=1; $i<=15; $i++) {
+                    $attendanceStatusList[$i] = '';
+                }
+                // データがあればそれを使用
+                foreach ($attendancesData as $entity) {
+                    $attendanceStatusList[$entity->lecture_number] = $entity->attendance_status;
+                }
+
+                $data[] = [
+                    'student_user_id' => $user->id,
+                    'attendance_status_list' => $attendanceStatusList,
+                ];
+            }
+
+            $attendancesGrouped[] = [
+                'lecture_id' => $lecture->id,
+                'data'       => $data,
+            ];
+        }
+
+        $aaa = $this->Enum->AttendanceStatus->getValues(); // [0,1,2]
+        foreach ($aaa as $status) {
+            $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
+            $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
+        }
+
+        // logNotice text 出席、遅刻、欠席の順でログ出力
 
 		$this->set(compact('loginUserId'));
         $this->set('lectures', json_encode($lectures));
-        $this->set('users', json_encode($users));
-        $this->set('attendances', json_encode($attendances));
+        $this->set('users', json_encode($userList));
+        $this->set('attendances', json_encode($attendancesGrouped));
         $this->set('attendanceStatusOptions', json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions()));
     }
 
