@@ -10,6 +10,7 @@ namespace App\Utils;
  * @property \Utils\enums\Enum\EnumItem\InvalidationFlag $InvalidationFlag
 * @property \Utils\enums\Enum\EnumItem\CourseTime        $CourseTime
  * @property \Utils\enums\Enum\EnumItem\PageMode         $PageMode
+ * @property \Utils\enums\Enum\EnumItem\AttendanceStatus         $AttendanceStatus
  */
 class Enum
 {

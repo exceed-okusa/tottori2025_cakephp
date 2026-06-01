@@ -71,6 +71,17 @@ Abstract Class Enum {
         return null;
     }
 
+    	public function getDescriptionByValue($findValue){
+        $attributes = $this->_getAttributes();
+        foreach ($attributes as $attribute){
+            if ($attribute->value == $findValue){
+                return $attribute->description;
+            }
+        }
+        return null;
+    }
+
+
     /**
      * This method is used to obtain the itemEnum that has the value equal to the parameter
      *

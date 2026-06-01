@@ -12,32 +12,25 @@
                 attendances:      {$attendances},
                 valueCheck:       null,
                 attendanceStatus: null,
+                attendancesForSelectedLecture: [],
+                attendanceStatusOptions: {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
                 selectedLecture:  "",
+                selectedLectureId: '' ,
                 students: [
                 ],
                 status: [
                 ],
 			},
-            created:
-            // // if(){
-
-            // // } 
-            // //     for(let i=0;i<this.attendances.length; i++){
-            // //         this.selectedLecture = Object.assign({}, this.attendances[i]);
-            // //     }
-                function informationConnect(index1,index2){
-                    for(let i = 0; i<this.attendances.length; i++){
-                        let statusList = [];
-                        for(let j = 0; j<this.attendances; j++){  
-                            statusList.push(
-                                { student_attendance: this.attendances.attendance_status }
-                            );
-                        }
-                        this.students.push(
-                            statusList
-                        );
-                    }
-                },
+            created(){
+                this.selectedLectureId = this.lectures[0].id;
+                // for(i=0;i<this.attendances.length;i++){
+                //     if(this.selectedLectureId == this.attendances[i]['lecture_id']){
+                //         this.attendancesForSelectedLecture = this.attendances[i]['data'];
+                //     }
+                // }
+                    
+                this.setAttendancesForSelectedLecture();
+            },
 			methods:{
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
@@ -53,11 +46,8 @@
                         };
 			        }
                 },
-                confirmation: function(index1,index2){
-                    console.log(index1)
-                    console.log(index2)
-                    console.log(this.students)
-                    console.log(this.attendances)
+                confirmation: function(){
+                    console.log(this.attendanceStatusOptions);
                 },
                 informationConnect:function() {
                     for(let i = 0; i<2; i++){
@@ -73,12 +63,16 @@
                         );
                     }
                 },
-                onSelectChange: function(index1,index2){
-                    if(index2 == 'attendances[index1].lecture_number'){
-                        this.selectedLecture = "attendances[index1].attendance_status";
-                        console.log('aaa')
-                    }else{
-                        this.selectedLecture =  null;
+                changeLecture: function(){
+                    console.log("講座ID:" + this.selectedLectureId + "に変更されました");
+                    this.setAttendancesForSelectedLecture();
+                },
+                setAttendancesForSelectedLecture: function(){
+                    for (attendance of this.attendances) {
+                        if (attendance.lecture_id == this.selectedLectureId) {
+                            this.attendancesForSelectedLecture = attendance.data;
+                            break;
+                        }
                     }
                 }
             },
@@ -120,10 +114,13 @@ label {
 <div id="vm">
 	<h1 style="margin-left:25px;">出席管理</h1>
         <div>
-            <select>
-                <option v-for="lecture in lectures" v-text="lecture.lecture_name" value=""></option>
+            <select id='lecture-name' v-model='selectedLectureId' @change = "changeLecture()">
+                <option v-for="lecture in lectures" v-text="lecture.lecture_name" :value="lecture.id"></option>
             </select>
-            <div class="markMean">〇：出席 △：遅刻 ✖：欠席</div>
+            <span   class="markMean" 
+                    v-for='(status, index) in attendanceStatusOptions' 
+                    v-text="status + ':' +index + ' '">
+            </span>
             <table class="course-check">
                 <thead>
                     <tr class="course-count">
@@ -134,15 +131,17 @@ label {
                 <tbody>
                     <tr v-for="(user, index1) in users" v-if = "user.authority == 0">
                         <td v-text="user.family_name + '  ' + user.first_name" class="subjectName"></td>
-                        <td v-for="(n, index2) in 15" value = 'i'>
+                        <td v-for="n in 15" value = 'i'>
                             {* lecture_numberをうまく関連させる *}
-                            <select v-model = "selectedLecture">
+                            <select v-model = "attendancesForSelectedLecture[index1]['attendance_list'][n]" style="padding: 2px 6px;">
                                 <option></option>
-                                <option value='1'>〇</option>
-                                <option value='2'>△</option>
-                                <option value='3'>✖</option>
+                                <option 
+                                    v-for='(status, index) in attendanceStatusOptions' 
+                                    v-text='status' 
+                                    :value= 'index'>
+                                </option>
                             </select>
-                            <button @click="confirmation(index1,index2)">確認</button>
+                            <button @click="confirmation()">確認</button>
                         </td>
                     </tr>
                 </tbody>                    

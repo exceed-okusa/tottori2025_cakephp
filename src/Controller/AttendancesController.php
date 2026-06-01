@@ -24,31 +24,65 @@ class AttendancesController extends BaseController
     }
     public function edit()
     {
-        $attendances = $this->Attendances->find()
-        ->contain([
-            'Users',
-        ])
-        // ->where([
-        //     'Attendances.student_user_id' => 'Users.id'
-        // ])
-        ->order([
-            'Attendances.student_user_id' => 'ASC'
-        ])
-        ->toArray();
-        $this->logNotice($attendances);
-
-        // $this->logNotice($this->request->session()->read());
             $loginUserId = $this->request->session()->read('loginUserId');
 
-            $users = $this->Users->find()->toArray();
-            $lectures = $this->Lectures->find()->toArray();
-            $attendances = $this->Attendances->find()->toArray();
-            // $this->logNotice($users);
-            // $target = ($attendances['student_user_name'] == $users['id']);
-            $this->set(compact('loginUserId'));
-            $this->set(compact('target'));
-            $this->set('users', json_encode($users));
-            $this->set('lectures', json_encode($lectures));
-            $this->set('attendances', json_encode($attendances));
+                $lectureList = $this->Lectures->find()
+            ->where([
+                'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+            ])
+            ->toArray();
+
+        $userList = $this->Users->find()
+            ->where([
+                'authority' => $this->Enum->Authority->STUDENT->value,
+            ])
+            ->toArray();
+
+        $attendancesGrouped =[];
+ 
+        foreach($lectureList as $lecture){
+            $data = [];
+            foreach($userList as $user){
+                $attendance_status = [];
+                    $attendancesData = $this->Attendances->find()
+                        ->select(['attendance_status','lecture_number'])
+                        ->where([
+                            'semester'          => $this->Enum->Semester->FIRST_SEMESTER->value,
+                            'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+                            'lecture_id'        => $lecture['id'],
+                            'student_user_id'   => $user['id']
+                        ])
+                        ->toArray();
+
+                    $attendanceStatusList = [];
+                    for($i=1; $i<=15; $i++){
+                        $attendanceStatusList[$i] = '';
+                        foreach($attendancesData as $entity){
+                            if($i == $entity['lecture_number']){
+                                $attendanceStatusList[$i] = $entity['attendance_status'];
+                                break;
+                            }
+                        }
+                    }
+
+                $data[] = ['student_user_id' => $user['id'], 'attendance_list' => $attendanceStatusList];
+            }
+            $attendancesGrouped[] = ['lecture_id' => $lecture['id'], 'data' => $data];
+        }
+
+
+        $aaa = $this->Enum->AttendanceStatus->getValues();
+        $bbb = $this->Enum->AttendanceStatus->getTexts();
+        $this->logNotice($bbb);
+
+        foreach($aaa as $status){
+            $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
+        }
+        
+
+        $this->set(compact('loginUserId'));
+        $this->set('lectures', json_encode($lectureList));
+        $this->set('users', json_encode($userList));
+        $this->set('attendances', json_encode($attendancesGrouped));
     }
 }

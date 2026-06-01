@@ -30,5 +30,23 @@ class AttendancesTable extends BaseTable
             'joinType'   =>  'LEFT',
             'foreignKey' =>  'id',
         ]);
+
+        $this->belongsTo('InsertUser',[
+            'className'   =>'Users',
+            'foreignKey'  =>'insert_user_id',
+            'propertyName'=>'insert_user'
+        ]);
+
+        $this->belongsTo('InsertUser',[
+            'className'   =>'Users',
+            'foreignKey'  =>'update_user_id',
+            'propertyName'=>'update_user'
+        ]);
+
+        $this->belongsTo('Lectures',[
+            'className' =>'Users',
+            'foreignKey'  =>'lecture_id',
+            'propertyName'=>'lecture'
+        ]);
     }
 }
