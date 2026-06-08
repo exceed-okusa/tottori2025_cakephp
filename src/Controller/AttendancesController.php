@@ -105,6 +105,7 @@ class AttendancesController extends BaseController
 
         $aaa = $this->Enum->AttendanceStatus->getValues(); // [0,1,2]
         foreach ($aaa as $status) {
+            $this->logNotice('現在のvalueは' . $status . ' です。');
             $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
             $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
         }
