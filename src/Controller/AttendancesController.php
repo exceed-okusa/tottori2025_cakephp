@@ -75,14 +75,20 @@ class AttendancesController extends BaseController
         $bbb = $this->Enum->AttendanceStatus->getTexts();
         $this->logNotice($bbb);
 
+        $ccc = [];
+
         foreach($aaa as $status){
+            // $this->logNotice('現在のvalueは' . $status . 'です。');
             $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
+            // $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
         }
+        $this->logNotice($ccc);
         
 
         $this->set(compact('loginUserId'));
         $this->set('lectures', json_encode($lectureList));
         $this->set('users', json_encode($userList));
         $this->set('attendances', json_encode($attendancesGrouped));
+        $this->set('textArray', json_encode($ccc));
     }
 }

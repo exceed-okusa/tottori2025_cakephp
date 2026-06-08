@@ -13,13 +13,13 @@
                 valueCheck:       null,
                 attendanceStatus: null,
                 attendancesForSelectedLecture: [],
-                attendanceStatusOptions: {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
+                attendanceStatusOptions:       {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
                 selectedLecture:  "",
                 selectedLectureId: '' ,
-                students: [
-                ],
-                status: [
-                ],
+                students: [],
+                status: [],
+                originalData : [],
+                isChanged : false,
 			},
             created(){
                 this.selectedLectureId = this.lectures[0].id;
@@ -63,17 +63,33 @@
                         );
                     }
                 },
-                changeLecture: function(){
-                    console.log("講座ID:" + this.selectedLectureId + "に変更されました");
-                    this.setAttendancesForSelectedLecture();
-                },
                 setAttendancesForSelectedLecture: function(){
                     for (attendance of this.attendances) {
                         if (attendance.lecture_id == this.selectedLectureId) {
                             this.attendancesForSelectedLecture = attendance.data;
+
+                            for(userStatusList of attendance.data){
+                                this.originalData.push({ 
+                                    attendance_list:Object.assign({},userStatusList.attendance_list),
+                                    student_user_id:userStatusList.student_user_id 
+                                });
+                            }
                             break;
                         }
                     }
+                },
+                changeData(){
+                    for(aaa of this.attendancesForSelectedLecture){
+                        console.log(aaa);
+                        for(let i=1; i<=15, i++){
+                            if(aaa['attendance_list'][i] != this.originalData['attendance_list'][i]){
+                                this.isChanged = true;
+                            }else{
+                                this.isChanged = false;
+                            }
+                        }
+                    }      
+                    console.log(this.isChanged);
                 }
             },
 		});
@@ -117,9 +133,10 @@ label {
             <select id='lecture-name' v-model='selectedLectureId' @change = "changeLecture()">
                 <option v-for="lecture in lectures" v-text="lecture.lecture_name" :value="lecture.id"></option>
             </select>
-            <span   class="markMean" 
-                    v-for='(status, index) in attendanceStatusOptions' 
-                    v-text="status + ':' +index + ' '">
+            <span style="margin-left:25px;">
+                {foreach from=$this->Enum->AttendanceStatus->getValues() item=status}
+                    {$this->Enum->AttendanceStatus->getDescriptionByValue($status)}:{$this->Enum->AttendanceStatus->getTextByValue($status)}
+                {/foreach}
             </span>
             <table class="course-check">
                 <thead>
@@ -133,7 +150,8 @@ label {
                         <td v-text="user.family_name + '  ' + user.first_name" class="subjectName"></td>
                         <td v-for="n in 15" value = 'i'>
                             {* lecture_numberをうまく関連させる *}
-                            <select v-model = "attendancesForSelectedLecture[index1]['attendance_list'][n]" style="padding: 2px 6px;">
+                            <select v-model = "attendancesForSelectedLecture[index1]['attendance_list'][n]" style="padding: 2px 6px;"
+                                @change="changeData()">
                                 <option></option>
                                 <option 
                                     v-for='(status, index) in attendanceStatusOptions' 
