@@ -100,7 +100,16 @@ class AttendancesController extends BaseController
 				'message' => '',
 			]
 		];
-        
+        $this->logNotice($data);
+        if(!empty($data['attendancesForSelectedLecture'])){
+            $
+        }
+
+
+
+
+
+
         // $studentUserIds = [];
         // $areaOfStudyList = $this->AreaOfStudies->find()
         //     ->select([
@@ -199,10 +208,12 @@ class AttendancesController extends BaseController
 
         $aaa = $this->Enum->AttendanceStatus->getValues();
         foreach($aaa as $status){
+            $this->logNotice('現在のvalueは' . $status . 'です。');
             $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
+            $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
         }
 
-        $this->Enum->AttendanceStatus->getTextByValue();
+        // $this->Enum->AttendanceStatus->getTextByValue();
 
         $this->set(compact('loginUserId'));
         $this->set('lectures', json_encode($lectures));
