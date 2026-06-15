@@ -7,51 +7,67 @@
 		const vmMain = new Vue({
 			el:'#vm',
 			data:{
-                selectedLectureId        : null,
-                lectures                 : {$lectures},
-                lectureNumberMax         : 15,
-                attendances              : {$attendances},
-                attendanceStatusOptions  : {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
-                users                    : {$users},
+                selectedLectureId             : null,
+                lectures                      : {$lectures},
+                lectureNumberMax              : 15,
+                attendances                   : {$attendances},
+                attendanceStatusOptions       : {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
+                users                         : {$users},
                 attendancesForSelectedLecture : [],
-                originalData             : [],
-                isChanged                : false,
+                originalData                  : [],
+                changedData                   : [],
 			},
 			methods:{
                 changeLecture() {
                     this.setAttendancesForSelectedLecture();
                 },
                 changeData(){
-                    // attendancesForSelectedLecture と originalData に差異があるか？
-
-                    for (user of this.users) {
-                        for (let i=1; i<=15; i++) {
-                            // ★★★★★★★★
+                    this.changedData = [];
+                    // attendancesForSelectedLecture と originalData に差異があるか確認
+                    for (let i=0; i<this.users.length; i++) {
+                        for (let j=1; j<= this.lectureNumberMax; j++) {
+                            if (this.attendancesForSelectedLecture[i].attendance_status_list[j] !== this.originalData[i].attendance_status_list[j]) {
+                                this.changedData.push({
+                                    user_id : this.attendancesForSelectedLecture[i].student_user_id,
+                                    lecture_number : j,
+                                    status : this.attendancesForSelectedLecture[i].attendance_status_list[j]
+                                });
+                            }
                         }
                     }
-
-                    this.isChanged = (this.attendancesForSelectedLecture[0].attendance_status_list[1] != this.originalData[0].attendance_status_list[1]);
                 },
                 setAttendancesForSelectedLecture() {
+                    this.originalData = [];
                     // 全出欠データから講座に対応するものをセットする
                     for (attendance of this.attendances) {
                         if (attendance.lecture_id == this.selectedLectureId) {
                             // 画面に表示するデータの特定
                             this.attendancesForSelectedLecture = attendance.data;
-                            // this.originalData = Object.assign({}, attendance.data); ★失敗例
-
-                            // ★★★★★★★ここから
                             for (userStatusList of attendance.data) {
                                 this.originalData.push({
                                     attendance_status_list: Object.assign({}, userStatusList.attendance_status_list), 
                                     student_user_id: userStatusList.student_user_id 
                                 });
                             }
-                            
                             break;
                         }
                     }
                 },
+                save() {
+                    const result = window.confirm('この内容で登録します。よろしいですか？');
+					if(result){
+                        const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
+                    
+                        const data = {
+                            lecture_id : this.selectedLectureId,
+                            attendance_status_list: this.changedData
+                        };
+                        const fn = function(dataFromAjax){
+
+                        }
+						stsAjax(url, data, fn);
+					}
+                }
 			},
             created() {
                 this.selectedLectureId = this.lectures[0].id;
@@ -112,7 +128,7 @@
         </table>
     </div>
     <div style="text-align:center; margin: 15px;">
-        <button class="btn btn-primary btn-lg">登録</button>
+        <button class="btn btn-primary btn-lg" :disabled="changedData.length == 0" @click="save()">登録</button>
     </div>
 </div>
 
