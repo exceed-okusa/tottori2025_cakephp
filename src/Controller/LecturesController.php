@@ -164,7 +164,6 @@ class LecturesController extends BaseController
     // 入力したデータを保存する処理↓
 	public function save()
     {
-		// 未実装		
         $this->autoRender = false; // Viewを強制的に使わない
                 // ↓これはindex.tplのdataの中身
         $data = $this->request->input('json_decode', true);

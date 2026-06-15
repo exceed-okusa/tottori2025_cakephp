@@ -82,7 +82,6 @@ class AttendancesController extends BaseController
             $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
             // $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
         }
-        $this->logNotice($ccc);
         
 
         $this->set(compact('loginUserId'));
@@ -90,5 +89,32 @@ class AttendancesController extends BaseController
         $this->set('users', json_encode($userList));
         $this->set('attendances', json_encode($attendancesGrouped));
         $this->set('textArray', json_encode($ccc));
+    }
+    public function save(){
+        $this->autoRender = false; // Viewを強制的に使わない
+                // ↓これはindex.tplのdataの中身
+        $data = $this->request->input('json_decode', true);
+
+		$ret = [
+			'errors' => '',
+			'data' => [
+            ]
+		];
+
+        $this->logNotice($data);
+
+
+        $this->set([
+            'dataFromAjax' => $ret['data'],
+			'errors' => $ret['errors'],
+            '_serialize' => ['response']
+        ]);
+
+		// JSONヘッダーをセット
+		$this->response->type('json');
+		// JSON文字列を本文にセット
+		$this->response->body(json_encode($ret));
+
+		return $this->response;
     }
 }

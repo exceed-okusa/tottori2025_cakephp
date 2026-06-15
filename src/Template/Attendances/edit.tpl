@@ -7,19 +7,20 @@
 		const vmMain = new Vue({
 			el:'#vm',
 			data:{
-                users:            {$users},
-                lectures:         {$lectures},
-                attendances:      {$attendances},
-                valueCheck:       null,
-                attendanceStatus: null,
-                attendancesForSelectedLecture: [],
-                attendanceStatusOptions:       {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
+                users                         : {$users},
+                lectures                      : {$lectures},
+                attendances                   : {$attendances},
+                valueCheck                    : null,
+                attendanceStatus              : null,
+                attendancesForSelectedLecture : [],
+                attendanceStatusOptions       : {json_encode($this->Enum->AttendanceStatus->getValuesAndDescriptions())},
                 selectedLecture:  "",
                 selectedLectureId: '' ,
                 students: [],
                 status: [],
                 originalData : [],
                 isChanged : false,
+                changedData: [],
 			},
             created(){
                 this.selectedLectureId = this.lectures[0].id;
@@ -34,17 +35,18 @@
 			methods:{
 				saveConfirm: function(){		
 					const result = window.confirm('この内容で登録します。よろしいですか？');
-                    // OKを押すことによってtrue判定になる
 					if(result){
-                        // 未完成
                         const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
+                    
                         const data = {
-                            // 編集する講座ID
-                            editId: this.editId,
-                            // 入力した内容
-                            selectedLecture: this.selectedLecture,
+                            lecture_id : this.selectedLectureId,
+                            attendance_status_list: this.changedData
                         };
-			        }
+                        const fn = function(dataFromAjax){
+
+                        }
+						stsAjax(url, data, fn);
+					}
                 },
                 confirmation: function(){
                     console.log(this.attendanceStatusOptions);
@@ -64,10 +66,11 @@
                     }
                 },
                 setAttendancesForSelectedLecture: function(){
+                    this.originalData = [];
                     for (attendance of this.attendances) {
                         if (attendance.lecture_id == this.selectedLectureId) {
                             this.attendancesForSelectedLecture = attendance.data;
-
+                            
                             for(userStatusList of attendance.data){
                                 this.originalData.push({ 
                                     attendance_list:Object.assign({},userStatusList.attendance_list),
@@ -79,18 +82,41 @@
                     }
                 },
                 changeData(){
-                    for(aaa of this.attendancesForSelectedLecture){
-                        console.log(aaa);
-                        for(let i=1; i<=15, i++){
-                            if(aaa['attendance_list'][i] != this.originalData['attendance_list'][i]){
-                                this.isChanged = true;
-                            }else{
-                                this.isChanged = false;
-                            }
+                        this.changedData = [];
+                        for(let i=0; i<=1; i++){
+                            for(let j=1; j<=15; j++){
+                                if(this.attendancesForSelectedLecture[i].attendance_list[j] !== this.originalData[i].attendance_list[j]){
+                                    this.changedData.push({
+                                        user_id : this.attendancesForSelectedLecture[i].student_user_id, 
+                                        lecture_number : j, 
+                                        status : this.attendancesForSelectedLecture[i].attendance_list[j]
+                                    });
+                                }   
+                            }            
+                        }      
+                    console.log(this.changedData);
+                },
+                save: function (){
+                    const result = window.confirm('この内容で登録します。よろしいですか？');
+                    // OKを押すことによってtrue判定になる
+					if(result){
+                        // 未完成
+                        const url = '{$this->Url->build(['action'=>'save', '_ext'=>'json'])}';
+                        const data = {
+                            lectureId: this.selectedLectureId,
+                            attendance_status_list : this.changedData
+                        };
+                        const fn = function(dataFromAjax){
+                                // 正常に登録処理を行うときのみ
+                                location.reload();
                         }
-                    }      
-                    console.log(this.isChanged);
-                }
+						stsAjax(url, data, fn);
+                        this.pageMode = {$this->Enum->PageMode->LIST->value};
+					}
+				},
+                changeLecture() {
+                    this.setAttendancesForSelectedLecture();
+                },
             },
 		});
     //-->
@@ -166,7 +192,7 @@ label {
             </table>
         </div>
         <div>
-            <button class="buttonClass" @click="saveConfirm">登録</button>
+            <button class="buttonClass" @click="saveConfirm" :disabled="changedData.length == 0" @click="save()">登録</button>
         </div>
 </div>
 
