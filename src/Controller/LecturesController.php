@@ -163,7 +163,6 @@ class LecturesController extends BaseController
             $data['selectedLecture']['update_user_id'] = 0;
             $lecture = $this->Lectures->newEntity($data['selectedLecture'], ['associated'=>false]);
         }
-
         $this->Lectures->save($lecture);
 
         $this->set([

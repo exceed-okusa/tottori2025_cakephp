@@ -103,15 +103,6 @@ class AttendancesController extends BaseController
             ];
         }
 
-        $aaa = $this->Enum->AttendanceStatus->getValues(); // [0,1,2]
-        foreach ($aaa as $status) {
-            $this->logNotice('現在のvalueは' . $status . ' です。');
-            $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
-            $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
-        }
-
-        // logNotice text 出席、遅刻、欠席の順でログ出力
-
 		$this->set(compact('loginUserId'));
         $this->set('lectures', json_encode($lectures));
         $this->set('users', json_encode($userList));
@@ -134,6 +125,15 @@ class AttendancesController extends BaseController
         // ここから処理を記述
         $this->logNotice($data);
 
+        $attendance = $this->Attendances->newEntity([
+            'lecture_id'        => $data['lecture_id'],
+            'student_user_id'   => $data['attendance_status_list'][0]['user_id'],
+            'lecture_number'    => $data['attendance_status_list'][0]['lecture_number'],
+            'attendance_status' => $data['attendance_status_list'][0]['status']
+        ], ['associated'=>false]);
+        $this->logNotice($attendance);
+
+        $this->Attendances->save($attendance);
 
         // ここまで
         $this->set([
