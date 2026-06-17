@@ -101,9 +101,29 @@ class AttendancesController extends BaseController
 			]
 		];
         $this->logNotice($data);
-        if(!empty($data['attendancesForSelectedLecture'])){
-            $
-        }
+
+        $loginUserId = $this->request->session()->read('loginUserId');
+        $now = new FrozenTime();
+        $attendance = $this->Attendances->newEntity([
+            'lecture_id' => $data['lecture_id'],
+            'student_user_id' => $data['attendance_status_list'][0]['user_id'],
+            'lecture_number' => $data['attendance_status_list'][0]['lecture_number'],
+            'attendance_status' => $data['attendance_status_list'][0]['status'],
+            'semester' => $this->Enum->Semester->FIRST_SEMESTER->value,
+            'insert_date' => $now,
+            'insert_user_id' => $loginUserId,
+            'update_date' => $now,
+            'update_user_id' => $loginUserId,
+            'invalidation_flag' =>$this->Enum->InvalidationFlag->OFF->value,
+        ],['associated'=>false]);
+        $this->logNotice($attendance);
+
+        $this->Attendances->save($attendance);
+
+
+        // if(!empty($data['attendancesForSelectedLecture'])){
+        //     $data['selectedLectureId']
+        // }
 
 
 

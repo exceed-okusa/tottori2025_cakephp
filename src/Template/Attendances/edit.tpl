@@ -94,7 +94,8 @@
                                 this.changedData.push({
                                     user_id: this.attendancesForSelectedLecture[i].student_user_id,
                                     lecture_number: j,
-                                    status: this.attendancesForSelectedLecture[i].attendance_status_list[j],
+                                    status: this.attendancesForSelectedLecture[i].attendance_status_list[j]
+                                    
                                 })
 
                                 // this.isChanged = true;

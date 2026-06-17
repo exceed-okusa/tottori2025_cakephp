@@ -1205,7 +1205,7 @@ class Request implements ArrayAccess
      * @param string|null $callback A decoding callback that will convert the string data to another
      *     representation. Leave empty to access the raw input data. You can also
      *     supply additional parameters for the decoding callback using var args, see above.
-     * @return string The decoded/processed request data.
+     * @return string|array The decoded/processed request data.
      */
     public function input($callback = null)
     {
