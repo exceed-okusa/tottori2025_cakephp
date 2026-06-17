@@ -73,13 +73,13 @@ class AttendancesController extends BaseController
 
         $aaa = $this->Enum->AttendanceStatus->getValues();
         $bbb = $this->Enum->AttendanceStatus->getTexts();
-        $this->logNotice($bbb);
+        // $this->logNotice($bbb);
 
         $ccc = [];
 
         foreach($aaa as $status){
             // $this->logNotice('現在のvalueは' . $status . 'です。');
-            $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
+            // $this->logNotice($this->Enum->AttendanceStatus->getTextByValue($status));
             // $this->logNotice($this->Enum->AttendanceStatus->getDescriptionByValue($status));
         }
         
@@ -91,30 +91,37 @@ class AttendancesController extends BaseController
         $this->set('textArray', json_encode($ccc));
     }
     public function save(){
-        $this->autoRender = false; // Viewを強制的に使わない
-                // ↓これはindex.tplのdataの中身
+$this->autoRender = false; // Viewを強制的に使わない
         $data = $this->request->input('json_decode', true);
 
 		$ret = [
 			'errors' => '',
-			'data' => [
-            ]
+			'data' => []
 		];
-
+        // ここから処理を記述
         $this->logNotice($data);
 
+        $attendance = $this->Attendances->newEntity([
+            'lecture_id'        => $data['lecture_id'],
+            'student_user_id'   => $data['attendance_status_list'][0]['user_id'],
+            'lecture_number'    => $data['attendance_status_list'][0]['lecture_number'],
+            'attendance_status' => $data['attendance_status_list'][0]['status']
+        ], ['associated'=>false]);
+        $this->logNotice($attendance);
 
+        $this->Attendances->save($attendance);
+
+        // ここまで
         $this->set([
             'dataFromAjax' => $ret['data'],
 			'errors' => $ret['errors'],
             '_serialize' => ['response']
         ]);
-
 		// JSONヘッダーをセット
 		$this->response->type('json');
 		// JSON文字列を本文にセット
 		$this->response->body(json_encode($ret));
 
 		return $this->response;
+        }
     }
-}
