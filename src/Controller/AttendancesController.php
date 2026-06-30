@@ -125,40 +125,40 @@ class AttendancesController extends BaseController
         // ここから処理を記述
         $this->logNotice($data);
 
-        // foreach ($data['attendance_status_list'] as $attendanceStatus){
-        //     // (a) テーブルの中から条件に合うものを取得
-        //     $attendance = $this->Attendances->find()
-        //         ->where([
-        //             'student_user_id'   => $attendanceStatus['user_id'],
-        //             'lecture_id'        => $data['lecture_id'],
-        //             'lecture_number'    => $attendanceStatus['lecture_number'],
-        //             'semester'          => $this->Enum->Semester->FIRST_SEMESTER->value,
-        //             'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
-        //         ])
-        //         ->first(); // 1件だけ取得
-        //     $this->logNotice($attendance);
+        foreach ($data['attendance_status_list'] as $attendanceStatus){
+            // (a) テーブルの中から条件に合うものを取得(登録処理の場合は取得できない)
+            $attendance = $this->Attendances->find()
+                ->where([
+                    'student_user_id'   => $attendanceStatus['user_id'],
+                    'lecture_id'        => $data['lecture_id'],
+                    'lecture_number'    => $attendanceStatus['lecture_number'],
+                    'semester'          => $this->Enum->Semester->FIRST_SEMESTER->value,
+                    'invalidation_flag' => $this->Enum->InvalidationFlag->OFF->value,
+                ])
+                ->first();
+            $this->logNotice($attendance);
 
-        //     $loginUserId = $this->request->session()->read('loginUserId');
-        //     $now = new FrozenTime();
+            if (!empty($attendance)) {
+                // 更新処理
+                $loginUserId = $this->request->session()->read('loginUserId');
+                $now = new FrozenTime();
 
-        //     // (a)で取得したEntityにstatusなどのcolumnの値を変更 ※DBにはまだ登録されてない
-        //     $attendance = $this->Attendances->patchEntity(
-        //         $attendance,
-        //         [
-        //             'attendance_status' => $attendanceStatus['status'],
-        //             'update_date'       => $now,
-        //             'update_user_id'    => $loginUserId,
-        //         ],
-        //         ['associated' => false]
-        //     );
-        //     // 実際にDB更新を行う
-        //     $this->Attendances->save($attendance);
-        // }
-
-        // // 登録処理
-        foreach ($data['attendance_status_list'] as $attendanceStatus) {
-            $attendanceData = $this->getDataForAdd($data['lecture_id'], $attendanceStatus);
-            $attendance = $this->Attendances->newEntity($attendanceData, ['associated'=>false]);
+                // (a)で取得したEntityにstatusなどのcolumnの値を変更 ※DBにはまだ登録されてない
+                $attendance = $this->Attendances->patchEntity(
+                    $attendance,
+                    [
+                        'attendance_status' => $attendanceStatus['status'],
+                        'update_date'       => $now,
+                        'update_user_id'    => $loginUserId,
+                    ],
+                    ['associated' => false]
+                );
+            } else {
+                // 登録処理
+                $attendanceData = $this->getDataForAdd($data['lecture_id'], $attendanceStatus);
+                $attendance = $this->Attendances->newEntity($attendanceData, ['associated'=>false]);
+            }
+            // 実際にDB更新を行う
             $this->Attendances->save($attendance);
         }
 
